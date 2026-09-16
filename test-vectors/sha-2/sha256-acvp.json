@@ -1,0 +1,45 @@
+{
+  "algorithm": "SHA2-256",
+  "standard": "FIPS 180-4",
+  "source": "https://raw.githubusercontent.com/usnistgov/ACVP-Server/master/gen-val/json-files/HMAC-SHA2-256-1.0",
+  "source_type": "NIST ACVP Server vectors (HMAC-SHA2-256, used to derive SHA-256 test inputs)",
+  "date": "2026-03-09",
+  "notes": "SHA-256 direct hash test vectors from NIST CAVP. These are the underlying message inputs used in HMAC-SHA2-256 testing. For pure SHA-256 hash vectors, use NIST CAVP SHA Test Vectors at https://csrc.nist.gov/Projects/Cryptographic-Algorithm-Validation-Program/Secure-Hashing",
+  "cavp_reference": {
+    "url": "https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Algorithm-Validation-Program/documents/shs/shabytetestvectors.zip",
+    "description": "NIST CAVP SHA byte-oriented test vectors ZIP"
+  },
+  "sample_test_vectors": [
+    {
+      "tcId": 1,
+      "comment": "SHA-256 of empty string",
+      "msg": "",
+      "md": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "tcId": 2,
+      "comment": "SHA-256 of 'abc'",
+      "msg": "616263",
+      "md": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+    },
+    {
+      "tcId": 3,
+      "comment": "SHA-256 of 'abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq'",
+      "msg": "6162636462636465636465666465666765666768666768696768696a68696a6b696a6b6c6a6b6c6d6b6c6d6e6c6d6e6f6d6e6f706e6f7071",
+      "md": "248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1"
+    },
+    {
+      "tcId": 4,
+      "comment": "SHA-256 FIPS 180-4 example: 1 million 'a' characters",
+      "msg": "REPEATED_61_1000000_TIMES",
+      "md": "cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0",
+      "note": "Message is 0x61 repeated 1,000,000 times. md is the FIPS 180-4 official test vector."
+    },
+    {
+      "tcId": 5,
+      "comment": "SHA-256 of 'abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu'",
+      "msg": "61626364656667686263646566676869636465666768696a6465666768696a6b65666768696a6b6c666768696a6b6c6d6768696a6b6c6d6e68696a6b6c6d6e6f696a6b6c6d6e6f706a6b6c6d6e6f70716b6c6d6e6f7071726c6d6e6f707172736d6e6f70717273746e6f707172737475",
+      "md": "cf5b16a778af8380036ce59e7b0492370b249b11e8f07a51afac45037afee9d1"
+    }
+  ]
+}

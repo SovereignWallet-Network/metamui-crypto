@@ -1,0 +1,68 @@
+{
+  "algorithm": "SHA3-256",
+  "source": "NIST FIPS 202 / NIST CSRC examples",
+  "description": "Byte-aligned SHA3-256 test vectors for implementations that operate on whole bytes",
+  "testGroups": [
+    {
+      "type": "SHA3-256",
+      "tests": [
+        {
+          "tcId": 1,
+          "msg": "",
+          "len": 0,
+          "md": "A7FFC6F8BF1ED76651C14756A061D662F580FF4DE43B49FA82D80A4B80F8434A",
+          "comment": "empty string"
+        },
+        {
+          "tcId": 2,
+          "msg": "E9",
+          "len": 8,
+          "md": "F0D04DD1E6CFC29A4460D521796852F25D9EF8D28B44EE91FF5B759D72C1E6D6",
+          "comment": "1-byte message 0xe9"
+        },
+        {
+          "tcId": 3,
+          "msg": "D477",
+          "len": 16,
+          "md": "94279E8F5CCDF6E17F292B59698AB4E614DFE696A46C46DA78305FC6A3146AB7",
+          "comment": "2-byte message"
+        },
+        {
+          "tcId": 4,
+          "msg": "B053FA",
+          "len": 24,
+          "md": "9D0FF086CD0EC06A682C51C094DC73ABDC492004292344BD41B82A60498CCFDB",
+          "comment": "3-byte message"
+        },
+        {
+          "tcId": 5,
+          "msg": "E7372105",
+          "len": 32,
+          "md": "3A42B68AB079F28C4CA3C752296F279006C4FE78B1EB79D989777F051E4046AE",
+          "comment": "4-byte message"
+        },
+        {
+          "tcId": 6,
+          "msg": "616263",
+          "len": 24,
+          "md": "3A985DA74FE225B2045C172D6BD390BD855F086E3E9D525B46BFE24511431532",
+          "comment": "ASCII 'abc' — NIST FIPS 202 example"
+        },
+        {
+          "tcId": 7,
+          "msg": "6162636462636465636465666465666765666768666768696768696A68696A6B696A6B6C6A6B6C6D6B6C6D6E6C6D6E6F6D6E6F706E6F7071",
+          "len": 448,
+          "md": "41C0DBA2A9D6240849100376A8235E2C82E1B9998A999E21DB32DD97496D3376",
+          "comment": "NIST 448-bit test message 'abcdbcde...nopq'"
+        },
+        {
+          "tcId": 8,
+          "msg": "6162636465666768696A6B6C6D6E6F707172737475767778797A",
+          "len": 208,
+          "md": "7CAB2DC765E21B241DBC1C255CE620B29F527C6D5E7F5F843E56288F0D707521",
+          "comment": "ASCII 'abcdefghijklmnopqrstuvwxyz'"
+        }
+      ]
+    }
+  ]
+}

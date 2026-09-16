@@ -1,0 +1,21 @@
+MetaMUI Crypto
+Copyright 2024-2026 Sovereign Wallet Co., Ltd.
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Earlier versions of this software were published under different
+source-available and commercially licensed terms. Those versions remain
+available under the terms they were published with; nothing in this product
+revokes or narrows any right granted under them.
+
+This product includes software and data developed by third parties. The
+complete list of components, their copyright holders and their license texts
+is in THIRD_PARTY_NOTICES.md. In particular this product includes:
+
+  * Falcon reference implementation notices, Copyright (c) 2017-2019
+    Falcon Project / Thomas Pornin (MIT), and the Python reference
+    falcon.py by Thomas Prest (MIT), against which the Falcon crate is written
+  * Test vectors from NIST (ACVP and CAVP, U.S. Government work), the Falcon
+    Round-3 submission package (MIT), PQClean (public domain / MIT),
+    the kyber-py project (MIT), Google Wycheproof (Apache-2.0) and RFC
+    appendices (IETF Trust)

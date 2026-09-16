@@ -1,0 +1,27 @@
+[package]
+name = "metamui-getrandom-unavailable"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+authors = [ "Phantom <phantom@metamui.id>",]
+license = "Apache-2.0"
+description = "wasm32 getrandom backend that reports randomness as unavailable, for consumers with no JavaScript environment"
+repository.workspace = true
+keywords = [ "crypto", "wasm", "getrandom", "determinism", "metamui",]
+categories = [ "cryptography", "no-std", "wasm",]
+# Published: metamui-falcon512 and metamui-mlkem depend on it for wasm32, so a
+# registry that lacks it cannot resolve either (#215).
+
+[lib]
+name = "metamui_getrandom_unavailable"
+
+# `custom` is what lets this crate register the backend; it is inert whenever
+# something else in the graph selects `js`, so depending on this crate never
+# takes a browser consumer's Web Crypto source away.
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+getrandom = { version = "0.2", default-features = false, features = ["custom"] }
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["wasm32-unknown-unknown"]

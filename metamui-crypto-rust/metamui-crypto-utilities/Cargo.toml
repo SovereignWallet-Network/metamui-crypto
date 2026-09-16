@@ -1,0 +1,120 @@
+[package]
+name = "metamui-crypto-utilities"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+license = "Apache-2.0"
+description = "Cryptographic utilities and primitives for the MetaMUI ecosystem"
+repository.workspace = true
+homepage = "https://metamui.id"
+keywords = [ "crypto", "utilities", "hmac", "kdf", "random",]
+categories = [ "cryptography",]
+
+[lib]
+name = "metamui_crypto_utilities"
+
+[features]
+default = [ "std", "full",]
+std = [ "rand/std", "rand_core/std", "thiserror", "getrandom/std",]
+full = [ "hmac", "kdf", "encoding", "padding", "mnemonic", "flathash",]
+hmac = []
+kdf = [ "hmac",]
+encoding = [ "base64", "hex", "bs58",]
+padding = []
+mnemonic = [ "hex", "kdf", "hmac",]
+flathash = [ "serde", "serde_json", "hex",]
+test-utils = []
+
+[dev-dependencies]
+criterion = "0.5"
+serde_json = "1.0"
+hex-literal = "0.4"
+
+[dependencies]
+num-bigint = "0.4.6"
+num-traits = "0.2.19"
+
+[dependencies.rand]
+version = "0.8"
+default-features = false
+features = ["std_rng"]
+
+[dependencies.rand_core]
+version = "0.6"
+default-features = false
+
+[dependencies.getrandom]
+version = "0.2"
+
+# MetaMUI hash algorithm dependencies
+[dependencies.metamui-sha2]
+path = "../metamui-sha2"
+version = "=1.0.0-rc.1"
+
+[dependencies.metamui-security-utils]
+path = "../metamui-security-utils"
+version = "=1.0.0-rc.1"
+features = [ "subtle", "zeroize",]
+
+[dependencies.metamui-acceleration]
+path = "../metamui-acceleration"
+version = "=1.0.0-rc.1"
+default-features = false
+
+[dependencies.once_cell]
+version = "1.19"
+
+# External crypto dependencies removed - using pure MetaMUI implementations
+# [dependencies.sha2]
+# version = "0.10"  # REMOVED: Using pure MetaMUI SHA implementation
+# optional = true
+# default-features = false
+
+# [dependencies.blake2]
+# version = "0.10"  # REMOVED: Using pure MetaMUI Blake2 implementation
+# optional = true
+# default-features = false
+
+[dependencies.base64]
+version = "0.22"
+optional = true
+default-features = false
+
+[dependencies.hex]
+version = "0.4"
+optional = true
+default-features = false
+features = [ "alloc",]
+
+[dependencies.bs58]
+version = "0.5"
+optional = true
+default-features = false
+
+# [dependencies.hmac]
+# version = "0.12"  # REMOVED: Using pure MetaMUI HMAC implementation
+# optional = true
+# default-features = false
+
+[dependencies.thiserror]
+version = "1.0"
+optional = true
+
+[dependencies.serde]
+version = "1.0"
+optional = true
+default-features = false
+features = [ "derive", "alloc",]
+
+[dependencies.serde_json]
+version = "1.0"
+optional = true
+default-features = false
+features = [ "alloc",]
+
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]

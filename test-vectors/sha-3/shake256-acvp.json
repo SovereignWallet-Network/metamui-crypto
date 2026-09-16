@@ -1,0 +1,54 @@
+{
+  "algorithm": "SHAKE-256",
+  "standard": "FIPS 202",
+  "source": "https://raw.githubusercontent.com/usnistgov/ACVP-Server/master/gen-val/json-files/SHAKE-256-1.0",
+  "source_type": "NIST ACVP Server sample vectors",
+  "date": "2026-03-09",
+  "revision": "1.0",
+  "vsId": 0,
+  "isSample": true,
+  "notes": "msg is MSB-first hex-encoded bit string; len is bit length; outLen is output length in bits; md is the XOF output.",
+  "testGroups": [
+    {
+      "tgId": 1,
+      "testType": "AFT",
+      "tests": [
+        {
+          "tcId": 1,
+          "msg": "80",
+          "len": 1,
+          "outLen": 256,
+          "md": "2CF36A2683A28FA23AE61F45B65348AF5836A89864309B122C25295FDDF37E1B"
+        },
+        {
+          "tcId": 2,
+          "msg": "80",
+          "len": 2,
+          "outLen": 256,
+          "md": "D93F97BF0211BBD33DF10904E7F7ED9CD476EAFA7F658F6442F660D2B4520BD1"
+        },
+        {
+          "tcId": 3,
+          "msg": "60",
+          "len": 3,
+          "outLen": 256,
+          "md": "7CD75713AA9ADAD98E24652D4A2404BB74B1929704901EE7F044FAA3DA354760"
+        },
+        {
+          "tcId": 4,
+          "msg": "D0",
+          "len": 4,
+          "outLen": 256,
+          "md": "D03D757462CD3C828BF24D0FBDEBC852DAE2B8A808805773442109C615167140"
+        },
+        {
+          "tcId": 5,
+          "msg": "20",
+          "len": 5,
+          "outLen": 256,
+          "md": "0E7C963AA0AB2AF826B079581688D477C4C3A97408EFBB46E545969819D89DE6"
+        }
+      ]
+    }
+  ]
+}

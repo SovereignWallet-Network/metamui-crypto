@@ -1,0 +1,152 @@
+{
+  "suite_name": "Falcon-512 Cross-Platform Test Vectors",
+  "version": "1.0.0",
+  "date_generated": "2025-01-27",
+  "description": "Test vectors for validating Falcon-512 implementations across all platforms",
+  "platforms": [
+    "Rust (reference)",
+    "Python",
+    "TypeScript (WASM)",
+    "Kotlin",
+    "Swift",
+    "Go",
+    "Java",
+    "C#",
+    "C"
+  ],
+  "test_categories": {
+    "basic_operations": [
+      {
+        "test_id": 1,
+        "description": "Empty message test",
+        "message": "",
+        "message_hex": "",
+        "expected_result": true,
+        "parameters": {
+          "n": 512,
+          "q": 12289,
+          "sigma": 165.7366171829776,
+          "beta_squared": 34034726
+        }
+      },
+      {
+        "test_id": 2,
+        "description": "Short message test",
+        "message": "Test",
+        "message_hex": "54657374",
+        "expected_result": true,
+        "parameters": {
+          "n": 512,
+          "q": 12289,
+          "sigma": 165.7366171829776,
+          "beta_squared": 34034726
+        }
+      },
+      {
+        "test_id": 3,
+        "description": "Long message test",
+        "message": "The quick brown fox jumps over the lazy dog",
+        "message_hex": "54686520717569636b2062726f776e20666f78206a756d7073206f76657220746865206c617a7920646f67",
+        "expected_result": true,
+        "parameters": {
+          "n": 512,
+          "q": 12289,
+          "sigma": 165.7366171829776,
+          "beta_squared": 34034726
+        }
+      },
+      {
+        "test_id": 4,
+        "description": "Binary data test",
+        "message_hex": "00112233445566778899aabbccddeeff",
+        "expected_result": true,
+        "parameters": {
+          "n": 512,
+          "q": 12289,
+          "sigma": 165.7366171829776,
+          "beta_squared": 34034726
+        }
+      },
+      {
+        "test_id": 5,
+        "description": "Maximum length message test",
+        "message": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "message_hex": "41414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141",
+        "expected_result": true,
+        "parameters": {
+          "n": 512,
+          "q": 12289,
+          "sigma": 165.7366171829776,
+          "beta_squared": 34034726
+        }
+      }
+    ],
+    "parameter_validation": [
+      {
+        "test_id": "param_1",
+        "description": "Verify correct sigma value",
+        "parameter": "sigma",
+        "expected_value": 165.7366171829776,
+        "tolerance": 1e-10
+      },
+      {
+        "test_id": "param_2",
+        "description": "Verify beta squared bound",
+        "parameter": "beta_squared",
+        "expected_value": 34034726,
+        "tolerance": 0
+      },
+      {
+        "test_id": "param_3",
+        "description": "Verify modulus q",
+        "parameter": "q",
+        "expected_value": 12289,
+        "tolerance": 0
+      },
+      {
+        "test_id": "param_4",
+        "description": "Verify dimension n",
+        "parameter": "n",
+        "expected_value": 512,
+        "tolerance": 0
+      },
+      {
+        "test_id": "param_5",
+        "description": "Verify nonce size",
+        "parameter": "nonce_size",
+        "expected_value": 40,
+        "tolerance": 0
+      }
+    ],
+    "signature_format": [
+      {
+        "test_id": "format_1",
+        "description": "Verify z0/z1 format structure",
+        "signature_components": {
+          "nonce_size": 40,
+          "z0_size": 512,
+          "z1_size": 512,
+          "encoding": "2 bytes per coefficient",
+          "total_size": "40 + 512*2 + 512*2 = 2088 bytes"
+        },
+        "verification_equation": "z0 = c - h*z1 (mod q)",
+        "norm_check": "||z0||^2 + ||z1||^2 <= 34034726"
+      }
+    ],
+    "ntru_verification": [
+      {
+        "test_id": "ntru_1",
+        "description": "Verify NTRU equation f*G - g*F = q",
+        "equation": "f*G - g*F = q (mod X^n + 1)",
+        "small_poly_norm": "f,g have ternary coefficients {-1,0,1}",
+        "large_poly_bound": "Gram-Schmidt norm <= sqrt(34034726)"
+      }
+    ]
+  },
+  "compliance": {
+    "specification": "Falcon-512 NIST Round 3",
+    "sigma_value": 165.7366171829776,
+    "signature_format": "z0/z1",
+    "security_level": "NIST Level 1"
+  }
+}

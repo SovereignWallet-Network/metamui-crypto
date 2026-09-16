@@ -1,0 +1,24 @@
+[package]
+name = "metamui-acvp-core"
+categories = ["cryptography"]
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Generic ACVP (Automated Cryptographic Validation Protocol) infrastructure for post-quantum cryptography"
+keywords = ["acvp", "nist", "post-quantum", "cryptography", "testing"]
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+hex = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]

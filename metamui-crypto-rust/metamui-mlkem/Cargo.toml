@@ -1,0 +1,101 @@
+[[bench]]
+name = "mlkem_benchmarks"
+harness = false
+# Bit-rotted against the current public ML-KEM API (removed re-exports
+# of MLKem512 / MLKem1024, changed `encaps`/`decaps` signatures). Opt-in
+# via `cargo bench --features legacy-benches` after restoring upstream.
+required-features = ["std", "legacy-benches"]
+
+[[example]]
+name = "generate_mlkem_test_vectors"
+required-features = ["std"]
+
+[package]
+name = "metamui-mlkem"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+license = "Apache-2.0"
+authors = ["Phantom Seokgu Yun <phantom@metamui.id>"]
+# Only the explicitly-declared `mlkem_benchmarks` bench is built.
+autobenches = false
+description = "ML-KEM (NIST FIPS 203) post-quantum key encapsulation mechanism - all parameter sets"
+homepage = "https://metamui.id"
+repository.workspace = true
+keywords = ["cryptography", "post-quantum", "ml-kem", "kem", "fips-203"]
+categories = ["cryptography"]
+readme = "README.md"
+
+[dependencies]
+# Internal dependencies only - no external crypto libraries
+metamui-shake = { version = "=1.0.0-rc.1", path = "../metamui-shake"  }
+metamui-sha3 = { version = "=1.0.0-rc.1", path = "../metamui-sha3"  }
+metamui-security-utils = { version = "=1.0.0-rc.1", path = "../metamui-security-utils", features = ["subtle", "zeroize"]  }
+metamui-crypto-utilities = { version = "=1.0.0-rc.1", path = "../metamui-crypto-utilities"  }
+metamui-acvp-core = { version = "=1.0.0-rc.1", path = "../metamui-acvp-core"  }
+rand_core = { version = "0.6", features = ["std"] }
+rand_chacha = "0.3"
+serde_json = { version = "1.0", optional = true }
+hex = { version = "0.4", optional = true }
+
+[dev-dependencies]
+rand = { workspace = true }
+hex = "0.4"
+rand_chacha = "0.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+criterion = { version = "0.5", default-features = false }
+# This crate's own tests, examples and benches build with `fips203-internal`,
+# so the ACVP and KAT gates that call the internal entry points are always
+# compiled. A `required-features` on those targets would instead let
+# `cargo test` skip them without a word — a green run that verified nothing.
+# cargo drops an unversioned dev-dependency when packaging, so nothing
+# published enables the feature. `default-features = false` keeps a
+# `--no-default-features` test run as narrow as the caller asked.
+metamui-mlkem = { path = ".", default-features = false, features = ["fips203-internal"] }
+
+[features]
+default = ["std", "mlkem768"]
+std = ["serde_json", "hex"]
+mlkem512 = []
+mlkem768 = []
+mlkem1024 = []
+all = ["mlkem512", "mlkem768", "mlkem1024"]
+# Opt-in gate for bit-rotted legacy benchmarks.
+legacy-benches = []
+avx2 = ["simd-abstraction"]
+constant-time-test = []
+# FIPS 203 §6 internal algorithms, which the standard says applications must
+# not be offered: `generate_keypair_from_dz` (KeyGen_internal),
+# `encapsulate_deterministic` (Encaps_internal) and the MetaMUI single-seed
+# convention `generate_keypair_from_seed`, on each parameter set. For
+# known-answer tests and fixture generators only. Applications call
+# `generate_keypair` / `encapsulate`, which run the same bodies (#202).
+fips203-internal = []
+# Reserved for an optimization backend that is not shipped; declaring it
+# satisfies the unexpected_cfgs lint.
+optimized = []
+
+[lib]
+name = "metamui_mlkem"
+crate-type = ["cdylib", "rlib"]
+
+[target."cfg(target_arch = \"x86_64\")".dependencies.simd-abstraction]
+version = "0.7"
+optional = true
+
+# wasm32 `getrandom` backend, the same registration metamui-falcon512 carries:
+# `rand_core/std` pulls getrandom, which refuses wasm32-unknown-unknown unless
+# a backend is named, so a consumer building this crate alone for wasm32 got
+# getrandom's compile_error (release feature matrix, #215). Registering the
+# in-tree "unavailable" backend makes the build link without asserting a
+# browser; a consumer that is a browser enables `getrandom/js` itself, which
+# getrandom prefers, and this registration is then inert.
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+metamui-getrandom-unavailable = { version = "=1.0.0-rc.1", path = "../metamui-getrandom-unavailable" }
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["all"]

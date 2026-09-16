@@ -1,0 +1,134 @@
+[workspace]
+resolver = "2"
+members = [
+    "metamui-acceleration",
+    "metamui-acvp-core",
+    "metamui-aes-256",
+    "metamui-aes-ctr-drbg",
+    "metamui-crypto",
+    "metamui-crypto-utilities",
+    "metamui-falcon512",
+    "metamui-mlkem",
+    "metamui-getrandom-unavailable",
+    "metamui-security-utils",
+    "metamui-sha2",
+    "metamui-sha3",
+    "metamui-shake",
+    "metamui-prehash-oids",
+]
+
+# Release profile — hoisted from metamui-falcon512, metamui-haetae, and
+# metamui-pqc-benchmarks so it actually takes effect (cargo ignores
+# [profile.release] in non-root manifests).
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = "symbols"
+
+# Bench profile — same optimizations, symbols kept for profiling.
+[profile.bench]
+opt-level = 3
+lto = true
+codegen-units = 1
+
+[workspace.package]
+version = "1.0.0-rc.1"
+edition = "2021"
+# Minimum supported Rust version for every workspace member (each member
+# declares `rust-version.workspace = true`). The `rust linux (docker)`
+# preflight leg builds with the matching `rust:<MSRV>-bookworm` image, so
+# this is the version that is actually proven, not an aspiration.
+rust-version = "1.95"
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+license = "Apache-2.0"
+repository = "https://github.com/SovereignWallet-Network/metamui-crypto"
+homepage = "https://metamui.id"
+readme = "README.md"
+
+[workspace.dependencies.hex]
+version = "=0.4.3"
+
+[workspace.dependencies.thiserror]
+version = "=1.0.68"
+
+[workspace.dependencies.serde]
+version = "1.0.217"
+features = [ "derive",]
+
+[workspace.dependencies.serde_json]
+version = "1.0.133"
+
+[workspace.dependencies.rand]
+version = "=0.8.5"
+
+# External cryptographic dependencies have been replaced with pure implementations
+# for enhanced supply chain security: every digest, cipher and DRBG in the
+# workspace is MetaMUI's own code, and RustCrypto crates appear only as
+# dev-dependencies (test oracles).
+#
+# Removed external dependencies (now using pure implementations):
+# - sha2 (replaced with metamui-sha2)
+# - sha3 (replaced with metamui-shake)
+# - hmac (replaced with pure HMAC in metamui-crypto-utilities)
+# - blake2 (replaced with metamui-blake2b256, metamui-blake2b512, metamui-blake2s256)
+# - blake3 (replaced with metamui-blake3)
+# - argon2 (replaced with metamui-argon2)
+# - ed25519-zebra (replaced with metamui-ed25519)
+# - chacha20poly1305 (replaced with metamui-chacha20-poly1305)
+# - aead (replaced with pure AEAD implementations)
+# - hkdf (replaced with metamui-hkdf)
+# - curve25519-dalek (replaced with metamui-x25519)
+# - bip39 (replaced with pure BIP39 in metamui-mnemonic)
+# - substrate-bip39 (replaced with pure BIP39 in metamui-mnemonic)
+
+[workspace.dependencies.lazy_static]
+version = "1.4.0"
+
+[workspace.dependencies.getrandom]
+version = "=0.2.15"
+
+[workspace.dependencies.array-ref]
+version = "=0.3.9"
+
+[workspace.dependencies.zeroize]
+version = "=1.8.1"
+# Workspace baseline: no default features so no_std members pick up
+# a clean slate. Members add "derive" / "alloc" etc. on top via
+# `{ workspace = true, features = [...] }`.
+default-features = false
+
+[workspace.dependencies.subtle]
+version = "=2.6.1"
+
+[workspace.dependencies.rand_core]
+version = "=0.6.4"
+
+[workspace.dependencies.sha3]
+# Upstream SHA-3 / Keccak primitive. Kept at workspace scope so
+# member crates using it (metamui-argon2, metamui-frodokem, etc.)
+# all resolve to the same version. Prefer the internal
+# `metamui-shake` / `metamui-keccak256` pure implementations for
+# anything shipping on the supply-chain-hardened path; `sha3` is
+# a transitional dependency only.
+version = "=0.10.8"
+default-features = false
+
+[workspace.dependencies.sp-core]
+version = "=36.1.0"
+
+# [workspace.dependencies.bip39]
+# version = "=2.1.0"  # REMOVED: Using pure BIP39 implementation
+
+[workspace.dependencies.hex-literal]
+version = "=0.4.1"
+
+[workspace.dependencies.sp-crypto-hashing]
+version = "=0.1.0"
+
+# [workspace.dependencies.substrate-bip39]
+# version = "=0.6.0"  # REMOVED: Using pure BIP39 implementation
+
+
+
+

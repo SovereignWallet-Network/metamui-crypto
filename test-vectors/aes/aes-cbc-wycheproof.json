@@ -1,0 +1,123 @@
+{
+  "algorithm": "AES-CBC-PKCS5",
+  "standard": "FIPS 197 / NIST SP 800-38A",
+  "source": "https://raw.githubusercontent.com/google/wycheproof/master/testvectors_v1/aes_cbc_pkcs5_test.json",
+  "source_type": "Google Wycheproof test vectors v0.9",
+  "schema": "ind_cpa_test_schema_v1.json",
+  "date": "2026-03-09",
+  "filter": "AES-256 only (keySize=256)",
+  "notes": "Test vectors of type IndCpaTest. Only AES-256 (keySize=256) test groups are included. BadPadding tests verify correct padding validation.",
+  "testGroups": [
+    {
+      "type": "IndCpaTest",
+      "source": {
+        "name": "google-wycheproof",
+        "version": "0.9"
+      },
+      "keySize": 256,
+      "ivSize": 128,
+      "tests": [
+        {
+          "tcId": 145,
+          "comment": "empty message",
+          "flags": ["Pseudorandom"],
+          "key": "7bf9e536b66a215c22233fe2daaa743a898b9acb9f7802de70b40e3d6e43ef97",
+          "iv": "eb38ef61717e1324ae064e86f1c3e797",
+          "msg": "",
+          "ct": "e7c166554d1bb32792c981fa674cc4d8",
+          "result": "valid"
+        },
+        {
+          "tcId": 146,
+          "comment": "message size divisible by block size",
+          "flags": ["Pseudorandom"],
+          "key": "612e837843ceae7f61d49625faa7e7494f9253e20cb3adcea686512b043936cd",
+          "iv": "9ec7b863ac845cad5e4673da21f5b6a9",
+          "msg": "cc37fae15f745a2f40e2c8b192f2b38d",
+          "ct": "299295be47e9f5441fe83a7a811c4aeb2650333e681e69fa6b767d28a6ccf282",
+          "result": "valid"
+        },
+        {
+          "tcId": 147,
+          "comment": "message size divisible by block size",
+          "flags": ["Pseudorandom"],
+          "key": "96e1e4896fb2cd05f133a6a100bc5609a7ac3ca6d81721e922dadd69ad07a892",
+          "iv": "e70d83a77a2ce722ac214c00837acedf",
+          "msg": "91a17e4dfcc3166a1add26ff0e7c12056e8a654f28a6de24f4ba739ceb5b5b18",
+          "ct": "a615a39ff8f59f82cf72ed13e1b01e32459700561be112412961365c7a0b58aa7a16d68c065e77ebe504999051476bd7",
+          "result": "valid"
+        },
+        {
+          "tcId": 148,
+          "comment": "message size divisible by block size",
+          "flags": ["Pseudorandom"],
+          "key": "649e373e681ef52e3c10ac265484750932a9918f28fb824f7cb50adab39781fe",
+          "iv": "bd003c0a9d804c29f053a77cb380cb47",
+          "msg": "39b447bd3a01983c1cb761b456d69000948ceb870562a536126a0d18a8e7e49b16de8fe672f13d0808d8b7d957899917",
+          "ct": "ed3ed8ecdbabc0a8c06259e913f3ab9a1f1dc6d05e5dfdd9c80e1008f3423064d540681291bbd3e159820fee3ff190a68fe506d8ab9e62c8e7b3816093336dbc",
+          "result": "valid"
+        },
+        {
+          "tcId": 149,
+          "comment": "small plaintext size",
+          "flags": ["Pseudorandom"],
+          "key": "e754076ceab3fdaf4f9bcab7d4f0df0cbbafbc87731b8f9b7cd2166472e8eebc",
+          "iv": "014d2e13dfbcb969ba3bb91442d52eca",
+          "msg": "40",
+          "ct": "42c0b89a706ed2606cd94f9cb361fa51",
+          "result": "valid"
+        },
+        {
+          "tcId": 150,
+          "comment": "small plaintext size",
+          "flags": ["Pseudorandom"],
+          "key": "ea3b016bdd387dd64d837c71683808f335dbdc53598a4ea8c5f952473fafaf5f",
+          "iv": "fae3e2054113f6b3b904aadbfe59655c",
+          "msg": "6601",
+          "ct": "b90c326b72eb222ddb4dae47f2bc223c",
+          "result": "valid"
+        },
+        {
+          "tcId": 151,
+          "comment": "small plaintext size",
+          "flags": ["Pseudorandom"],
+          "key": "73d4709637857dafab6ad8b2b0a51b06524717fedf100296644f7cfdaae1805b",
+          "iv": "203cd3e0068e43d38b6f2e48a188f252",
+          "msg": "f1d300",
+          "ct": "567c45c5e6d570bef583d21cac43757d",
+          "result": "valid"
+        },
+        {
+          "tcId": 169,
+          "comment": "empty ciphertext",
+          "flags": ["NoPadding"],
+          "key": "7c78f34dbce8f0557d43630266f59babd1cb92ba624bd1a8f45a2a91c84a804a",
+          "iv": "f010f61c31c9aa8fa0d5be5f6b0f2f70",
+          "msg": "",
+          "ct": "",
+          "result": "invalid"
+        },
+        {
+          "tcId": 215,
+          "comment": "Using no padding at all",
+          "flags": ["BadPadding"],
+          "key": "7c78f34dbce8f0557d43630266f59babd1cb92ba624bd1a8f45a2a91c84a804a",
+          "iv": "f010f61c31c9aa8fa0d5be5f6b0f2f70",
+          "msg": "30313233343536373839414243444546",
+          "ct": "8881e9e02fa9e3037b397957ba1fb7ce",
+          "result": "invalid"
+        },
+        {
+          "tcId": 216,
+          "comment": "Using no padding at all",
+          "flags": ["BadPadding"],
+          "key": "7c78f34dbce8f0557d43630266f59babd1cb92ba624bd1a8f45a2a91c84a804a",
+          "iv": "f010f61c31c9aa8fa0d5be5f6b0f2f70",
+          "msg": "404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f",
+          "ct": "706029a204cc11e69b5bc1a84e6a8ef75fe891cc466d6fb1bbf65135727a1ffb",
+          "result": "invalid"
+        }
+      ]
+    }
+  ]
+}

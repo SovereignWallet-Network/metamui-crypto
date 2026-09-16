@@ -1,0 +1,36 @@
+[package]
+rust-version.workspace = true
+name = "metamui-sha2"
+version.workspace = true
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+license = "Apache-2.0"
+description = "MetaMUI SHA-2 family: SHA-256, SHA-384, SHA-512 with HMAC"
+repository.workspace = true
+homepage = "https://metamui.id"
+
+[package.edition]
+workspace = true
+
+[features]
+default = ["std"]
+std = []
+serde = ["dep:serde"]
+
+[dependencies]
+hex = { workspace = true }
+thiserror = { workspace = true }
+
+[dependencies.serde]
+workspace = true
+optional = true
+
+[dev-dependencies]
+hex = { workspace = true }
+serde_json = { workspace = true }
+serde = { version = "1", features = ["derive"] }
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["serde"]

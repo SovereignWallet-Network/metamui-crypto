@@ -1,0 +1,37 @@
+[package]
+name = "metamui-crypto"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+authors.workspace = true
+license = "Apache-2.0"
+description = "MetaMUI Crypto public facade: explicit profiles over validated implementations"
+repository.workspace = true
+keywords = ["cryptography", "post-quantum", "falcon", "ml-kem"]
+categories = ["cryptography"]
+# Registry publication is a separately authorized release step.
+publish = false
+
+[features]
+default = ["std"]
+# Operating-system randomness convenience entry points (`*_os`).
+std = ["rand/std", "rand/std_rng"]
+
+[dependencies]
+metamui-falcon512 = { version = "=1.0.0-rc.1", path = "../metamui-falcon512", default-features = false, features = ["std"]  }
+metamui-mlkem = { version = "=1.0.0-rc.1", path = "../metamui-mlkem", default-features = false, features = ["std", "mlkem768"]  }
+rand_core = { workspace = true }
+rand = { workspace = true }
+zeroize = { workspace = true, features = ["alloc"] }
+subtle = { workspace = true }
+
+[dev-dependencies]
+hex = { workspace = true }
+rand_chacha = "0.3"
+serde_json = { workspace = true }
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+rustdoc-args = ["--cfg", "docsrs"]

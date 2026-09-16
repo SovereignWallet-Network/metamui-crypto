@@ -1,0 +1,68 @@
+[[bench]]
+name = "comparison"
+harness = false
+
+[package]
+name = "metamui-security-utils"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+authors = [ "Phantom <phantom@metamui.id>",]
+license = "Apache-2.0"
+description = "Native security utilities for constant-time operations and secure memory clearing"
+repository.workspace = true
+keywords = [ "crypto", "security", "constant-time", "memory-safety", "metamui",]
+categories = [ "cryptography", "no-std",]
+
+[lib]
+name = "metamui_security_utils"
+
+[dependencies]
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+# Apple platforms (macOS + iOS): `platform_random.rs::fill_random_apple` is
+# gated on `cfg(any(target_os = "macos", target_os = "ios"))`, so the
+# `security-framework` dependency must cover iOS too — otherwise iOS builds fail
+# with E0433 (unresolved `security_framework`). The crate supports iOS.
+[target.'cfg(any(target_os = "macos", target_os = "ios"))'.dependencies]
+security-framework = "2.9"
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3", features = ["bcrypt", "memoryapi", "minwindef", "basetsd", "ntdef"] }
+
+# wasm32 randomness goes through `getrandom`, and this crate deliberately
+# does NOT pick its backend: `getrandom`'s wasm32-unknown-unknown backend is
+# selected by feature (`js` for the browser, `custom` for a host-supplied
+# source), and that choice belongs to the final artifact, not to a library
+# sitting six levels down the graph.
+#
+# It used to be made here — `features = ["js"]` plus a hand-rolled
+# `wasm-bindgen`/`web-sys` `crypto.getRandomValues` call — which forced the
+# `__wbindgen_placeholder__` import surface into EVERY wasm32 consumer,
+# including deterministic consensus runtimes that must never reach for
+# ambient randomness and reject undeclared imports outright. Browser
+# packages built on this crate declare `getrandom/js` themselves, so their
+# backend is unchanged; a wasm32 consumer that selects
+# no backend now gets `getrandom`'s own compile error naming the fix,
+# instead of silently inheriting JS glue.
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+getrandom = "0.2"
+
+[dev-dependencies]
+criterion = "0.5"
+rand = { workspace = true }
+
+[features]
+default = [ "std",]
+std = ["alloc"]
+alloc = []
+subtle = []
+zeroize = []
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["subtle", "zeroize"]

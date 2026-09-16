@@ -1,0 +1,85 @@
+[[bench]]
+name = "aes_256_benchmarks"
+harness = false
+# Imports `metamui_aes256` — the package was renamed to
+# `metamui-aes-256` (crate name `metamui_aes_256`). Opt-in via
+# `cargo bench --features legacy-benches` after updating the import.
+required-features = ["legacy-benches"]
+
+[package]
+rust-version.workspace = true
+name = "metamui-aes-256"
+version.workspace = true
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+license = "Apache-2.0"
+repository.workspace = true
+readme = "README.md"
+keywords = ["aes", "aes-256", "encryption", "crypto", "metamui"]
+categories = [ "cryptography",]
+description = "AES-256 implementation for MetaMUI Crypto Primitives"
+
+[dev-dependencies]
+criterion = "0.5"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+hex = "0.4"
+
+[features]
+default = [ "std", "native",]
+std = [ "rand/std",]
+native = [ "rand", "lazy_static",]
+# Opt-in gate for bit-rotted legacy benchmarks.
+legacy-benches = []
+
+[package.edition]
+workspace = true
+
+[package.homepage]
+workspace = true
+
+# External crypto dependencies removed - using pure native implementation only
+
+[dependencies.hex]
+workspace = true
+
+[dependencies.thiserror]
+workspace = true
+
+[dependencies.metamui-security-utils]
+path = "../metamui-security-utils"
+version = "=1.0.0-rc.1"
+features = [ "subtle", "zeroize",]
+
+[dependencies.metamui-crypto-utilities]
+path = "../metamui-crypto-utilities"
+version = "=1.0.0-rc.1"
+
+[dependencies.rand]
+workspace = true
+optional = true
+
+[dependencies.lazy_static]
+version = "1.4"
+optional = true
+
+[dependencies.getrandom]
+workspace = true
+
+# HMAC dependency removed - using pure implementation from metamui-crypto-utilities
+
+# [dependencies.pbkdf2]  # REMOVED: Using pure PBKDF2 implementation
+# version = "0.12"
+# optional = true
+
+# [dependencies.sha2]  # REMOVED: Using pure SHA implementations
+# workspace = true
+# optional = true
+
+[dev-dependencies.hex-literal]
+workspace = true
+
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]

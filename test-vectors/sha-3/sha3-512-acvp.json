@@ -1,0 +1,43 @@
+{
+  "algorithm": "SHA3-512",
+  "standard": "FIPS 202",
+  "source": "https://raw.githubusercontent.com/usnistgov/ACVP-Server/master/gen-val/json-files/SHA3-512-2.0",
+  "source_type": "NIST ACVP Server sample vectors",
+  "date": "2026-03-09",
+  "revision": "2.0",
+  "vsId": 0,
+  "isSample": false,
+  "notes": "msg field is hex-encoded bit string; len is the bit length. md is the 512-bit digest. NIST ACVP bit-oriented vectors: most cases have non-byte-aligned len (len%8!=0) and are skipped by byte-level implementations — see sha3-512-byte-aligned.json for the consumable companion set.",
+  "testGroups": [
+    {
+      "tgId": 1,
+      "testType": "AFT",
+      "tests": [
+        {
+          "tcId": 1,
+          "msg": "AA12F919B1F62A216A8290AD6B3F37FDDEEE3C5C95602DE61A597E9E8D12A3F80A",
+          "len": 263,
+          "md": "2535D57402049A71ACB1FAE023BAC97CDC1F165571F20FAC91C72CDD00899A2F9478D10C068EB08A1D7FA688BB0E40AB8D5A69D12D232F0A126692F0E1411BD9"
+        },
+        {
+          "tcId": 2,
+          "msg": "AA8101B63B99AAE6D3FF73CC1DD3DFAB2CDFE2163779FD2731B8E9E9B03A58F176DF516B2E8FEFFF043A6C5F8DD8C68AE4EECFEDD1",
+          "len": 424,
+          "md": "DC4C68799FAD49C0FED417B2274A394C327F0485408C317D87454679A5E6D1142DA1F3EDF48D72366E1F82102A2CC9D44610B092AE11AA424466306555844ECD"
+        },
+        {
+          "tcId": 3,
+          "msg": "E9347D40B1C9CCE3F2BBE52D889163A1F625D66C2660B9D9656BE4B5ED1D0262827E9A1B575B3A4D309E62B0821931A05942C22DB07C05034F5400",
+          "len": 465,
+          "md": "E293830A2231A21DFF7A71BCFBA14DC783CF55245B73A7F9EF9AB3E112F624209EB5B8AFB8166C5EC6CF36D641EB279C79FE5521BE9A8A429AEAB52C2538475F"
+        },
+        {
+          "tcId": 4,
+          "msg": "591C6D1FD0B34C3A030B4D2B75FFFEE4BDACD361095E552323B0541A1640A7D10763E12B6DB9560887B069B9CAF1BBB5250C2801F6CC6D3A47DAC936B0",
+          "len": 484,
+          "md": "4F37701B8F5A57B29FE083B28B9E295583C20BFA655B0CDA6D714D0F4E24276234FDA79FD9ACE345D5667337905C89612ED1E34BB680DD1EFCF81546927FF188"
+        }
+      ]
+    }
+  ]
+}

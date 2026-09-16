@@ -1,0 +1,97 @@
+{
+  "algorithm": "AES-GCM",
+  "standard": "FIPS 197 / NIST SP 800-38D",
+  "source": "https://raw.githubusercontent.com/google/wycheproof/master/testvectors_v1/aes_gcm_test.json",
+  "source_type": "Google Wycheproof test vectors v0.9rc5",
+  "schema": "aead_test_schema_v1.json",
+  "date": "2026-03-09",
+  "filter": "AES-256 only (keySize=256)",
+  "numberOfTests": 6,
+  "notes": "Test vectors of type AeadTest. Only AES-256 (keySize=256) test groups are included. Ktv = known-test-vector; Pseudorandom = randomly generated.",
+  "testGroups": [
+    {
+      "ivSize": 96,
+      "keySize": 256,
+      "tagSize": 128,
+      "type": "AeadTest",
+      "source": {
+        "name": "google-wycheproof",
+        "version": "0.9rc5"
+      },
+      "tests": [
+        {
+          "tcId": 91,
+          "comment": "",
+          "flags": ["Ktv"],
+          "key": "92ace3e348cd821092cd921aa3546374299ab46209691bc28b8752d17f123c20",
+          "iv": "00112233445566778899aabb",
+          "aad": "00000000ffffffff",
+          "msg": "00010203040506070809",
+          "ct": "e27abdd2d2a53d2f136b",
+          "tag": "9a4a2579529301bcfb71c78d4060f52c",
+          "result": "valid"
+        },
+        {
+          "tcId": 92,
+          "comment": "",
+          "flags": ["Ktv"],
+          "key": "29d3a44f8723dc640239100c365423a312934ac80239212ac3df3421a2098123",
+          "iv": "00112233445566778899aabb",
+          "aad": "aabbccddeeff",
+          "msg": "",
+          "ct": "",
+          "tag": "2a7d77fa526b8250cb296078926b5020",
+          "result": "valid"
+        },
+        {
+          "tcId": 93,
+          "comment": "",
+          "flags": ["Pseudorandom"],
+          "key": "80ba3192c803ce965ea371d5ff073cf0f43b6a2ab576b208426e11409c09b9b0",
+          "iv": "4da5bf8dfd5852c1ea12379d",
+          "aad": "",
+          "msg": "",
+          "ct": "",
+          "tag": "4771a7c404a472966cea8f73c8bfe17a",
+          "result": "valid"
+        },
+        {
+          "tcId": 94,
+          "comment": "",
+          "flags": ["Pseudorandom"],
+          "key": "cc56b680552eb75008f5484b4cb803fa5063ebd6eab91f6ab6aef4916a766273",
+          "iv": "99e23ec48985bccdeeab60f1",
+          "aad": "",
+          "msg": "2a",
+          "ct": "06",
+          "tag": "633c1e9703ef744ffffb40edf9d14355",
+          "result": "valid"
+        },
+        {
+          "tcId": 95,
+          "comment": "",
+          "flags": ["Pseudorandom"],
+          "key": "51e4bf2bad92b7aff1a4bc05550ba81df4b96fabf41c12c7b00e60e48db7e152",
+          "iv": "4f07afedfdc3b6c2361823d3",
+          "aad": "",
+          "msg": "be3308f72a2c6aed",
+          "ct": "cf332a12fdee800b",
+          "tag": "602e8d7c4799d62c140c9bb834876b09",
+          "result": "valid"
+        },
+        {
+          "tcId": 96,
+          "comment": "",
+          "flags": ["Pseudorandom"],
+          "key": "67119627bd988eda906219e08c0d0d779a07d208ce8a4fe0709af755eeec6dcb",
+          "iv": "68ab7fdbf61901dad461d23c",
+          "aad": "",
+          "msg": "51f8c1f731ea14acdb210a6d973e07",
+          "ct": "43fc101bff4b32bfadd3daf57a590e",
+          "tag": "ec04aacb7148a8b8be44cb7eaf4efa69",
+          "result": "valid"
+        }
+      ]
+    }
+  ]
+}

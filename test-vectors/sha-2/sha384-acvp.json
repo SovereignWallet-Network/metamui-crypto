@@ -1,0 +1,41 @@
+{
+  "algorithm": "SHA2-384",
+  "standard": "FIPS 180-4",
+  "source": "https://csrc.nist.gov/Projects/Cryptographic-Algorithm-Validation-Program/Secure-Hashing",
+  "source_type": "NIST FIPS 180-4 official test vectors",
+  "date": "2026-03-09",
+  "notes": "Official FIPS 180-4 SHA-384 test vectors from NIST. msg is hex-encoded.",
+  "sample_test_vectors": [
+    {
+      "tcId": 1,
+      "comment": "SHA-384 of empty string",
+      "msg": "",
+      "md": "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b"
+    },
+    {
+      "tcId": 2,
+      "comment": "SHA-384 of 'abc'",
+      "msg": "616263",
+      "md": "cb00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7"
+    },
+    {
+      "tcId": 3,
+      "comment": "SHA-384 of 'abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq'",
+      "msg": "6162636462636465636465666465666765666768666768696768696a68696a6b696a6b6c6a6b6c6d6b6c6d6e6c6d6e6f6d6e6f706e6f7071",
+      "md": "3391fdddfc8dc7393707a65b1b4709397cf8b1d162af05abfe8f450de5f36bc6b0455a8520bc4e6f5fe95b1fe3c8452b"
+    },
+    {
+      "tcId": 4,
+      "comment": "SHA-384 of 'abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu'",
+      "msg": "61626364656667686263646566676869636465666768696a6465666768696a6b65666768696a6b6c666768696a6b6c6d6768696a6b6c6d6e68696a6b6c6d6e6f696a6b6c6d6e6f706a6b6c6d6e6f70716b6c6d6e6f7071726c6d6e6f707172736d6e6f70717273746e6f707172737475",
+      "md": "09330c33f71147e83d192fc782cd1b4753111b173b3b05d22fa08086e3b0f712fcc7c71a557e2db966c3e9fa91746039"
+    },
+    {
+      "tcId": 5,
+      "comment": "SHA-384 of 1 million 'a' characters",
+      "msg": "REPEATED_61_1000000_TIMES",
+      "md": "9d0e1809716474cb086e834e310a4a1ced149e9c00f248527972cec5704c2a5b07b8b3dc38ecc4ebae97ddd87f3d8985",
+      "note": "Message is 0x61 repeated 1,000,000 times."
+    }
+  ]
+}

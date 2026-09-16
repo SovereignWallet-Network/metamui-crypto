@@ -1,0 +1,142 @@
+{
+  "algorithm": "HMACSHA512",
+  "standard": "FIPS 198-1",
+  "source": "https://raw.githubusercontent.com/google/wycheproof/master/testvectors_v1/hmac_sha512_test.json",
+  "source_type": "Google Wycheproof test vectors v0.9",
+  "schema": "mac_test_schema_v1.json",
+  "date": "2026-03-09",
+  "numberOfTests": 174,
+  "notes": "Test vectors of type MacTest for HMAC-SHA-512. ModifiedTag tests check authentication bypass; Pseudorandom tests check correctness.",
+  "testGroups": [
+    {
+      "type": "MacTest",
+      "source": {
+        "name": "google-wycheproof",
+        "version": "0.9"
+      },
+      "keySize": 512,
+      "tagSize": 512,
+      "tests": [
+        {
+          "tcId": 1,
+          "comment": "empty message",
+          "flags": ["Pseudorandom"],
+          "key": "5365244bb43f23f18dfc86c09d62db4741138bec1fbddc282d295e0a098eb5c3e37bd6f4cc16d5ce7d77b1d474a1eb4db313cc0c24e48992ac125196549df9a8",
+          "msg": "",
+          "tag": "d0a556bd1afa8df1ebf9e3ee683a8a2450a7c83eba2daf2e2ff2f953f0cd64da216e67134cf55578b205c8a1e241ba1369516a5ef4298b9c1d31e9d59fc04fe4",
+          "result": "valid"
+        },
+        {
+          "tcId": 2,
+          "comment": "short message",
+          "flags": ["Pseudorandom"],
+          "key": "00698977f7102c67b594166919aa99dc3e58c7b6697a6422e238d04d2f57b2c74e4e84f5c4c6b792952df72f1c09244802f0bcf8752efb90e836110703bfa21c",
+          "msg": "01",
+          "tag": "4d1609cc2c2f1ab5ddc35815ae1b5dc046f226bde17ec37a4c89ec46fbd31af2aeb810b196dffdd11924d3772bef26a7a542e0a1673b76b915d41cbd3df0f6a6",
+          "result": "valid"
+        },
+        {
+          "tcId": 3,
+          "comment": "short message",
+          "flags": ["Pseudorandom"],
+          "key": "ed6dc65dbeaadbdaab530a0d35f19f78a7bd93e698546c82751bf650c2a44fc8529033d088febeed288fb4c8132a59df0207687640c76dcdb270ac3af5f042f1",
+          "msg": "a78f",
+          "tag": "0757b27e120559d64cd3d6e3cb40d497845375815181bd9b4e74f2189d09d01a1b3ead53701380d988958ed22bc379ace9d47cbcac1d49bfa7e14f1f44804c30",
+          "result": "valid"
+        },
+        {
+          "tcId": 4,
+          "comment": "short message",
+          "flags": ["Pseudorandom"],
+          "key": "463c5e696da0ec0d784388be775d1d91d94746aa8d3d2c209f56ac95ea54e7288329f9fb40be4eef35547e64c61dc51a4a1f3380a2b96420f088655ea9d85b97",
+          "msg": "e956c1",
+          "tag": "ac4b1509391814ae5cb5a123e7a060601575c11d81b563bdc52febe6bb2c747b85eeddcb6748c98147a46a1cc9be6776d1a8e82ae4896b9c18da2ff351c56795",
+          "result": "valid"
+        },
+        {
+          "tcId": 5,
+          "comment": "short message",
+          "flags": ["Pseudorandom"],
+          "key": "4bc0d32e945cfdafd20d39be3820f9649727cbda5ab5859953a322cbde1ab7a514d7dcd14ba90905e70919bb86b85cfeaa375ee2ce2703711b938c8f4ab5f178",
+          "msg": "b2aa48b3",
+          "tag": "c4ecdbd2efb17640ce6707e2e9d0ee5bfb98b91584bc86ab386437eaa37b0f2eb70500361105416c0dcecff389dc94c723fcff18cb801740962312007a195a23",
+          "result": "valid"
+        },
+        {
+          "tcId": 6,
+          "comment": "short message",
+          "flags": ["Pseudorandom"],
+          "key": "aca47f6350941a0efd8c3bac9064a554be337cde7d192f6fbf86d1b4db09b36531165cbae0a634206f71fa400df33352fff60e1fba4009ac6671cd37312bdd98",
+          "msg": "bc993b1db0",
+          "tag": "89af2f5746cab89fda6993e00f1bf0cc70a77188945bb7b5409b536aec5533ad501db6ecfa3e516b580b7df9c8eadb3cf556ccc01668be984335bd5a6255d566",
+          "result": "valid"
+        },
+        {
+          "tcId": 7,
+          "comment": "short message",
+          "flags": ["Pseudorandom"],
+          "key": "b3ecae6f25c2f699f158b3ffcd0a7a575583e4c9cb56b5c22ef4273cde6c6734e84d7400749c17e47e8cfccafaf8b50c65eb47dfeb273d5d30a1181e37b27ad0",
+          "msg": "f0361d58291e",
+          "tag": "4037a57aa279b5a07abe9389dcf508be9495a8257dcb3feba3f0801cd57574c30bfddc6df5df6567cd572c4e82735fd4e67b65e85b030f183a7f4457fb7d2c3d",
+          "result": "valid"
+        },
+        {
+          "tcId": 8,
+          "comment": "short message",
+          "flags": ["Pseudorandom"],
+          "key": "70ff24a252d65183bdc6b7c88751f850821141a61246727c3240b4f96088ae3278767a822b65735a28ccebe4c874bcb2c942882cb23f9dd87fe08fbaad5ae72f",
+          "msg": "e18da3ebf0ffa4",
+          "tag": "878d488754bc796c70e11d5db77acda2e1796d86146e27d862586740c4d488ed12239e6fb4ab2925afc88168609edc048f8572536fae96e149d73d230b18db66",
+          "result": "valid"
+        },
+        {
+          "tcId": 9,
+          "comment": "short message",
+          "flags": ["Pseudorandom"],
+          "key": "dd4e05933d09711ee88cb4c1ceb3600b2b33808bc08d499387b331d9c7af49bc65b55172cf8083385a940e4b864b7b4b73ddf3bd513a6cbcac73878a879b4d06",
+          "msg": "66948029351432c3",
+          "tag": "9968a16eff2b4eeecb2f9d11fcb105e8d8ca59ed4e69131c9de599cd8155fa4f33def1195a6b452263aad9265e16d4951841d7cd33c74c475da04497c02922ea",
+          "result": "valid"
+        },
+        {
+          "tcId": 10,
+          "comment": "short message",
+          "flags": ["Pseudorandom"],
+          "key": "fbd32caf8984fc4376d10daa7288db8e6e74464bdd94b448adab4497b319e9a6dcce542f82a7ff2e775d12477c880e460a9eab8efc49fcfc8c5476cb4b08954a",
+          "msg": "38a2586a2883953cc4",
+          "tag": "e0c69bd034cdec5b48150fdf3a4383456a7626d4405df52dc6c2bc8fe93bd87e369e06a781ed80ba8b1fe1146c4df82b6a514412358b31b77b9b79c7a91ec9e4",
+          "result": "valid"
+        }
+      ]
+    },
+    {
+      "type": "MacTest",
+      "source": {
+        "name": "google-wycheproof",
+        "version": "0.9"
+      },
+      "keySize": 512,
+      "tagSize": 256,
+      "tests": [
+        {
+          "tcId": 82,
+          "comment": "empty message",
+          "flags": ["Pseudorandom"],
+          "key": "eef6bcf16ef7ae17326a33f22d1406ec1bd3f866505f4b2e4fe8b45bd62ccbd85032a9899facf2db0c93a2345cb8892afb74db549781211dd8881a8c8e25c171",
+          "msg": "",
+          "tag": "75f6975e3500be4fbfee1bc95644745ce9f8d47b6f3818a48ff34e8c2b186ba6",
+          "result": "valid"
+        },
+        {
+          "tcId": 83,
+          "comment": "short message",
+          "flags": ["Pseudorandom"],
+          "key": "838696e6190c874c3717b8be0cf063ca6d60760987d1a33703e7e35eb173e5ae954e741a37935139d612149e76f6ab2a370604f5b4a68bee87e309240a9ba3d6",
+          "msg": "d8",
+          "tag": "5bcf44539d8783bb708e7f5dafc4d683bcaa0d240c902675bdde059f944dacde",
+          "result": "valid"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+[package]
+rust-version.workspace = true
+name = "metamui-aes-ctr-drbg"
+categories = ["cryptography"]
+keywords = ["drbg", "sp800-90a", "aes", "kat", "cryptography"]
+description = "AES-256-CTR-DRBG (NIST SP 800-90A) — deterministic random bit generator for PQC KAT vector reproduction"
+readme = false
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.authors]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.repository]
+workspace = true
+
+[package.homepage]
+workspace = true
+
+[features]
+default = ["std"]
+std = []
+
+[dependencies]
+metamui-aes-256 = { version = "=1.0.0-rc.1", path = "../metamui-aes-256", features = ["native"]  }
+zeroize = { workspace = true, features = ["derive", "alloc"] }
+
+[dev-dependencies]
+hex = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]

@@ -1,0 +1,50 @@
+{
+  "platform": "Kotlin",
+  "tests": [
+    {
+      "test_id": 1,
+      "description": "Empty message test",
+      "message": "",
+      "message_hex": "",
+      "expected_result": true,
+      "parameters": {
+        "n": 512,
+        "q": 12289,
+        "sigma": 165.7366171829776,
+        "beta_squared": 34034726
+      }
+    },
+    {
+      "test_id": 2,
+      "description": "Short message test",
+      "message": "Test",
+      "message_hex": "54657374",
+      "expected_result": true,
+      "parameters": {
+        "n": 512,
+        "q": 12289,
+        "sigma": 165.7366171829776,
+        "beta_squared": 34034726
+      }
+    },
+    {
+      "test_id": 3,
+      "description": "Long message test",
+      "message": "The quick brown fox jumps over the lazy dog",
+      "message_hex": "54686520717569636b2062726f776e20666f78206a756d7073206f76657220746865206c617a7920646f67",
+      "expected_result": true,
+      "parameters": {
+        "n": 512,
+        "q": 12289,
+        "sigma": 165.7366171829776,
+        "beta_squared": 34034726
+      }
+    }
+  ],
+  "parameters": {
+    "specification": "Falcon-512 NIST Round 3",
+    "sigma_value": 165.7366171829776,
+    "signature_format": "z0/z1",
+    "security_level": "NIST Level 1"
+  }
+}

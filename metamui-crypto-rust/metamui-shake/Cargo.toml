@@ -1,0 +1,28 @@
+[package]
+rust-version.workspace = true
+name = "metamui-shake"
+version.workspace = true
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+license = "Apache-2.0"
+description = "MetaMUI SHAKE XOF family: SHAKE-128 and SHAKE-256"
+repository.workspace = true
+homepage = "https://metamui.id"
+
+[package.edition]
+workspace = true
+
+[features]
+default = ["std"]
+std = []
+
+[dependencies]
+
+[dev-dependencies]
+hex = { workspace = true }
+serde_json = { workspace = true }
+serde = { version = "1", features = ["derive"] }
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
