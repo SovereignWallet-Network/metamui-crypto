@@ -50,8 +50,15 @@ attempt for callers that manage retries themselves.
 | `std` | yes | operating-system randomness helpers |
 | `kat-internal` | no | seeded and known-answer entry points (`kat_api`, `deterministic_mode`, the NIST DRBG replay). Compiled for this crate's own tests; an application is never offered a seed |
 | `fn-dsa-draft` | no | FN-DSA (FIPS 206) draft hooks; not wire-compatible with Round-3 Falcon and out of contract until the standard is final |
-| `optimized`, `avx512`, `sve2`, `metal`, `multithreading`, `batch-api` | no | platform acceleration and batch APIs; the outputs are the same bytes |
+| `multithreading`, `batch-api` | no | batch APIs (Rayon parallelism for `multithreading`); the outputs are the same bytes |
 | `wasm-bindgen` | no | browser bindings |
+
+Every code path in this crate is portable scalar Rust; there is no SIMD,
+assembly or GPU path and no CPU-feature detection. The FFT-domain operations
+of the signing pipeline go through `fft_ops::backend()`, whose default is the
+scalar implementation in `fft_ops::scalar`; `fft_ops::install` lets a separate
+crate replace it once, before the first Falcon operation of the process, with
+an implementation of the same arithmetic. This crate ships no other backend.
 | `fips` | no | requires `initialize()` (power-on self-tests) before use |
 
 ## Tests

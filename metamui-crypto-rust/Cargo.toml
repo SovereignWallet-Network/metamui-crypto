@@ -1,7 +1,6 @@
 [workspace]
 resolver = "2"
 members = [
-    "metamui-acceleration",
     "metamui-acvp-core",
     "metamui-aes-256",
     "metamui-aes-ctr-drbg",
@@ -33,7 +32,7 @@ lto = true
 codegen-units = 1
 
 [workspace.package]
-version = "1.0.0-rc.1"
+version = "1.0.0-rc.2"
 edition = "2021"
 # Minimum supported Rust version for every workspace member (each member
 # declares `rust-version.workspace = true`). The `rust linux (docker)`

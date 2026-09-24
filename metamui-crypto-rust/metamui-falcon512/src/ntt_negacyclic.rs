@@ -3,14 +3,11 @@
 /// This module implements the Number Theoretic Transform for negacyclic
 /// convolution, where X^n = -1 in the polynomial ring.
 /// 
-/// This module now includes automatic optimization detection and fallback.
+/// Portable scalar code only: there is no SIMD or assembly path.
 
 use crate::constants::{N, Q};
 use crate::poly::Poly;
 use alloc::vec::Vec;
-
-#[cfg(feature = "optimized")]
-use crate::ntt_optimized::OptimizedNTT;
 
 /// Montgomery parameters for efficient modular arithmetic
 mod montgomery {
@@ -86,18 +83,10 @@ impl NegacyclicNTT {
         result as u16
     }
     
-    /// Forward negacyclic NTT transform with automatic optimization
+    /// Forward negacyclic NTT transform
     /// Implements X_k = sum_{j=0}^{n-1} x_j * psi^{j*(2k+1)}
     pub fn forward(poly: &Poly) -> Vec<u16> {
-        #[cfg(feature = "optimized")]
-        {
-            return OptimizedNTT::forward(poly);
-        }
-        
-        #[cfg(not(feature = "optimized"))]
-        {
-            Self::forward_reference(poly)
-        }
+        Self::forward_reference(poly)
     }
     
     /// Reference implementation (fallback)
@@ -136,17 +125,8 @@ impl NegacyclicNTT {
     
     /// Inverse negacyclic NTT transform
     /// Implements x_j = n^{-1} * sum_{k=0}^{n-1} X_k * psi^{-j*(2k+1)}
-    /// Inverse negacyclic NTT transform with automatic optimization
     pub fn inverse(ntt: &[u16]) -> Poly {
-        #[cfg(feature = "optimized")]
-        {
-            return OptimizedNTT::inverse(ntt);
-        }
-        
-        #[cfg(not(feature = "optimized"))]
-        {
-            Self::inverse_reference(ntt)
-        }
+        Self::inverse_reference(ntt)
     }
     
     /// Reference inverse implementation (fallback)
@@ -187,17 +167,8 @@ impl NegacyclicNTT {
     }
     
     /// Multiply two polynomials using negacyclic NTT
-    /// Polynomial multiplication with automatic optimization
     pub fn multiply(a: &Poly, b: &Poly) -> Poly {
-        #[cfg(feature = "optimized")]
-        {
-            return OptimizedNTT::multiply(a, b);
-        }
-        
-        #[cfg(not(feature = "optimized"))]
-        {
-            Self::multiply_reference(a, b)
-        }
+        Self::multiply_reference(a, b)
     }
     
     /// Reference multiplication implementation (fallback)

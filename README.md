@@ -23,6 +23,11 @@ caller-supplied randomness, no seeded entry point. The workspace also carries
 the crates it is built on (SHA-2, SHA-3, SHAKE, AES-256, AES CTR_DRBG and the
 shared utilities), all MetaMUI's own implementations.
 
+Every crate here is portable scalar Rust: no SIMD, assembly, GPU or
+CPU-feature-detection path is in this tree, so the same arithmetic runs on
+every target the compiler supports. Accelerated variants are not part of
+the public release.
+
 ```
 cd metamui-crypto-rust && cargo test --workspace --release
 ```

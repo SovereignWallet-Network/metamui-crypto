@@ -1,21 +1,19 @@
-//! Correct Falcon-512 FFSampling Implementation (SIMD-Accelerated)
+//! Falcon-512 FFSampling implementation
 //!
 //! Self-contained module implementing the complete signing pipeline:
-//!   1. O(n log n) negacyclic FFT via SIMD-dispatched butterfly
-//!   2. FFT split/merge via SIMD dispatch (AVX2/AVX-512/NEON)
+//!   1. O(n log n) negacyclic FFT (`fft_ops`, portable scalar code)
+//!   2. FFT split/merge on the SOA layout
 //!   3. LDL tree construction from Gram matrix (SOA layout)
 //!   4. Recursive FFSampling algorithm
 //!   5. Signature computation
 //!
 //! All internal operations use SOA (Structure-of-Arrays) layout:
 //!   `f[0..hn-1]` = real parts, `f[hn..n-1]` = imaginary parts.
-//! This enables SIMD-accelerated split/merge/add/sub/mul operations
-//! throughout the entire signing pipeline.
 
 use alloc::vec::Vec;
 use crate::constants::{Q, SIGMA_MIN, SIGMA_MIN_1024};
 use crate::error::{Result, Falcon512Error};
-use crate::dispatch;
+use crate::fft_ops;
 use crate::sampler_z::sampler_z;
 use rand::RngCore;
 
@@ -35,7 +33,7 @@ fn sigma_min_for(n: usize) -> f64 {
 //
 // These operate on SOA flat arrays where:
 //   f[0..hn-1] = real parts, f[hn..n-1] = imaginary parts
-// For operations not covered by dispatch (e.g., c_div, c_abs2),
+// For operations not covered by fft_ops (e.g., c_div, c_abs2),
 // we provide scalar helpers on the SOA layout.
 // ================================================================
 
@@ -129,7 +127,7 @@ fn build_ldl_tree_top(
 
     // l10 = adj(g01) / g00 = conj(g01) / g00
     let mut g01_conj = vec![0.0; n];
-    dispatch::poly_adj_fft(&mut g01_conj, g01, logn_of(n));
+    fft_ops::poly_adj_fft(&mut g01_conj, g01, logn_of(n));
     soa_div(&mut l10, &g01_conj, g00);
 
     // d_lower = g11 - |g01|² / g00
@@ -139,7 +137,7 @@ fn build_ldl_tree_top(
     let mut ratio = vec![0.0; n];
     soa_div(&mut ratio, &abs2_g01, g00);
 
-    dispatch::poly_sub_fft(&mut d_lower, g11, &ratio, logn_of(n));
+    fft_ops::poly_sub_fft(&mut d_lower, g11, &ratio, logn_of(n));
 
     build_ldl_inner(g00, &d_lower, l10, n, sigma)
 }
@@ -162,11 +160,11 @@ fn build_ldl_inner(
     // Split self-adjoint polynomials d_upper and d_lower
     let mut du0 = vec![0.0; hn];
     let mut du1 = vec![0.0; hn];
-    dispatch::poly_split_fft(&mut du0, &mut du1, d_upper, logn);
+    fft_ops::poly_split_fft(&mut du0, &mut du1, d_upper, logn);
 
     let mut dl0 = vec![0.0; hn];
     let mut dl1 = vec![0.0; hn];
-    dispatch::poly_split_fft(&mut dl0, &mut dl1, d_lower, logn);
+    fft_ops::poly_split_fft(&mut dl0, &mut dl1, d_lower, logn);
 
     // Left subtree from d_upper: Gram = [[du0, du1], [adj(du1), du0]]
     let left = build_ldl_subtree(&du0, &du1, hn, sigma);
@@ -186,7 +184,7 @@ fn build_ldl_subtree(g0: &[f64], g1: &[f64], n: usize, sigma: f64) -> LDLTree {
 
     // l10 = conj(g1) / g0
     let mut g1_conj = vec![0.0; n];
-    dispatch::poly_adj_fft(&mut g1_conj, g1, logn);
+    fft_ops::poly_adj_fft(&mut g1_conj, g1, logn);
     soa_div(&mut l10, &g1_conj, g0);
 
     // d_lower = g0 - |g1|² / g0
@@ -194,7 +192,7 @@ fn build_ldl_subtree(g0: &[f64], g1: &[f64], n: usize, sigma: f64) -> LDLTree {
     soa_abs2_real(&mut abs2_g1, g1);
     let mut ratio = vec![0.0; n];
     soa_div(&mut ratio, &abs2_g1, g0);
-    dispatch::poly_sub_fft(&mut d_lower, g0, &ratio, logn);
+    fft_ops::poly_sub_fft(&mut d_lower, g0, &ratio, logn);
 
     build_ldl_inner(g0, &d_lower, l10, n, sigma)
 }
@@ -249,32 +247,32 @@ fn ffsampling<R: RngCore>(
             // 1. Split t1 and recurse on right subtree
             let mut t10 = vec![0.0; hn];
             let mut t11 = vec![0.0; hn];
-            dispatch::poly_split_fft(&mut t10, &mut t11, t1, logn);
+            fft_ops::poly_split_fft(&mut t10, &mut t11, t1, logn);
 
             let (z10, z11) = ffsampling(right, &t10, &t11, hn, sigma_min, rng);
 
             let mut z1 = vec![0.0; n];
-            dispatch::poly_merge_fft(&mut z1, &z10, &z11, logn);
+            fft_ops::poly_merge_fft(&mut z1, &z10, &z11, logn);
 
             // 2. Gram-Schmidt correction: t0_adj = t0 + L·(t1 - z1)
             let mut diff = vec![0.0; n];
-            dispatch::poly_sub_fft(&mut diff, t1, &z1, logn);
+            fft_ops::poly_sub_fft(&mut diff, t1, &z1, logn);
 
             let mut correction = vec![0.0; n];
-            dispatch::poly_mul_fft(&mut correction, l10, &diff, logn);
+            fft_ops::poly_mul_fft(&mut correction, l10, &diff, logn);
 
             let mut t0_adj = vec![0.0; n];
-            dispatch::poly_add_fft(&mut t0_adj, t0, &correction, logn);
+            fft_ops::poly_add_fft(&mut t0_adj, t0, &correction, logn);
 
             // 3. Split adjusted t0 and recurse on left subtree
             let mut t00 = vec![0.0; hn];
             let mut t01 = vec![0.0; hn];
-            dispatch::poly_split_fft(&mut t00, &mut t01, &t0_adj, logn);
+            fft_ops::poly_split_fft(&mut t00, &mut t01, &t0_adj, logn);
 
             let (z00, z01) = ffsampling(left, &t00, &t01, hn, sigma_min, rng);
 
             let mut z0 = vec![0.0; n];
-            dispatch::poly_merge_fft(&mut z0, &z00, &z01, logn);
+            fft_ops::poly_merge_fft(&mut z0, &z00, &z01, logn);
 
             (z0, z1)
         }
@@ -354,32 +352,32 @@ impl ExpandedKey {
             bg_fft[i] = big_g[i] as f64;
         }
 
-        dispatch::fft_forward(&mut f_fft, logn);
-        dispatch::fft_forward(&mut g_fft, logn);
-        dispatch::fft_forward(&mut bf_fft, logn);
-        dispatch::fft_forward(&mut bg_fft, logn);
+        fft_ops::fft_forward(&mut f_fft, logn);
+        fft_ops::fft_forward(&mut g_fft, logn);
+        fft_ops::fft_forward(&mut bf_fft, logn);
+        fft_ops::fft_forward(&mut bg_fft, logn);
 
         // Gram matrix
         let mut g00 = vec![0.0; n];
         let mut f_norm = vec![0.0; n];
         let mut g_norm = vec![0.0; n];
-        dispatch::poly_norm_fft(&mut f_norm, &f_fft, logn);
-        dispatch::poly_norm_fft(&mut g_norm, &g_fft, logn);
-        dispatch::poly_add_fft(&mut g00, &f_norm, &g_norm, logn);
+        fft_ops::poly_norm_fft(&mut f_norm, &f_fft, logn);
+        fft_ops::poly_norm_fft(&mut g_norm, &g_fft, logn);
+        fft_ops::poly_add_fft(&mut g00, &f_norm, &g_norm, logn);
 
         let mut g01 = vec![0.0; n];
         let mut f_bf = vec![0.0; n];
         let mut g_bg = vec![0.0; n];
-        dispatch::poly_muladj_fft(&mut f_bf, &f_fft, &bf_fft, logn);
-        dispatch::poly_muladj_fft(&mut g_bg, &g_fft, &bg_fft, logn);
-        dispatch::poly_add_fft(&mut g01, &f_bf, &g_bg, logn);
+        fft_ops::poly_muladj_fft(&mut f_bf, &f_fft, &bf_fft, logn);
+        fft_ops::poly_muladj_fft(&mut g_bg, &g_fft, &bg_fft, logn);
+        fft_ops::poly_add_fft(&mut g01, &f_bf, &g_bg, logn);
 
         let mut g11 = vec![0.0; n];
         let mut bf_norm = vec![0.0; n];
         let mut bg_norm = vec![0.0; n];
-        dispatch::poly_norm_fft(&mut bf_norm, &bf_fft, logn);
-        dispatch::poly_norm_fft(&mut bg_norm, &bg_fft, logn);
-        dispatch::poly_add_fft(&mut g11, &bf_norm, &bg_norm, logn);
+        fft_ops::poly_norm_fft(&mut bf_norm, &bf_fft, logn);
+        fft_ops::poly_norm_fft(&mut bg_norm, &bg_fft, logn);
+        fft_ops::poly_add_fft(&mut g11, &bf_norm, &bg_norm, logn);
 
         let tree = build_ldl_tree_top(&g00, &g01, &g11, n, sigma);
 
@@ -407,15 +405,15 @@ impl ExpandedKey {
         // FFT(c) — only per-challenge work
         let mut c_soa = vec![0.0f64; n];
         for i in 0..n { c_soa[i] = c[i] as f64; }
-        dispatch::fft_forward(&mut c_soa, logn);
+        fft_ops::fft_forward(&mut c_soa, logn);
 
         // Target: t0 = -c·F/q, t1 = c·f/q
         let mut t0 = vec![0.0; n];
-        dispatch::poly_mul_fft(&mut t0, &c_soa, &self.bf_fft, logn);
+        fft_ops::poly_mul_fft(&mut t0, &c_soa, &self.bf_fft, logn);
         soa_scale_inplace(&mut t0, -q_inv);
 
         let mut t1 = vec![0.0; n];
-        dispatch::poly_mul_fft(&mut t1, &c_soa, &self.f_fft, logn);
+        fft_ops::poly_mul_fft(&mut t1, &c_soa, &self.f_fft, logn);
         soa_scale_inplace(&mut t1, q_inv);
 
         // FFSampling
@@ -423,20 +421,20 @@ impl ExpandedKey {
 
         // Signature: s0 = c - z0*g - z1*G (fused), s1 = z0*f + z1*F (fused)
         let mut s0_soa = vec![0.0; n];
-        dispatch::poly_mulsub_fft(&mut s0_soa, &z0_soa, &self.g_fft, &c_soa, logn);
+        fft_ops::poly_mulsub_fft(&mut s0_soa, &z0_soa, &self.g_fft, &c_soa, logn);
         let s0_tmp = s0_soa.clone();
-        dispatch::poly_mulsub_fft(&mut s0_soa, &z1_soa, &self.bg_fft, &s0_tmp, logn);
+        fft_ops::poly_mulsub_fft(&mut s0_soa, &z1_soa, &self.bg_fft, &s0_tmp, logn);
 
         let mut s1_soa = vec![0.0; n];
         // First term: s1 = z0*f (accumulator is zero, so use plain mul)
-        dispatch::poly_mul_fft(&mut s1_soa, &z0_soa, &self.f_fft, logn);
+        fft_ops::poly_mul_fft(&mut s1_soa, &z0_soa, &self.f_fft, logn);
         // Second term: s1 += z1*F (fused muladd)
         let s1_tmp = s1_soa.clone();
-        dispatch::poly_muladd_fft(&mut s1_soa, &z1_soa, &self.bf_fft, &s1_tmp, logn);
+        fft_ops::poly_muladd_fft(&mut s1_soa, &z1_soa, &self.bf_fft, &s1_tmp, logn);
 
         // Inverse FFT
-        dispatch::fft_inverse(&mut s0_soa, logn);
-        dispatch::fft_inverse(&mut s1_soa, logn);
+        fft_ops::fft_inverse(&mut s0_soa, logn);
+        fft_ops::fft_inverse(&mut s1_soa, logn);
 
         // Round to integer
         let mut s0 = vec![0i16; n];
@@ -467,7 +465,7 @@ impl ExpandedKey {
 ///   5. Sample z ≈ t via FFSampling
 ///   6. Compute s = (c,0) - z·B
 ///
-/// All internal operations use SOA layout and route through SIMD dispatch
+/// All internal operations use SOA layout and go through `fft_ops`
 /// for AVX2/AVX-512/NEON acceleration.
 #[allow(non_snake_case)]
 pub fn falcon_sign_sample<R: RngCore>(
@@ -483,7 +481,7 @@ pub fn falcon_sign_sample<R: RngCore>(
     let logn = n.trailing_zeros() as usize;
     let hn = n >> 1;
 
-    // 1. Convert to f64 and compute FFTs (O(n log n) via dispatch)
+    // 1. Convert to f64 and compute FFTs (O(n log n) via fft_ops)
     let mut f_soa = vec![0.0f64; n];
     let mut g_soa = vec![0.0f64; n];
     let mut bf_soa = vec![0.0f64; n];
@@ -498,11 +496,11 @@ pub fn falcon_sign_sample<R: RngCore>(
         c_soa[i]  = c[i] as f64;
     }
 
-    dispatch::fft_forward(&mut f_soa, logn);
-    dispatch::fft_forward(&mut g_soa, logn);
-    dispatch::fft_forward(&mut bf_soa, logn);
-    dispatch::fft_forward(&mut bg_soa, logn);
-    dispatch::fft_forward(&mut c_soa, logn);
+    fft_ops::fft_forward(&mut f_soa, logn);
+    fft_ops::fft_forward(&mut g_soa, logn);
+    fft_ops::fft_forward(&mut bf_soa, logn);
+    fft_ops::fft_forward(&mut bg_soa, logn);
+    fft_ops::fft_forward(&mut c_soa, logn);
 
     // 2. Gram matrix: G = B·B* where B = [[g, -f], [G, -F]]
     //    g00 = |f|² + |g|²    (real, via norm)
@@ -511,23 +509,23 @@ pub fn falcon_sign_sample<R: RngCore>(
     let mut g00 = vec![0.0; n];
     let mut f_norm = vec![0.0; n];
     let mut g_norm = vec![0.0; n];
-    dispatch::poly_norm_fft(&mut f_norm, &f_soa, logn);
-    dispatch::poly_norm_fft(&mut g_norm, &g_soa, logn);
-    dispatch::poly_add_fft(&mut g00, &f_norm, &g_norm, logn);
+    fft_ops::poly_norm_fft(&mut f_norm, &f_soa, logn);
+    fft_ops::poly_norm_fft(&mut g_norm, &g_soa, logn);
+    fft_ops::poly_add_fft(&mut g00, &f_norm, &g_norm, logn);
 
     let mut g01 = vec![0.0; n];
     let mut fF = vec![0.0; n];
     let mut gG = vec![0.0; n];
-    dispatch::poly_muladj_fft(&mut fF, &f_soa, &bf_soa, logn);
-    dispatch::poly_muladj_fft(&mut gG, &g_soa, &bg_soa, logn);
-    dispatch::poly_add_fft(&mut g01, &fF, &gG, logn);
+    fft_ops::poly_muladj_fft(&mut fF, &f_soa, &bf_soa, logn);
+    fft_ops::poly_muladj_fft(&mut gG, &g_soa, &bg_soa, logn);
+    fft_ops::poly_add_fft(&mut g01, &fF, &gG, logn);
 
     let mut g11 = vec![0.0; n];
     let mut bf_norm = vec![0.0; n];
     let mut bg_norm = vec![0.0; n];
-    dispatch::poly_norm_fft(&mut bf_norm, &bf_soa, logn);
-    dispatch::poly_norm_fft(&mut bg_norm, &bg_soa, logn);
-    dispatch::poly_add_fft(&mut g11, &bf_norm, &bg_norm, logn);
+    fft_ops::poly_norm_fft(&mut bf_norm, &bf_soa, logn);
+    fft_ops::poly_norm_fft(&mut bg_norm, &bg_soa, logn);
+    fft_ops::poly_add_fft(&mut g11, &bf_norm, &bg_norm, logn);
 
     // 3. Build LDL tree (all SOA)
     let tree = build_ldl_tree_top(&g00, &g01, &g11, n, sigma);
@@ -543,32 +541,32 @@ pub fn falcon_sign_sample<R: RngCore>(
     let q_inv = 1.0 / Q as f64;
 
     let mut t0 = vec![0.0; n];
-    dispatch::poly_mul_fft(&mut t0, &c_soa, &bf_soa, logn);
+    fft_ops::poly_mul_fft(&mut t0, &c_soa, &bf_soa, logn);
     soa_scale_inplace(&mut t0, -q_inv);
 
     let mut t1 = vec![0.0; n];
-    dispatch::poly_mul_fft(&mut t1, &c_soa, &f_soa, logn);
+    fft_ops::poly_mul_fft(&mut t1, &c_soa, &f_soa, logn);
     soa_scale_inplace(&mut t1, q_inv);
 
-    // 5. FFSampling: sample integer z close to target t (all SOA, SIMD-dispatched)
+    // 5. FFSampling: sample integer z close to target t (all SOA)
     let (z0_soa, z1_soa) = ffsampling(&tree, &t0, &t1, n, sigma_min_for(n), rng);
 
     // 6. Signature: s = (c, 0) - z·B  (using fused multiply-add/sub)
     //    s0 = c - z0·g - z1·G
     //    s1 = z0·f + z1·F
     let mut s0_soa = vec![0.0; n];
-    dispatch::poly_mulsub_fft(&mut s0_soa, &z0_soa, &g_soa, &c_soa, logn);
+    fft_ops::poly_mulsub_fft(&mut s0_soa, &z0_soa, &g_soa, &c_soa, logn);
     let s0_tmp = s0_soa.clone();
-    dispatch::poly_mulsub_fft(&mut s0_soa, &z1_soa, &bg_soa, &s0_tmp, logn);
+    fft_ops::poly_mulsub_fft(&mut s0_soa, &z1_soa, &bg_soa, &s0_tmp, logn);
 
     let mut s1_soa = vec![0.0; n];
-    dispatch::poly_mul_fft(&mut s1_soa, &z0_soa, &f_soa, logn);
+    fft_ops::poly_mul_fft(&mut s1_soa, &z0_soa, &f_soa, logn);
     let s1_tmp = s1_soa.clone();
-    dispatch::poly_muladd_fft(&mut s1_soa, &z1_soa, &bf_soa, &s1_tmp, logn);
+    fft_ops::poly_muladd_fft(&mut s1_soa, &z1_soa, &bf_soa, &s1_tmp, logn);
 
     // 7. Inverse FFT to get real coefficients (O(n log n))
-    dispatch::fft_inverse(&mut s0_soa, logn);
-    dispatch::fft_inverse(&mut s1_soa, logn);
+    fft_ops::fft_inverse(&mut s0_soa, logn);
+    fft_ops::fft_inverse(&mut s1_soa, logn);
 
     // 8. Round to nearest integer
     let mut s0 = vec![0i16; n];
@@ -590,7 +588,7 @@ pub fn falcon_sign_sample<R: RngCore>(
 mod tests {
     use super::*;
     use crate::constants::N;
-    use crate::dispatch;
+    use crate::fft_ops;
 
     fn close(a: f64, b: f64, tol: f64) -> bool {
         let diff = (a - b).abs();
@@ -599,15 +597,15 @@ mod tests {
     }
 
     #[test]
-    fn test_fft_roundtrip_via_dispatch() {
-        // Test that dispatch::fft_forward → fft_inverse recovers original
+    fn test_fft_roundtrip_via_fft_ops() {
+        // Test that fft_ops::fft_forward → fft_inverse recovers original
         let mut poly = vec![0.0f64; 8];
         poly[0] = 3.0; poly[1] = 1.0; poly[2] = 4.0; poly[3] = 1.0;
         poly[4] = 5.0; poly[5] = 9.0; poly[6] = 2.0; poly[7] = 6.0;
 
         let original = poly.clone();
-        dispatch::fft_forward(&mut poly, 3);
-        dispatch::fft_inverse(&mut poly, 3);
+        fft_ops::fft_forward(&mut poly, 3);
+        fft_ops::fft_inverse(&mut poly, 3);
 
         for i in 0..8 {
             assert!(close(original[i], poly[i], 1e-10),
@@ -619,14 +617,14 @@ mod tests {
     fn test_split_merge_roundtrip_soa() {
         let poly = vec![3.0, 1.0, 4.0, 1.0, 5.0, 9.0, 2.0, 6.0];
         let mut fft = poly.clone();
-        dispatch::fft_forward(&mut fft, 3);
+        fft_ops::fft_forward(&mut fft, 3);
 
         let mut f0 = vec![0.0; 4];
         let mut f1 = vec![0.0; 4];
-        dispatch::poly_split_fft(&mut f0, &mut f1, &fft, 3);
+        fft_ops::poly_split_fft(&mut f0, &mut f1, &fft, 3);
 
         let mut merged = vec![0.0; 8];
-        dispatch::poly_merge_fft(&mut merged, &f0, &f1, 3);
+        fft_ops::poly_merge_fft(&mut merged, &f0, &f1, 3);
 
         for i in 0..8 {
             assert!(close(fft[i], merged[i], 1e-10),
@@ -642,13 +640,13 @@ mod tests {
         // Expected: (15 - 14) + (21 + 10)x = 1 + 31x
         let expected = vec![1.0, 31.0];
 
-        dispatch::fft_forward(&mut a_fft, 1);
-        dispatch::fft_forward(&mut b_fft, 1);
+        fft_ops::fft_forward(&mut a_fft, 1);
+        fft_ops::fft_forward(&mut b_fft, 1);
 
         let mut c_fft = vec![0.0; 2];
-        dispatch::poly_mul_fft(&mut c_fft, &a_fft, &b_fft, 1);
+        fft_ops::poly_mul_fft(&mut c_fft, &a_fft, &b_fft, 1);
 
-        dispatch::fft_inverse(&mut c_fft, 1);
+        fft_ops::fft_inverse(&mut c_fft, 1);
 
         for i in 0..2 {
             assert!(close(c_fft[i], expected[i], 1e-10),
@@ -693,7 +691,7 @@ mod tests {
 
             // Butterfly FFT: n SOA values = n/2 complex evaluations
             let mut butterfly = poly.clone();
-            dispatch::fft_forward(&mut butterfly, logn);
+            fft_ops::fft_forward(&mut butterfly, logn);
 
             // The butterfly FFT stores evaluations at ω^{2k+1} for k=0..hn-1
             // in SOA format: butterfly[k] = re, butterfly[k+hn] = im
@@ -806,13 +804,13 @@ mod tests {
 
         // Separate: mul then add
         let mut prod = vec![0.0; n];
-        dispatch::poly_mul_fft(&mut prod, &a, &b, logn);
+        fft_ops::poly_mul_fft(&mut prod, &a, &b, logn);
         let mut expected_add = vec![0.0; n];
-        dispatch::poly_add_fft(&mut expected_add, &acc, &prod, logn);
+        fft_ops::poly_add_fft(&mut expected_add, &acc, &prod, logn);
 
         // Fused muladd
         let mut fused_add = vec![0.0; n];
-        dispatch::poly_muladd_fft(&mut fused_add, &a, &b, &acc, logn);
+        fft_ops::poly_muladd_fft(&mut fused_add, &a, &b, &acc, logn);
 
         for i in 0..n {
             assert!(close(expected_add[i], fused_add[i], 1e-12),
@@ -821,11 +819,11 @@ mod tests {
 
         // Separate: mul then sub
         let mut expected_sub = vec![0.0; n];
-        dispatch::poly_sub_fft(&mut expected_sub, &acc, &prod, logn);
+        fft_ops::poly_sub_fft(&mut expected_sub, &acc, &prod, logn);
 
         // Fused mulsub
         let mut fused_sub = vec![0.0; n];
-        dispatch::poly_mulsub_fft(&mut fused_sub, &a, &b, &acc, logn);
+        fft_ops::poly_mulsub_fft(&mut fused_sub, &a, &b, &acc, logn);
 
         for i in 0..n {
             assert!(close(expected_sub[i], fused_sub[i], 1e-12),

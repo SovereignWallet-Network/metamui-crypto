@@ -120,7 +120,6 @@ pub mod simple_sampler_improved;
 // FFT and NTT operations
 mod fft;
 pub mod fft_hybrid;
-mod ntt_optimized;
 mod ntt_negacyclic;
 pub mod ntt_falcon;
 
@@ -205,14 +204,9 @@ mod kat_validation;
 // Optimizations
 mod numerical_stability;
 
-// SIMD dispatch: runtime detection → fastest available implementation
-// Hierarchy: AVX-512 > AVX2 > NEON > Portable (scalar)
-pub mod dispatch;
-pub mod simd;
-
-// Metal GPU batch operations (macOS only)
-#[cfg(all(feature = "metal", target_os = "macos"))]
-pub mod metal;
+// FFT-domain polynomial operations on the SOA layout, portable scalar code
+// only: this crate carries no SIMD, assembly or GPU path.
+pub mod fft_ops;
 
 // Threshold optimization (March 2025 milestone)
 pub mod threshold_optimization;

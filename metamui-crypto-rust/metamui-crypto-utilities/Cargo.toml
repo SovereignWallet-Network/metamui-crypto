@@ -50,17 +50,12 @@ version = "0.2"
 # MetaMUI hash algorithm dependencies
 [dependencies.metamui-sha2]
 path = "../metamui-sha2"
-version = "=1.0.0-rc.1"
+version = "=1.0.0-rc.2"
 
 [dependencies.metamui-security-utils]
 path = "../metamui-security-utils"
-version = "=1.0.0-rc.1"
+version = "=1.0.0-rc.2"
 features = [ "subtle", "zeroize",]
-
-[dependencies.metamui-acceleration]
-path = "../metamui-acceleration"
-version = "=1.0.0-rc.1"
-default-features = false
 
 [dependencies.once_cell]
 version = "1.19"

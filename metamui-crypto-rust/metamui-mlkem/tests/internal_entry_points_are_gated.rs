@@ -98,9 +98,7 @@ fn every_internal_entry_point_is_compiled_only_with_the_feature() {
     let mut offenders = Vec::new();
     for path in files {
         let rel = path.strip_prefix(root).unwrap().to_string_lossy().replace('\\', "/");
-        // `src/optimized/` is not a module of the crate (lib.rs declares no
-        // `mod optimized`), so nothing in it is compiled.
-        if rel == "src/kem.rs" || rel.starts_with("src/optimized/") {
+        if rel == "src/kem.rs" {
             continue;
         }
         let text = fs::read_to_string(&path).unwrap();

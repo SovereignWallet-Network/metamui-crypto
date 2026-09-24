@@ -28,11 +28,11 @@ readme = "README.md"
 
 [dependencies]
 # Internal dependencies only - no external crypto libraries
-metamui-shake = { version = "=1.0.0-rc.1", path = "../metamui-shake"  }
-metamui-sha3 = { version = "=1.0.0-rc.1", path = "../metamui-sha3"  }
-metamui-security-utils = { version = "=1.0.0-rc.1", path = "../metamui-security-utils", features = ["subtle", "zeroize"]  }
-metamui-crypto-utilities = { version = "=1.0.0-rc.1", path = "../metamui-crypto-utilities"  }
-metamui-acvp-core = { version = "=1.0.0-rc.1", path = "../metamui-acvp-core"  }
+metamui-shake = { version = "=1.0.0-rc.2", path = "../metamui-shake"  }
+metamui-sha3 = { version = "=1.0.0-rc.2", path = "../metamui-sha3"  }
+metamui-security-utils = { version = "=1.0.0-rc.2", path = "../metamui-security-utils", features = ["subtle", "zeroize"]  }
+metamui-crypto-utilities = { version = "=1.0.0-rc.2", path = "../metamui-crypto-utilities"  }
+metamui-acvp-core = { version = "=1.0.0-rc.2", path = "../metamui-acvp-core"  }
 rand_core = { version = "0.6", features = ["std"] }
 rand_chacha = "0.3"
 serde_json = { version = "1.0", optional = true }
@@ -63,7 +63,6 @@ mlkem1024 = []
 all = ["mlkem512", "mlkem768", "mlkem1024"]
 # Opt-in gate for bit-rotted legacy benchmarks.
 legacy-benches = []
-avx2 = ["simd-abstraction"]
 constant-time-test = []
 # FIPS 203 §6 internal algorithms, which the standard says applications must
 # not be offered: `generate_keypair_from_dz` (KeyGen_internal),
@@ -72,17 +71,10 @@ constant-time-test = []
 # known-answer tests and fixture generators only. Applications call
 # `generate_keypair` / `encapsulate`, which run the same bodies (#202).
 fips203-internal = []
-# Reserved for an optimization backend that is not shipped; declaring it
-# satisfies the unexpected_cfgs lint.
-optimized = []
 
 [lib]
 name = "metamui_mlkem"
 crate-type = ["cdylib", "rlib"]
-
-[target."cfg(target_arch = \"x86_64\")".dependencies.simd-abstraction]
-version = "0.7"
-optional = true
 
 # wasm32 `getrandom` backend, the same registration metamui-falcon512 carries:
 # `rand_core/std` pulls getrandom, which refuses wasm32-unknown-unknown unless
@@ -92,7 +84,7 @@ optional = true
 # browser; a consumer that is a browser enables `getrandom/js` itself, which
 # getrandom prefers, and this registration is then inert.
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-metamui-getrandom-unavailable = { version = "=1.0.0-rc.1", path = "../metamui-getrandom-unavailable" }
+metamui-getrandom-unavailable = { version = "=1.0.0-rc.2", path = "../metamui-getrandom-unavailable" }
 
 # What docs.rs builds: the public API on one target, with only the features listed —
 # never all-features, which unions host-gated and test-only features.

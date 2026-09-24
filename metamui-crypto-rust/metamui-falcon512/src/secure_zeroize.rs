@@ -5,7 +5,7 @@
 // Compliant with FIPS 140-3 and Common Criteria requirements.
 
 use core::ptr;
-use core::sync::atomic::{compiler_fence, Ordering};
+use core::sync::atomic::{compiler_fence, fence, Ordering};
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 use std::vec::Vec;
@@ -133,26 +133,13 @@ impl Zeroize for SecurePolynomial {
 
 impl ZeroizeOnDrop for SecurePolynomial {}
 
-/// Memory barrier operations for different architectures
-#[cfg(target_arch = "x86_64")]
+/// Full memory fence between erasure passes.
+///
+/// Portable: `fence(SeqCst)` orders the volatile writes of one pass before
+/// the next on every target, with no architecture-specific instruction.
 #[inline(always)]
 pub fn memory_barrier() {
-    use core::arch::x86_64::_mm_mfence;
-    unsafe { _mm_mfence(); }
-}
-
-#[cfg(target_arch = "aarch64")]
-#[inline(always)]
-pub fn memory_barrier() {
-    use core::arch::asm;
-    unsafe { asm!("dmb sy", options(nostack, preserves_flags)); }
-}
-
-#[cfg(not(any(target_arch = "x86_64", target_arch = "aarch64")))]
-#[inline(always)]
-pub fn memory_barrier() {
-    // Fallback to compiler fence for other architectures
-    compiler_fence(Ordering::SeqCst);
+    fence(Ordering::SeqCst);
 }
 
 /// Pattern-based secure erasure

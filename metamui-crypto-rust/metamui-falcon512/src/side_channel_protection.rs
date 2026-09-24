@@ -61,24 +61,6 @@ impl SideChannelProtection {
         result
     }
     
-    /// Prefetch memory to normalize cache behavior
-    pub fn prefetch_memory(&self, data: &[u8]) {
-        // Touch all cache lines
-        const CACHE_LINE_SIZE: usize = 64;
-        
-        for i in (0..data.len()).step_by(CACHE_LINE_SIZE) {
-            #[cfg(target_arch = "x86_64")]
-            unsafe {
-                core::arch::x86_64::_mm_prefetch(
-                    data[i..].as_ptr() as *const i8,
-                    core::arch::x86_64::_MM_HINT_T0
-                );
-            }
-
-            #[cfg(not(target_arch = "x86_64"))]
-            let _ = data[i];
-        }
-    }
 }
 
 /// Power analysis protection
@@ -148,20 +130,6 @@ impl CacheProtection {
         vec
     }
     
-    /// Flush cache lines
-    #[cfg(target_arch = "x86_64")]
-    pub fn flush_cache(data: &[u8]) {
-        unsafe {
-            for chunk in data.chunks(64) {
-                core::arch::x86_64::_mm_clflush(chunk.as_ptr());
-            }
-        }
-    }
-    
-    #[cfg(not(target_arch = "x86_64"))]
-    pub fn flush_cache(_data: &[u8]) {
-        // No-op on other architectures
-    }
 }
 
 /// Secure memory operations
