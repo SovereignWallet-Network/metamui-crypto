@@ -1,0 +1,81 @@
+[package]
+name = "metamui-smaug-t"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+authors = ["MetaMUI Crypto Team"]
+license = "Apache-2.0"
+description = "SMAUG-T v1.2.0 post-quantum KEM (KpqC standard), byte-exact to the CryptoLab reference vectors"
+repository.workspace = true
+keywords = ["post-quantum", "cryptography", "kem", "lattice", "smaug"]
+categories = ["cryptography"]
+readme = "README.md"
+
+[dependencies]
+thiserror = "1.0"
+serde = { version = "1.0", features = ["derive"], optional = true }
+zeroize = { version = "1.5", features = ["zeroize_derive"] }
+subtle = { workspace = true, features = ["std"] }
+# Hashing is the in-house MetaMUI Keccak family; no RustCrypto crate is in
+# this crate's closure (the TypeScript/WASM SMAUG-T binding is built from it).
+metamui-shake = { version = "=1.0.0-rc.3", path = "../metamui-shake" }
+metamui-sha3 = { version = "=1.0.0-rc.3", path = "../metamui-sha3" }
+# Entropy is the platform's (`rand_core::OsRng` over getrandom). `rand`
+# itself was here before, dragging its ChaCha `StdRng` into the closure for
+# nothing this crate calls; tests that want a seeded RNG take it as a
+# dev-dependency.
+rand_core = { workspace = true, features = ["getrandom"] }
+getrandom = { version = "0.2" }
+
+[dev-dependencies]
+# This crate's own tests build with `kat-internal`, so the seeded keygen
+# conveniences are always compiled for them; a `required-features` on those
+# targets would let `cargo test` skip them silently. cargo drops an
+# unversioned dev-dependency when packaging, so nothing published enables the
+# feature.
+metamui-smaug-t = { path = ".", default-features = false, features = ["kat-internal"] }
+hex = "0.4"
+rand = { workspace = true }
+serde_json = "1.0"
+# AES-CTR-DRBG used by the v1.1.1 full-keygen+encap KAT byte-equality
+# test (reproduces the NIST PQC KAT framework's deterministic
+# randombytes_init → randombytes → keypair_internal → enc_internal flow).
+metamui-aes-ctr-drbg = { path = "../metamui-aes-ctr-drbg" }
+
+[features]
+default = []
+serde_feature = ["dep:serde"]
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release. Arithmetic that decides a key's or ciphertext's bytes is
+# therefore the same arithmetic everywhere.
+
+# Seeded and known-answer entry points — `SmaugT::keygen_from_seed`,
+# `SmaugTV1::{keygen_from_seed, keygen_internal, encapsulate_internal}` and the
+# reference-named `crypto_kem_{keypair,enc,dec}_internal`. They replay the
+# NIST KAT flow and exist for conformance gates and fixture generators only;
+# an application is never offered a seed (the same rule as
+# `metamui-falcon512`'s `kat-internal` and `metamui-mlkem`'s
+# `fips203-internal`). `tests/kat_surface_gated.rs` fails if one of these
+# functions is compiled without the feature.
+kat-internal = []
+
+[lib]
+name = "metamui_smaug_t"
+crate-type = ["lib", "staticlib", "cdylib"]
+
+# wasm32 `getrandom` backend. This crate is a cdylib, so cargo links it for
+# wasm32 even when a consumer only wants the rlib, and that link needs a
+# backend to resolve. Taking it from here instead of `getrandom/js` means the
+# link no longer asserts that a browser is present; a consumer that IS a
+# browser enables `js` itself and keeps Web Crypto (getrandom prefers `js`,
+# so this registration is then inert).
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+metamui-getrandom-unavailable = { version = "=1.0.0-rc.3", path = "../metamui-getrandom-unavailable" }
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["serde_feature"]

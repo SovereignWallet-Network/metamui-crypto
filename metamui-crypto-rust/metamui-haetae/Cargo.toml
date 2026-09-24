@@ -1,0 +1,84 @@
+[package]
+name = "metamui-haetae"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+authors = ["Phantom <phantom@metamui.id>", "MetaMUI Crypto Team"]
+description = "HAETAE (KpqC) lattice-based signatures, HAETAE-2/3/5, a port of the v1.2.0 reference verified against its PQCgenKAT answer files"
+license = "Apache-2.0"
+repository.workspace = true
+keywords = ["cryptography", "post-quantum", "signature", "lattice", "haetae"]
+categories = ["cryptography"]
+
+[features]
+default = ["std", "haetae2"]
+std = ["getrandom", "metamui-shake/std"]
+
+# Security level features (mutually exclusive - enable exactly ONE at a time)
+#
+# Usage:
+#   HAETAE-2 (128-bit): cargo build   (the default features: std, haetae2)
+#   HAETAE-3 (192-bit): cargo build --no-default-features --features haetae3,std
+#   HAETAE-5 (256-bit): cargo build --no-default-features --features haetae5,std
+#
+# Testing:
+#   HAETAE-2: cargo test --features haetae2,std --lib
+#   HAETAE-3: cargo test --no-default-features --features haetae3,std --lib
+#   HAETAE-5: cargo test --no-default-features --features haetae5,std --lib
+#   All levels: ./test_all_levels.sh
+#
+# IMPORTANT: Use --no-default-features for HAETAE-3/5 to avoid enabling multiple
+# security levels simultaneously (which causes duplicate definition errors).
+haetae2 = []
+haetae3 = []
+haetae5 = []
+
+# Seeded and known-answer entry points — `sign::crypto_sign_keypair_internal`
+# (keygen from a 32-byte seed) and `sign::crypto_sign_signature_internal`
+# (signing with a caller-supplied hedging seed). They replay the reference
+# PQCgenKAT_sign answer files and exist for conformance gates and fixture
+# generators only; an application is never offered a seed (the same rule as
+# `metamui-mlkem`'s `fips203-internal`). `tests/kat_surface_gated.rs` fails if
+# one of them is compiled without the feature.
+kat-internal = []
+
+[dependencies]
+# Core dependencies (from full implementation)
+rand = { version = "0.8", default-features = false }
+getrandom = { version = "0.2", optional = true, default-features = false }
+metamui-shake = { version = "=1.0.0-rc.3", path = "../metamui-shake", default-features = false }
+zeroize = { workspace = true, features = ["derive"] }
+
+# Internal dependencies (minimal - only for error handling)
+metamui-error = { version = "=1.0.0-rc.3", path = "../metamui-error" }
+
+[dev-dependencies]
+# This crate's own tests, examples and benches build with `kat-internal`, so
+# the upstream KAT gate that replays the NIST DRBG schedule is always
+# compiled; a `required-features` on those targets would let `cargo test`
+# skip it silently. cargo drops an unversioned dev-dependency when packaging,
+# so nothing published enables the feature. `default-features = false` keeps
+# a `--no-default-features --features haetae3,std` run on one level.
+metamui-haetae = { path = ".", default-features = false, features = ["kat-internal"] }
+hex = "0.4"
+rand_chacha = "0.3"
+criterion = "0.5"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# Genuine upstream KAT conformance: NIST AES-256-CTR-DRBG (no DF) to replay
+# the PQCgenKAT_sign seed stream. See tests/haetae_upstream_kat.rs.
+metamui-aes-ctr-drbg = { path = "../metamui-aes-ctr-drbg" }
+
+# NOTE: [profile.release] / [profile.bench] live in the workspace root
+# Cargo.toml so they actually take effect.
+
+[[bench]]
+name = "haetae_benchmarks"
+harness = false
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which would enable two mutually exclusive levels.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["std", "haetae2"]
+no-default-features = true

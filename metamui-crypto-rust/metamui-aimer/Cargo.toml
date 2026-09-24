@@ -1,0 +1,68 @@
+[package]
+name = "metamui-aimer"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+authors = ["MetaMUI Team"]
+license = "Apache-2.0"
+description = "AIMer (KpqC) MPC-in-the-head signatures: the v3 specification and the v2.1 AIM2 scheme, verified against the authors' known-answer files"
+repository.workspace = true
+categories = ["cryptography", "no-std"]
+keywords = ["aimer", "kpqc", "post-quantum", "mpc", "signature"]
+
+[dependencies]
+metamui-aes-256 = { version = "=1.0.0-rc.3", path = "../metamui-aes-256" }
+metamui-shake = { version = "=1.0.0-rc.3", path = "../metamui-shake" }
+getrandom = { version = "0.2", default-features = false }
+zeroize = { workspace = true, features = ["derive", "alloc"] }
+subtle = { workspace = true }
+rayon = { version = "1.10", optional = true }
+
+[features]
+default = ["std", "aim-v2"]
+std = ["getrandom/std"]
+parallel = ["rayon", "std"]
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release. The v3 scheme has a backend hook (`v3::backend::install`)
+# through which a separately maintained crate may plug an implementation of
+# the same scheme in; this crate ships none.
+
+# AIM2 (the KPQC winner) is the only cipher this crate implements. AIM v1 was
+# deleted in 2026-09: it has known algebraic vulnerabilities and was never a
+# KPQC selection, so there is no version to select between any more.
+#
+# `aim-v2` is retained as an accepted no-op purely so that consumers pinning an
+# older revision keep resolving across a pin bump — a downstream consumer passes
+# `features = ["std", "aim-v2"]` at three manifest sites. Removing the name
+# would turn their bump into a resolver error that says nothing about what
+# changed. Delete it once they have dropped it. `aim-v1` is NOT kept: a build
+# asking for it must fail loudly, because it is asking for the broken cipher.
+aim-v2 = []
+
+[dev-dependencies]
+hex = "0.4"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rand = "0.8"
+# NIST AES-256-CTR-DRBG for deterministic sign-side KAT byte-equality
+metamui-aes-ctr-drbg = { path = "../metamui-aes-ctr-drbg" }
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+# wasm32 `getrandom` backend. This crate is a cdylib, so cargo links it for
+# wasm32 even when a consumer only wants the rlib, and that link needs a
+# backend to resolve. Taking it from here instead of `getrandom/js` means the
+# link no longer asserts that a browser is present; a consumer that IS a
+# browser enables `js` itself and keeps Web Crypto (getrandom prefers `js`,
+# so this registration is then inert).
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+metamui-getrandom-unavailable = { version = "=1.0.0-rc.3", path = "../metamui-getrandom-unavailable" }
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["std", "parallel"]

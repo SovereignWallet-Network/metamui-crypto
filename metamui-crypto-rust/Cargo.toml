@@ -4,16 +4,23 @@ members = [
     "metamui-acvp-core",
     "metamui-aes-256",
     "metamui-aes-ctr-drbg",
+    "metamui-aimer",
     "metamui-crypto",
     "metamui-crypto-utilities",
+    "metamui-dilithium",
+    "metamui-error",
     "metamui-falcon512",
+    "metamui-haetae",
     "metamui-mlkem",
+    "metamui-ntru-plus",
     "metamui-getrandom-unavailable",
     "metamui-security-utils",
     "metamui-sha2",
     "metamui-sha3",
     "metamui-shake",
+    "metamui-slhdsa",
     "metamui-prehash-oids",
+    "metamui-smaug-t",
 ]
 
 # Release profile — hoisted from metamui-falcon512, metamui-haetae, and
@@ -32,7 +39,7 @@ lto = true
 codegen-units = 1
 
 [workspace.package]
-version = "1.0.0-rc.2"
+version = "1.0.0-rc.3"
 edition = "2021"
 # Minimum supported Rust version for every workspace member (each member
 # declares `rust-version.workspace = true`). The `rust linux (docker)`

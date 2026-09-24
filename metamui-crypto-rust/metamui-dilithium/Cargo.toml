@@ -1,0 +1,108 @@
+[package]
+name = "metamui-dilithium"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+description = "ML-DSA-44/65/87 (FIPS 204) digital signatures, portable scalar Rust, verified against the NIST ACVP answer files; the crate name keeps the CRYSTALS-Dilithium history"
+license = "Apache-2.0"
+repository.workspace = true
+homepage = "https://metamui.id"
+keywords = [ "ml-dsa", "dilithium", "post-quantum", "signature", "fips-204",]
+categories = [ "cryptography",]
+# Disable auto-discovery of bench files — dilithium_bench.rs has
+# bit-rotted against the current API (sign/verify signature changes).
+# Explicit [[bench]] entries list benches that still build.
+autobenches = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = [ "std",]
+std = [ "rand_core/std",]
+# Opt-in gate for bit-rotted legacy benchmarks.
+legacy-benches = []
+
+# Seeded entry points — `Dilithium{2,3,5}::generate_keypair_from_seed`, FIPS 204
+# Algorithm 6 `ML-DSA.KeyGen_internal(ξ)` driven from an explicit seed. They
+# replay the NIST ACVP keyGen answer files and exist for conformance gates and
+# fixture generators only; an application is never offered a seed (the same
+# rule as `metamui-mlkem`'s `fips203-internal` and `metamui-falcon512`'s
+# `kat-internal`). `tests/kat_surface_gated.rs` fails if one of them is
+# compiled without the feature.
+kat-internal = []
+
+[dependencies]
+rand = { workspace = true }
+rand_chacha = "0.3"
+metamui-security-utils = { version = "=1.0.0-rc.3", path = "../metamui-security-utils" }
+metamui-acvp-core = { version = "=1.0.0-rc.3", path = "../metamui-acvp-core" }
+metamui-prehash-oids = { version = "=1.0.0-rc.3", path = "../metamui-prehash-oids" }
+hex = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+signature = { version = "2.0", features = ["rand_core"] }
+
+[dependencies.metamui-sha2]
+path = "../metamui-sha2"
+version = "=1.0.0-rc.3"
+
+[dependencies.metamui-shake]
+path = "../metamui-shake"
+version = "=1.0.0-rc.3"
+
+[dependencies.metamui-crypto-utilities]
+path = "../metamui-crypto-utilities"
+version = "=1.0.0-rc.3"
+
+[dev-dependencies]
+# This crate's own tests, examples and benches build with `kat-internal`, so
+# the upstream ACVP gate that replays the NIST keyGen seeds is always
+# compiled; a `required-features` on that target would let `cargo test`
+# skip it silently. cargo drops an unversioned dev-dependency when
+# packaging, so nothing published enables the feature.
+metamui-dilithium = { path = ".", default-features = false, features = ["kat-internal"] }
+metamui-prehash-oids = { path = "../metamui-prehash-oids" }
+hex = "0.4"
+criterion = { version = "0.5", default-features = false }
+serde = { version = "1.0", features = ["derive"] }
+# RustCrypto sha2/sha3 compute PH(M) in tests/upstream_acvp_gate.rs as an
+# independent oracle for metamui-prehash-oids; the crate itself hashes with
+# metamui-shake / metamui-crypto-utilities (src/sha3_compat.rs).
+serde_json = "1.0"
+sha2 = "0.10"
+sha3 = { workspace = true, features = ["std"] }
+
+[[example]]
+name = "generate_ml_dsa_test_vectors"
+required-features = ["std"]
+
+[[bench]]
+name = "dilithium_bench"
+harness = false
+# Bit-rotted against the current Dilithium sign/verify signatures.
+# Opt-in via `cargo bench --features legacy-benches`.
+required-features = ["legacy-benches"]
+
+[dependencies.rand_core]
+version = "0.6"
+default-features = false
+features = [ "getrandom",]
+
+# once_cell removed - not used in implementation
+
+# wasm32 `getrandom` backend. This crate is a cdylib, so cargo links it for
+# wasm32 even when a consumer only wants the rlib, and that link needs a
+# backend to resolve. Taking it from here instead of `getrandom/js` means the
+# link no longer asserts that a browser is present; a consumer that IS a
+# browser enables `js` itself and keeps Web Crypto (getrandom prefers `js`,
+# so this registration is then inert).
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+metamui-getrandom-unavailable = { version = "=1.0.0-rc.3", path = "../metamui-getrandom-unavailable" }
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["std"]

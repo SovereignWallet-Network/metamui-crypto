@@ -1,21 +1,21 @@
 {
  "schema_version": "1.0.0",
- "source_revision": "094be22243d713802407d096df5c015175530206",
+ "source_revision": "adb7bd27dc01f48a64bdae15801cb8afb80b350b",
  "export_manifest": "documents/public-release/export-manifest-rust.json",
- "export_manifest_sha256": "7be6ec35b8d59559db16fa2448e3445a1dbc245efe987472f36ebe730b8af66b",
+ "export_manifest_sha256": "e603b44c087f71061be19cd073ace0ef4a1ead0ac6b740ced216afa5b9654314",
  "profile": "preview-rust",
- "file_count": 399,
- "total_bytes": 16292325,
- "tree_digest": "e09e5c436611a9820d7265b7c5ee8fca58a9dbf23b25ec524147f39673510df1",
+ "file_count": 601,
+ "total_bytes": 53901050,
+ "tree_digest": "89640becaaa68b611ba45d0c657f9a6ee5c5b9cd4231fa12fc94a2cd037a904c",
  "transforms": [
-  "metamui-crypto-rust/Cargo.toml: pruned 51 workspace member(s) not in the export"
+  "metamui-crypto-rust/Cargo.toml: pruned 46 workspace member(s) not in the export"
  ],
  "files": [
   {
    "path": "CONTRIBUTING.md",
    "mode": "100644",
-   "bytes": 4080,
-   "sha256": "35d761d4860bab3e29eaa7d78f497b910fd19808e773c57610f3be43e2e65f63"
+   "bytes": 4190,
+   "sha256": "0a283d9b322a11671384bb5e156e5f7921d4312e49554234f4022d29ad8e3a22"
   },
   {
    "path": "LICENSE",
@@ -26,14 +26,14 @@
   {
    "path": "NOTICE",
    "mode": "100644",
-   "bytes": 1082,
-   "sha256": "086d5451154d519d72ef7c80744263f29038a9fe60897d2d086842210e2a8065"
+   "bytes": 1374,
+   "sha256": "d882e6b53b7559ca0645d2081e13c7283d97bb5177971d1c039dd010606a07d5"
   },
   {
    "path": "README.md",
    "mode": "100644",
-   "bytes": 2420,
-   "sha256": "9e626bcbf127f03469cee3c6f1ad86e5483e94a35a95e13c4e5ef80cd635518e"
+   "bytes": 3347,
+   "sha256": "28d2e3830c92d979ea8f502af634734c08b035f1320c49cb3703ae5a8f636dd1"
   },
   {
    "path": "SECURITY.md",
@@ -44,20 +44,20 @@
   {
    "path": "SUPPORT.md",
    "mode": "100644",
-   "bytes": 3618,
-   "sha256": "4b6984f45aca786331e0856f2d9de6246908e99d087dbb77533049b617fe1ebf"
+   "bytes": 3907,
+   "sha256": "2d6d50cb51bd58266f6710449623f1517655018a432c8205e2a602b2c38bf7b6"
   },
   {
    "path": "THIRD_PARTY_NOTICES.md",
    "mode": "100644",
-   "bytes": 4093,
-   "sha256": "0cb82320c3cfbd9d0f5bc540dc48aaf9a39ba6c4236b9c0d9835b4bb72b9245d"
+   "bytes": 6129,
+   "sha256": "b4f187aab6ad294b863693d8defc158b65e3da282fd3dfd683c390b426364c33"
   },
   {
    "path": "metamui-crypto-rust/Cargo.toml",
    "mode": "100644",
-   "bytes": 3988,
-   "sha256": "2f301b58682afca276d6a8899dfcc92961e02c91ecbd8ad5dae2a8b39e31ff66"
+   "bytes": 4147,
+   "sha256": "987c985094611e40d7649439b533574bff5ed814fd3f96079b326a94a9d6fa34"
   },
   {
    "path": "metamui-crypto-rust/metamui-acvp-core/Cargo.toml",
@@ -111,7 +111,7 @@
    "path": "metamui-crypto-rust/metamui-aes-256/Cargo.toml",
    "mode": "100644",
    "bytes": 2148,
-   "sha256": "542ecba62b6c2e57a9c6c8dbfd4619658259628241f86fd26fb039d6b9e6fe73"
+   "sha256": "7181bc7bb8919fb992bb2be63a59b5876288d19165e60e6f9b0a39e2bd0bff68"
   },
   {
    "path": "metamui-crypto-rust/metamui-aes-256/README.md",
@@ -207,7 +207,7 @@
    "path": "metamui-crypto-rust/metamui-aes-ctr-drbg/Cargo.toml",
    "mode": "100644",
    "bytes": 1094,
-   "sha256": "7b36e522f6a95123e778f75b0d7d70d0917a81a6a56fa5c769a0b4f798f97637"
+   "sha256": "2fca801e6028510764a79816fdf8269ff92f624f8ffe8288508514e840bff133"
   },
   {
    "path": "metamui-crypto-rust/metamui-aes-ctr-drbg/src/ctr_drbg.rs",
@@ -246,10 +246,160 @@
    "sha256": "69984618bb45620e8f53803caca7641d3d9846d79cdc1e3b9064f353430df84e"
   },
   {
+   "path": "metamui-crypto-rust/metamui-aimer/Cargo.toml",
+   "mode": "100644",
+   "bytes": 3055,
+   "sha256": "0ddc64c9cd6a668b3e7808eadf6246bb0d4f81262d93dfb4a3e9a907c28d3c33"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/README.md",
+   "mode": "100644",
+   "bytes": 5450,
+   "sha256": "a784e689b71882ec0abb35a4964247872659338c219a4a3291a07640fb39a1ab"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/aim2.rs",
+   "mode": "100644",
+   "bytes": 9634,
+   "sha256": "e2c340e7310c21ab205296ad863f9c985c24d046f966fcb60a24b9e87c943b93"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/error.rs",
+   "mode": "100644",
+   "bytes": 2030,
+   "sha256": "2c19006ae87960328ad105e976bf1c5b2aadbee024aec7883434794ffecaabb0"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/field.rs",
+   "mode": "100644",
+   "bytes": 37693,
+   "sha256": "1a233aae5e7e37c62be4548cb4be44925598904cc37ae60ffedea4a6a6436459"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/lib.rs",
+   "mode": "100644",
+   "bytes": 13732,
+   "sha256": "44c48f3d080a3fdd0d7ca01ce585b490d386a43d5bfe881d07814f2983d793e6"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/mpc_in_head.rs",
+   "mode": "100644",
+   "bytes": 4662,
+   "sha256": "593b379dc3475ac2e88a9dea4e2244bb6ec95e1703b43fc1fb2426303abaac88"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/params.rs",
+   "mode": "100644",
+   "bytes": 12665,
+   "sha256": "f21741df9471d1fc0266e137c143626c7c623f03377ad6f305d67098147e5ce0"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/signing.rs",
+   "mode": "100644",
+   "bytes": 38267,
+   "sha256": "d03e4b7e0174351e9411689d81ae7328d4ffebdfabaa167aff11723992183d3e"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/tree.rs",
+   "mode": "100644",
+   "bytes": 7478,
+   "sha256": "18a1d47250e89afecf3386a789563e66a7ac3a46f96bd58a7af20e446315705a"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/v3/aim3.rs",
+   "mode": "100644",
+   "bytes": 7383,
+   "sha256": "5108e2de91bd8d6bb803c41f0057e6c327014458d74960a62a8968109618dc33"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/v3/backend.rs",
+   "mode": "100644",
+   "bytes": 7099,
+   "sha256": "77148fe63d782e1a1b702265b3eab5fa451cd961a851d5da552b21c3e2592a8d"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/v3/field.rs",
+   "mode": "100644",
+   "bytes": 6227,
+   "sha256": "78a0691a39d0b22a6d90fafb072533f893a2a252e3b0157d952a70b92911e601"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/v3/hash.rs",
+   "mode": "100644",
+   "bytes": 1679,
+   "sha256": "4b687e6c919c98f75dbb5afcb524fee0a3af9b92409669ab2a82e328a33e85f5"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/v3/mod.rs",
+   "mode": "100644",
+   "bytes": 4386,
+   "sha256": "80023a27c249186ee0f75de0820134e41ba523eab3cc68ddcab013db8d3b4046"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/v3/params.rs",
+   "mode": "100644",
+   "bytes": 4082,
+   "sha256": "f56ba75e2c5875715d61659e946b1be7ea541b49a298bbc8e2d749eeac056877"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/v3/sign.rs",
+   "mode": "100644",
+   "bytes": 18026,
+   "sha256": "11a324973339fb5750275388639c3a738cccbdb82d5ef6c7be54904b2c8d7cf3"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/v3/tree.rs",
+   "mode": "100644",
+   "bytes": 2670,
+   "sha256": "9c3b31fc0620870e199342559b19e23a6c3cb24d681934f7396daa44e9f0cab8"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/src/verification.rs",
+   "mode": "100644",
+   "bytes": 7145,
+   "sha256": "68788e96c489132ffb88cdbdf70c36530dbf929b645df2f3ae192754146ff838"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/tests/aim2_signing.rs",
+   "mode": "100644",
+   "bytes": 6189,
+   "sha256": "42b9bad07346d930cf3a1a93cb4c529eec8b94a44431220e4f113926b9db7713"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/tests/aimer_sign_kat.rs",
+   "mode": "100644",
+   "bytes": 6449,
+   "sha256": "17baef7d0b59c773139be5ff29c19b7ddec7e850b33632ab9a0cf706f4445711"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/tests/aimer_upstream_kat.rs",
+   "mode": "100644",
+   "bytes": 9284,
+   "sha256": "ea0d3667665569d99f615f3679edf9bc9fb1c1b8123d9c0d80a52866129110e0"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/tests/aimer_v2_kat.rs",
+   "mode": "100644",
+   "bytes": 17907,
+   "sha256": "031293f76d4214635d98d49d6f8dc804149afc85ffaa3ac31885e0e6fc90b213"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/tests/aimer_v3_upstream_kat.rs",
+   "mode": "100644",
+   "bytes": 5066,
+   "sha256": "5c1cf1730e43b771d3b83c195d1eabb1e2d150b95470ace23c7d389cc02c3e7b"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-aimer/tests/signing_properties.rs",
+   "mode": "100644",
+   "bytes": 5113,
+   "sha256": "a8fd9e7d36e433caaf31ff7fcfdf33e7b0d4606379f60a80c5a9e0cc163b1539"
+  },
+  {
    "path": "metamui-crypto-rust/metamui-crypto-utilities/Cargo.toml",
    "mode": "100644",
    "bytes": 2702,
-   "sha256": "5906314944ed95d05aba547e1d2c3c6f17bd4fcc3c4550a8aca52e770df87ee0"
+   "sha256": "a89bf343c6371521888d59672fc1320799564b1c33c52416a5439b6347c7ab4f"
   },
   {
    "path": "metamui-crypto-rust/metamui-crypto-utilities/README.md",
@@ -459,7 +609,7 @@
    "path": "metamui-crypto-rust/metamui-crypto/Cargo.toml",
    "mode": "100644",
    "bytes": 1357,
-   "sha256": "affc556e16984ecaec6bdb2b7d6b1edf1790da0ebcfc9075da36af5b20511576"
+   "sha256": "84072a9607df9fc80a2322e1d8f14ed6978d51785f2b5b7158d616838a61e56e"
   },
   {
    "path": "metamui-crypto-rust/metamui-crypto/README.md",
@@ -534,10 +684,202 @@
    "sha256": "ea27dbeaeb48504505cbb412021afc3c0851d7c78f42db9b63ae70ae4265c56e"
   },
   {
+   "path": "metamui-crypto-rust/metamui-dilithium/Cargo.toml",
+   "mode": "100644",
+   "bytes": 4328,
+   "sha256": "e748e42344e3eb9b4f464185907606ddff9ca4022f6cb39f8cbc1000d89aa777"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/README.md",
+   "mode": "100644",
+   "bytes": 4385,
+   "sha256": "163dfaaaad9385e481d509985954d406b39d67fab19b6ef932517302a7ba8496"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/benches/dilithium_bench.rs",
+   "mode": "100644",
+   "bytes": 3946,
+   "sha256": "33a6539ac270d1d3bd2557e2ca6df6777ccf8f0fbf25fa06aed22db361a37fa9"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/examples/generate_ml_dsa_test_vectors.rs",
+   "mode": "100644",
+   "bytes": 2721,
+   "sha256": "a5d544be2edcfbfc960bf7f7b18d2d730578b2cd1ed50a10da27020980781f54"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/acvp_parser.rs",
+   "mode": "100644",
+   "bytes": 12317,
+   "sha256": "ac062208071bb464735c5cc48a2a1b6d69c379eb476415ae2c810d4d546cb548"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/acvp_parser_v2.rs",
+   "mode": "100644",
+   "bytes": 9155,
+   "sha256": "0d2c4b2f556140d8431e01124b878e8701a163024a4317da5f50d18530451c1c"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/constant_time.rs",
+   "mode": "100644",
+   "bytes": 5185,
+   "sha256": "9ae0be0c55d61a394b16c5f45eb78991ae6cbeec9f00a299f122a0d48fcfbb31"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/dilithium2.rs",
+   "mode": "100644",
+   "bytes": 38337,
+   "sha256": "e0d24c3ef6760ea9a284d8af48d89f1739374cd871bda5c4e37de3d260fb31c4"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/dilithium3.rs",
+   "mode": "100644",
+   "bytes": 31744,
+   "sha256": "7e0f2a990638aeda4785e9d132368e408c20baee31bd64828186b00881bf4948"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/dilithium5.rs",
+   "mode": "100644",
+   "bytes": 31309,
+   "sha256": "fcf0106e8607cbef31e61696977cafc998464dcb7e83864ff988955d274a89c2"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/lib.rs",
+   "mode": "100644",
+   "bytes": 17821,
+   "sha256": "6350760bfa3ea318f3067a8220dde7d6a7e088c533aebac679de74ab674e8f9b"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/memory.rs",
+   "mode": "100644",
+   "bytes": 1316,
+   "sha256": "1193715ed0abbd8c085636721736eb011f530c0d4670da5b63d4f91995cf8450"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/ntt.rs",
+   "mode": "100644",
+   "bytes": 11071,
+   "sha256": "421b62e2b4672bcfd88820ae4348c0ed653dccb42c09a265daf8661a35168b96"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/operations.rs",
+   "mode": "100644",
+   "bytes": 42812,
+   "sha256": "8648ce01be2c21b4c669321b1db97178253f50e23804a9e1a3dab62b124ebd2d"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/params.rs",
+   "mode": "100644",
+   "bytes": 3475,
+   "sha256": "f74f87663e75328d36917a5870d31ec87f5feb11bb4592ab5d026bff36c580ca"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/poly.rs",
+   "mode": "100644",
+   "bytes": 17746,
+   "sha256": "64910312b03f68a865a92024053b838ed72894ef89bcd76d3ac07e1316a5bf7d"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/sha3_compat.rs",
+   "mode": "100644",
+   "bytes": 6918,
+   "sha256": "f58cebdb3a66715fed5a0b8ae186049040c138f66dc5cda228b17a164158131d"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/signature_support.rs",
+   "mode": "100644",
+   "bytes": 13941,
+   "sha256": "651b4a825f3c937033c347d9f1e3c6c3cabea76ce168e617350c47d738303941"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/test_vector_generator.rs",
+   "mode": "100644",
+   "bytes": 16492,
+   "sha256": "0f3206b519f90777f116c2e775d75ea5834b884b449f12e890242eb6819586a9"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/test_vector_generator_v2.rs",
+   "mode": "100644",
+   "bytes": 21180,
+   "sha256": "0be54014e9fc08b7be0816beca8817fa99d7f8e95dd2e72af574d8d16534b3d8"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/src/wasm.rs",
+   "mode": "100644",
+   "bytes": 7354,
+   "sha256": "1eeeb070493fbca5141938273040d2a18a900cf0ff183aa21b73984a3f3d31fa"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/tests/acvp_integration_tests.rs",
+   "mode": "100644",
+   "bytes": 10008,
+   "sha256": "6a77015e0a1a70cf943b91b38cfdb1d8cb04841c06fa50bf6cb6a6f1effe1160"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/tests/fips204_compliance_tests.rs",
+   "mode": "100644",
+   "bytes": 15210,
+   "sha256": "9205ac5d214151ff4a58e6c12a6c26f0b1e49ed641597b2734c341971ccb8338"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/tests/fips204_integration.rs",
+   "mode": "100644",
+   "bytes": 11053,
+   "sha256": "a2bb79831126374dc212c9044f19066a71e6c93b3bd1d7292904d478689b9170"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/tests/kat_surface_gated.rs",
+   "mode": "100644",
+   "bytes": 2117,
+   "sha256": "c5c8d62586f50cb8c78de7b3042b274cd4179b6286f49ae314305bc4be1b7edf"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/tests/ml_dsa_test_vectors.rs",
+   "mode": "100644",
+   "bytes": 5383,
+   "sha256": "c110d2587fae07d3a1081dd9fb8e6173e71bfd28a52f5f931d6568ee42828e6a"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/tests/nist_test_vectors.rs",
+   "mode": "100644",
+   "bytes": 4800,
+   "sha256": "bd84b99bf9766f03426512493eebcc364e1206d85648b064d35a7c357f713449"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/tests/test_cross_language_compat.rs",
+   "mode": "100644",
+   "bytes": 2039,
+   "sha256": "85e674376ace49611adeaf3cdeec9943ce02b0a42d54c6455613f0f1bfccf57e"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/tests/test_key_generation.rs",
+   "mode": "100644",
+   "bytes": 3097,
+   "sha256": "3f50d4b22575f23e3c5b450561370f020f792d9970b5d6c4a41f4f65af2b833e"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-dilithium/tests/upstream_acvp_gate.rs",
+   "mode": "100644",
+   "bytes": 21491,
+   "sha256": "038d5ed800ffa8001b65cf3d826a13d8afdb058f1bbb7171bead8220f4e1e821"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-error/Cargo.toml",
+   "mode": "100644",
+   "bytes": 584,
+   "sha256": "948d34416b51313539a7066149a915d6202f8de22b192826091d598f792ad9a6"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-error/src/lib.rs",
+   "mode": "100644",
+   "bytes": 13219,
+   "sha256": "8133a15a5e1fd551e163e4c49f24dfaac4ab4b573a749e042e5ade7608241daa"
+  },
+  {
    "path": "metamui-crypto-rust/metamui-falcon512/Cargo.toml",
    "mode": "100644",
    "bytes": 6274,
-   "sha256": "83d2e363bb4feb81183b88a7c9b47fc68cd211d318c0b34114206ce194ec8c1b"
+   "sha256": "94ada8e04450a12544f469c01bcf50398bc93811d4007476e1c2a12fa45fa9d7"
   },
   {
    "path": "metamui-crypto-rust/metamui-falcon512/README.md",
@@ -1578,10 +1920,178 @@
    "sha256": "4ebe2a05b48e7e1a06a7693ee3482fe68d8778c3137874ab83f98c69d9db92cc"
   },
   {
+   "path": "metamui-crypto-rust/metamui-haetae/Cargo.toml",
+   "mode": "100644",
+   "bytes": 3662,
+   "sha256": "98038e4c45e50c7270cf63150a31c91d4466ff50196e337b7ef8131b6a6a5971"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/README.md",
+   "mode": "100644",
+   "bytes": 5586,
+   "sha256": "df518eabcd46a79e3a0a4891ea406a4ca33b2d3aa58ece47b74a462307a15f4b"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/benches/haetae_benchmarks.rs",
+   "mode": "100644",
+   "bytes": 5402,
+   "sha256": "3ea105b4bc284dce885aff59c3179e163057a5aadaa9b8cdbd7fd0f548fc09fc"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/examples/basic_sign_verify.rs",
+   "mode": "100644",
+   "bytes": 1624,
+   "sha256": "23041713b058163eaf8ac4520291eacaab50056bb907a9023a9e77d86c575840"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/examples/key_serialization.rs",
+   "mode": "100644",
+   "bytes": 2612,
+   "sha256": "ac55dcd2866d9647a89e66164c5ff3be036b8a1ed6a8604fdab757f6063e707b"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/examples/multiple_signatures.rs",
+   "mode": "100644",
+   "bytes": 4330,
+   "sha256": "cdfafca86379a1aa94e4c80ec1251ec75652ac02107ea07048481653db816226"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/api.rs",
+   "mode": "100644",
+   "bytes": 16426,
+   "sha256": "c33a463da3b746172005311f2b287e66e72a5ea5f9ad7c894f1f29c844c74311"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/encoding.rs",
+   "mode": "100644",
+   "bytes": 48812,
+   "sha256": "ce4332381574205c3c508d91bb491cbe5c5af7a732e98e0dce20df2640c7000c"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/fft.rs",
+   "mode": "100644",
+   "bytes": 17194,
+   "sha256": "10fa8578197708d2dfb6fb7e5a1381a75fa1a8d4a03d66c6d18af76010b98040"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/fixpoint.rs",
+   "mode": "100644",
+   "bytes": 11303,
+   "sha256": "71ea5b2202c6f1f9b2ad7266781b109edb7d7f1e7b7a49e9ee5b832903bc13af"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/lib.rs",
+   "mode": "100644",
+   "bytes": 2914,
+   "sha256": "50ae7f6c58653de6453b1d067927e48f8e17949266fe7e229848bd4c22bd3b3e"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/ntt.rs",
+   "mode": "100644",
+   "bytes": 6462,
+   "sha256": "5edd5f483d102ecca3777db39d162a548e57ca9ed5724a327baaefd9b85624d7"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/packing.rs",
+   "mode": "100644",
+   "bytes": 15149,
+   "sha256": "e748d90c769d4cd8054101568cf0c25e7fab3ee4feb46d4fbf653d06a48937fa"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/params.rs",
+   "mode": "100644",
+   "bytes": 8424,
+   "sha256": "1d0a92bc3f359b232127eb548882b78f5f56907baa74e8ad5c81d4a6e3d91a2f"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/poly.rs",
+   "mode": "100644",
+   "bytes": 29803,
+   "sha256": "14894856c0d2689bb4d712340434d4dc8f4327348f98c094c2310e973f5eb6ae"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/polyfix.rs",
+   "mode": "100644",
+   "bytes": 10008,
+   "sha256": "b7557d6c45fceb83ee032761bb23891390d8a1ba9e34461aebf2588927c176cd"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/polymat.rs",
+   "mode": "100644",
+   "bytes": 9306,
+   "sha256": "eab3490eb7ecfbe82ccd3858111d10d8aa88cf3db5130d70ca69ff1e38587a12"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/polyvec.rs",
+   "mode": "100644",
+   "bytes": 20678,
+   "sha256": "076aed2ab9d2a878c78571cf9c69966a17c501546ecee8d497986d748c092900"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/randombytes.rs",
+   "mode": "100644",
+   "bytes": 1802,
+   "sha256": "8b174b3bf176703ba21ebf3ff61b15cb6046f6619e45a9ba5f74c903f506e97a"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/rans_byte.rs",
+   "mode": "100644",
+   "bytes": 6529,
+   "sha256": "b28dbe890e9df8cfa1d4e6385efbdc9e4c33567350cf39348ad7b10d620756ba"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/reduce.rs",
+   "mode": "100644",
+   "bytes": 7799,
+   "sha256": "fc30f55d98ca2a35cea60ed08135aaa737ef010b63606f15d184af95f2f36da8"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/sampling.rs",
+   "mode": "100644",
+   "bytes": 20589,
+   "sha256": "d00b780696ae6836830e06dfaa248fd1908c3db34ece902bfbbe4d68d54333a0"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/shake.rs",
+   "mode": "100644",
+   "bytes": 6099,
+   "sha256": "2f88f2e8adb418f39a4a1feee110de1cc70ea3e24242621f879e4cb38e18ac5f"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/src/sign.rs",
+   "mode": "100644",
+   "bytes": 32433,
+   "sha256": "534b70212f6d052258259d3ddc1f55b12fbab48304912fe2c95ba1e6a6e0a868"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/test_all_levels.sh",
+   "mode": "100755",
+   "bytes": 2569,
+   "sha256": "a7f809510a0fdc13e69bce52629d6564fb39b6b09ad6f7efd520660ad739d9bf"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/tests/haetae_upstream_kat.rs",
+   "mode": "100644",
+   "bytes": 8576,
+   "sha256": "4a0ea95b91aae59151e8c0acbe29c52c21032c7b7c0d8699f488c2e92b4fd81a"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/tests/kat_surface_gated.rs",
+   "mode": "100644",
+   "bytes": 1732,
+   "sha256": "36e4797b524f47865b32de5bd7911de7fe126c79c043554e1ce8ea30eab23929"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-haetae/tests/kat_vectors.rs",
+   "mode": "100644",
+   "bytes": 5729,
+   "sha256": "905867acb57d78b5fe32b6943aecf1f38adaa1b08836c39cb1ca2924958bb96c"
+  },
+  {
    "path": "metamui-crypto-rust/metamui-mlkem/Cargo.toml",
    "mode": "100644",
    "bytes": 4110,
-   "sha256": "9991a9bd627a770ff3d99a342b22e3f4c4148f9089055b942d7b19ebab30999a"
+   "sha256": "96c1919aedc12557994c77d25f9f9d47ee08dc854dc85158149c5c68d4fac13f"
   },
   {
    "path": "metamui-crypto-rust/metamui-mlkem/README.md",
@@ -1764,10 +2274,76 @@
    "sha256": "e36b2c9eb8c052be9a35289737396015f33e553c20949b3cf345f692865d75ac"
   },
   {
+   "path": "metamui-crypto-rust/metamui-ntru-plus/Cargo.toml",
+   "mode": "100644",
+   "bytes": 2765,
+   "sha256": "da62c1a40f5b26ba7fc555f4b38b3db0b3b06ca268fa289f3f2856a55a6ad319"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-ntru-plus/README.md",
+   "mode": "100644",
+   "bytes": 4904,
+   "sha256": "0cdfd5564f97db8e5f2bf5be3eba6160f157496227389c2ea629f47584e2bfec"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-ntru-plus/src/error.rs",
+   "mode": "100644",
+   "bytes": 1170,
+   "sha256": "1e970bb3807dc1c6774dab966ac3bbec8f0631cda2ff568a98a3abcc1bac8844"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-ntru-plus/src/kem.rs",
+   "mode": "100644",
+   "bytes": 11970,
+   "sha256": "4ecc9fc4aba8bf7f93d28b0b08969160225d347f99f50ffd4546b2ee85273bb5"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-ntru-plus/src/lib.rs",
+   "mode": "100644",
+   "bytes": 6700,
+   "sha256": "a257f03fbdd54f9634b622b6c8b52dc1427769da9958cc372fc3adc5a28b7358"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-ntru-plus/src/ntt.rs",
+   "mode": "100644",
+   "bytes": 16196,
+   "sha256": "ecff332348b470e822e43689603e4acb75c13d854b20879eb4d6077e13e862de"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-ntru-plus/src/params.rs",
+   "mode": "100644",
+   "bytes": 11378,
+   "sha256": "f456879c8592a7a614c833d27c70716e186c46db842ea220e78e976ecbb250b5"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-ntru-plus/src/poly.rs",
+   "mode": "100644",
+   "bytes": 9510,
+   "sha256": "e04f78a4ed321fecfef20599b241dc2b39a97c8b4895f57e03c1428c5e884665"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-ntru-plus/src/symmetric.rs",
+   "mode": "100644",
+   "bytes": 2390,
+   "sha256": "2af76dfae83680d9a873dac639fb794a58c95f370efefcce4d871c5af99ade41"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-ntru-plus/tests/kat_surface_gated.rs",
+   "mode": "100644",
+   "bytes": 1787,
+   "sha256": "e2dfcc5d7779e90f122aa4a231736242b522b26f68f6c209b8eff70a557fdf70"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-ntru-plus/tests/upstream_ntru_plus_kat.rs",
+   "mode": "100644",
+   "bytes": 4698,
+   "sha256": "9e0bec28c8d1f5bc54bb2aec4c2f27fd5feb09c47739c23d7bc211699393f97a"
+  },
+  {
    "path": "metamui-crypto-rust/metamui-prehash-oids/Cargo.toml",
    "mode": "100644",
    "bytes": 1095,
-   "sha256": "21a243beb634b727a23f9c09343860278429d9d24d12d9562c09791894d72f88"
+   "sha256": "edbf7636ad886d12edfb7a25ba8b1a43b0fff7ed878dabf20dd29b95f4359859"
   },
   {
    "path": "metamui-crypto-rust/metamui-prehash-oids/src/lib.rs",
@@ -1893,7 +2469,7 @@
    "path": "metamui-crypto-rust/metamui-sha3/Cargo.toml",
    "mode": "100644",
    "bytes": 918,
-   "sha256": "48fe27453f6cdd7a8fe709eac175f463520f299e9a7ff2181b6d06e01e1e68cc"
+   "sha256": "72af248a1f63de033d8d58d82fbf914af7d424a4ce011ad2c67a746831efd26d"
   },
   {
    "path": "metamui-crypto-rust/metamui-sha3/examples/demo.rs",
@@ -2040,6 +2616,306 @@
    "sha256": "76eb1b7f64c877d82869e4b85347fb4e65852d95f619601a68bf0e2ae8f8ea41"
   },
   {
+   "path": "metamui-crypto-rust/metamui-slhdsa/Cargo.toml",
+   "mode": "100644",
+   "bytes": 4278,
+   "sha256": "143f7494dd0321826823bed29e20c072e74468565b9c4856d95b2ad412eaad3c"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/README.md",
+   "mode": "100644",
+   "bytes": 5146,
+   "sha256": "5a69f10c417417c63557e6387755125a80c17223de593c6de4807cbee4afcb38"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/examples/generate_portable_slh_dsa_vectors.rs",
+   "mode": "100644",
+   "bytes": 2668,
+   "sha256": "9786914f2b49e4971142417782b281ee3517eb44f1b9daa55c492fff07150fd6"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/examples/generate_slh_dsa_test_vectors.rs",
+   "mode": "100644",
+   "bytes": 2637,
+   "sha256": "cdd18626af883e7a559555bd6028b71fc31d9f4e5120a7733f0cd015f19230c7"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/examples/slhdsa_ref_cli.rs",
+   "mode": "100644",
+   "bytes": 5916,
+   "sha256": "7858e3e9faff7a33ac5bf0e5191c785e4fa4a92c5aca069557409b88599ae182"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/examples/verify_acvp_upstream.rs",
+   "mode": "100644",
+   "bytes": 10852,
+   "sha256": "27e14528f41554b021c6af285f0a2b42b105a70747fb082b7ee9a3085143f7d3"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/src/acvp_parser.rs",
+   "mode": "100644",
+   "bytes": 12444,
+   "sha256": "4398645ae524bf59607c68fbe8c83b6adde01ea0e5cf543d2379902fe5381cbd"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/src/address.rs",
+   "mode": "100644",
+   "bytes": 9936,
+   "sha256": "fd421776d05347e3988826fd6d5b0a41bf7eade0a914e1042ef9e6fb330bcc7c"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/src/fors.rs",
+   "mode": "100644",
+   "bytes": 8369,
+   "sha256": "21253d11eb747849eafbb3f5b9609268655b4cdd181ee778fdf0152561102195"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/src/hash.rs",
+   "mode": "100644",
+   "bytes": 13531,
+   "sha256": "b6db6762e40f9697d7684c1a088ad64eee7bb6f5ca77db95ce8371912180a0c9"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/src/hypertree.rs",
+   "mode": "100644",
+   "bytes": 5642,
+   "sha256": "4abcc4abdce03cc5097518b26520027deef982dfa08d1e2885e5c82c7ebd341f"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/src/lib.rs",
+   "mode": "100644",
+   "bytes": 7274,
+   "sha256": "4cb721300421599c374ced807998f3d89892afd33e14bd4ea54c9dbd139b5b0f"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/src/params.rs",
+   "mode": "100644",
+   "bytes": 12959,
+   "sha256": "9994bff0772ed18647e732a175f08a711c00afffbe614603a0e5e6916aa84323"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/src/signing.rs",
+   "mode": "100644",
+   "bytes": 10105,
+   "sha256": "f4c80b6d1ea23966f2e979f890431a921ab862f116d7a62d38d67421c14ad6dd"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/src/test_vector_generator.rs",
+   "mode": "100644",
+   "bytes": 15887,
+   "sha256": "de2b233299b94ee74fe44ed38be66ea49e081f421740851438a4ff513948d77e"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/src/types.rs",
+   "mode": "100644",
+   "bytes": 7242,
+   "sha256": "38172d453c09228deed8f34da860251d92178318c2c87b6962a480fa7fd4a8f4"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/src/verification.rs",
+   "mode": "100644",
+   "bytes": 8737,
+   "sha256": "0cad128466dd6ce4835c26842985dabe089ad08c8949b649ae2f227188dd9607"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/src/wots.rs",
+   "mode": "100644",
+   "bytes": 9276,
+   "sha256": "7aa22bdd36ef9369bb72e96cf9b3d9d9459c0d35631ee459e9890cfb693e789d"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/src/xmss.rs",
+   "mode": "100644",
+   "bytes": 7580,
+   "sha256": "73d159c623b50890b8d812bf8d772f1b5414e687d50635cdebd03b1e260e980d"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/tests/kat_surface_gated.rs",
+   "mode": "100644",
+   "bytes": 3084,
+   "sha256": "fb8a284be783be82fe8d2f6ad5525c15a2fdb512286d0f926b1a82d52e60012b"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/tests/keygen_validation.rs",
+   "mode": "100644",
+   "bytes": 6751,
+   "sha256": "8db8f272b55f27f492ab824b8104dd24ee4dd48fd900c0121252f93161f9543a"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/tests/signing_properties.rs",
+   "mode": "100644",
+   "bytes": 2706,
+   "sha256": "b52bd3e7c308286fc384e44138f1420e284f46db764a8d49b1605639cb470ad7"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/tests/test_json_vectors.rs",
+   "mode": "100644",
+   "bytes": 9995,
+   "sha256": "557a3025dd8357047a3e2fd8048cdaebb9bc30cc8113c791f64aa4d15ccd017a"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/tests/test_nist_vectors.rs",
+   "mode": "100644",
+   "bytes": 8867,
+   "sha256": "03c81cb0e15935d80ad98a78c4a2690709b185bc875a8997195c13314ae1e8e8"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-slhdsa/tests/upstream_acvp_gate.rs",
+   "mode": "100644",
+   "bytes": 6360,
+   "sha256": "8ba904b8411572fadf3f7b856163d59ec55586b9faf506ffa86c3a5cea979f96"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/Cargo.toml",
+   "mode": "100644",
+   "bytes": 3790,
+   "sha256": "af8a4faec9636286cdaa2f50eab2a7f38d2f57149da3f7ea0654a4d77dce412e"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/README.md",
+   "mode": "100644",
+   "bytes": 5144,
+   "sha256": "f763778451aea6822d0bf9870a1e2f73132221f072cbe8e1d264ebd72707e68a"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/lib.rs",
+   "mode": "100644",
+   "bytes": 10189,
+   "sha256": "f5d760565af4051e3ed40b46a92529cd5957421a2c2d2bef17c8b8fdfdb76e4d"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/api.rs",
+   "mode": "100644",
+   "bytes": 7747,
+   "sha256": "8d71b432dd05502c0d473c1f7a154cae9c3098bddcd2cfc607d7f36c57bf2a97"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/cbd.rs",
+   "mode": "100644",
+   "bytes": 3352,
+   "sha256": "5bb5e57800f4aa95d96f2122ccca6df3e46c8b1326be79760b461189d4e42988"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/ciphertext.rs",
+   "mode": "100644",
+   "bytes": 2267,
+   "sha256": "6e13043472c1bde8f747c50c0733d98e574731b9ef1cb63c39c22d52bc3dec4a"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/dg.rs",
+   "mode": "100644",
+   "bytes": 5227,
+   "sha256": "dd12202dd403f1af4c04bb671fdece52de240d7781c0e6dc6179aed8a6f71e03"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/hash.rs",
+   "mode": "100644",
+   "bytes": 3409,
+   "sha256": "a3f274bae528ae9bda69f14e74199f37bc7e9137327f9780a4e86de1feb60848"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/hwt.rs",
+   "mode": "100644",
+   "bytes": 3706,
+   "sha256": "d1fbf096941408f0e8f95eb05fc6f84b6edbebe3e070ef0aad90984764b3b3c5"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/indcpa.rs",
+   "mode": "100644",
+   "bytes": 4529,
+   "sha256": "7d419d4f6d4f6f163796289fa8c25f010747864b8f9cd4606b0b310713661e26"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/kem.rs",
+   "mode": "100644",
+   "bytes": 7102,
+   "sha256": "736c4416e0a1c6f41a542a0cf4ca978c28fc85d75ed49babba26e99cf30d3d48"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/key.rs",
+   "mode": "100644",
+   "bytes": 3270,
+   "sha256": "1684099ed7fdf449bebd6d51ed9d1127e555c290f0a2ab8cc8047abf5a22d9ba"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/mod.rs",
+   "mode": "100644",
+   "bytes": 2270,
+   "sha256": "f721592dba04120f79bc2e368d76048b997603f8dae02d00aea0277d5a446b33"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/pack.rs",
+   "mode": "100644",
+   "bytes": 9089,
+   "sha256": "1ad8c69cfe10e2564178185dce7c427370084381f36be2055212645c6b922846"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/pack_ring.rs",
+   "mode": "100644",
+   "bytes": 13865,
+   "sha256": "57d2c33fd27db96662c9066c731695e1fb1eb00dda73e5e2065bb14ab3935839"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/params.rs",
+   "mode": "100644",
+   "bytes": 7324,
+   "sha256": "f5995be77e3c355f5075a25eb3fda38cb165dae586115901602e43543b15b501"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/poly_ops.rs",
+   "mode": "100644",
+   "bytes": 15097,
+   "sha256": "8a56f894731949a6b1704d6eb81678f6bd2665cdd3d627da9a9ed11170778568"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/src/smaug_v1_2_0/poly_types.rs",
+   "mode": "100644",
+   "bytes": 1927,
+   "sha256": "aaf0c6c6c5b1c65b8b5e390b745acfd916acb3c4c587f992fe2111951cc69f21"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/tests/kat_surface_gated.rs",
+   "mode": "100644",
+   "bytes": 1629,
+   "sha256": "890dc3065822a2f6f475ede135a912e20cd71f7fabc801e8e2b10b2f79c1578f"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/tests/pack_ring_v1_2_0.rs",
+   "mode": "100644",
+   "bytes": 6543,
+   "sha256": "350a8ebfd6ecb4b4b29d418ce62532b3b7bee9e61d5e7e08efc7472f1467e0be"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/tests/public_api_v1_2_0.rs",
+   "mode": "100644",
+   "bytes": 5188,
+   "sha256": "1c08bd19ccf03ddd1ab8b17d2c69a8c5954cd8fbd4b9df2c5ec2799a4933c996"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/tests/python_compatibility_test.rs",
+   "mode": "100644",
+   "bytes": 3070,
+   "sha256": "6a41fc1254d7a4d95d75e54b20fb4a899d5b96d75ec34a0ba73ab32bbf0f3bbc"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/tests/seed_keygen_test.rs",
+   "mode": "100644",
+   "bytes": 2287,
+   "sha256": "402c0cdf66420da3726679c377499642c7aa5b792fa9021e453a471694ca34a1"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/tests/v1_2_0_full_kat_byte_equality.rs",
+   "mode": "100644",
+   "bytes": 7168,
+   "sha256": "be214b26acc2b4936af7a15154906e0c8280a8cb68e254d5dde32aa88e27de7e"
+  },
+  {
+   "path": "metamui-crypto-rust/metamui-smaug-t/tests/v1_2_0_kat_byte_equality.rs",
+   "mode": "100644",
+   "bytes": 3859,
+   "sha256": "f9f921233e57118e5944e37727b0c0721dac2d75c5bf957661fd2a9fb102fead"
+  },
+  {
    "path": "test-vectors/README.md",
    "mode": "100644",
    "bytes": 7510,
@@ -2062,6 +2938,96 @@
    "mode": "100644",
    "bytes": 3174,
    "sha256": "ddd32d3ac85bd239af771052141ece799fa8c7a53b3cca127785ecef1bc2e148"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/README.md",
+   "mode": "100644",
+   "bytes": 3915,
+   "sha256": "9d65c8a647facc2099d2b4c33881f5e7ae21b886c4f6f9d99ddd01e5167e383f"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/SHA256SUMS",
+   "mode": "100644",
+   "bytes": 1170,
+   "sha256": "279d0f0fcf07e003c95b993bb4e3b5674ce04d26b883ceebe5c73d681575ff74"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/aimer-128f/PQCsignKAT_48.rsp",
+   "mode": "100644",
+   "bytes": 73051,
+   "sha256": "95afe0fbfb0c9a45f3c19076729d894ac42b9b125bfc4c10306776e0bcd284cb"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/aimer-128s/PQCsignKAT_48.rsp",
+   "mode": "100644",
+   "bytes": 50651,
+   "sha256": "f33d4ef53e240d4315aca9c48677c2a7e7e24181a67619f726d701d88aff3b8a"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/aimer-192f/PQCsignKAT_72.rsp",
+   "mode": "100644",
+   "bytes": 158096,
+   "sha256": "4ba58ce5d51bee125d7736194f83148e9a9c5c18c1f8ad2c2752c5677b0e4b3b"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/aimer-192s/PQCsignKAT_72.rsp",
+   "mode": "100644",
+   "bytes": 107216,
+   "sha256": "8ff1b84c0bc1dc9d7ac24f813d6ee8739d15164340f1169da14b014153354708"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/aimer-256f/PQCsignKAT_96.rsp",
+   "mode": "100644",
+   "bytes": 318016,
+   "sha256": "aca96c00a8641a6e335af7188a209bfc395cc48484125fac1d8d45c48132aa2c"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/aimer-256s/PQCsignKAT_96.rsp",
+   "mode": "100644",
+   "bytes": 206656,
+   "sha256": "b4e9eb57bdde384a61b78f537ea498b46ab040542f4dad4382686a2ba035fc2f"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/v2.1/SHA256SUMS",
+   "mode": "100644",
+   "bytes": 570,
+   "sha256": "80630ccb53b7638e7a56732b3b2bf625185b2eed7438ed293679b8deb7186237"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/v2.1/aimer-128f/PQCsignKAT_48.rsp",
+   "mode": "100644",
+   "bytes": 62491,
+   "sha256": "72eae35a7d00cbc2d0b8a9584c941792c3f9957c52ba0076ed4a90aec7c6c742"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/v2.1/aimer-128s/PQCsignKAT_48.rsp",
+   "mode": "100644",
+   "bytes": 45211,
+   "sha256": "2e07b650e12b9d4b3b1f903946a2fc80089abe82ace162473eace5973d3caf0d"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/v2.1/aimer-192f/PQCsignKAT_72.rsp",
+   "mode": "100644",
+   "bytes": 134576,
+   "sha256": "d028f64421e0bdf5969c56784672368e5b90f107ba151bc3b101ffde8ea6a204"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/v2.1/aimer-192s/PQCsignKAT_72.rsp",
+   "mode": "100644",
+   "bytes": 95211,
+   "sha256": "328e4b9ac16d14f874bca5dc2f67d3734438b2e147ef9ce169a7615cf7637076"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/v2.1/aimer-256f/PQCsignKAT_96.rsp",
+   "mode": "100644",
+   "bytes": 255616,
+   "sha256": "1a4b3560a3c6d9aae28c78b9a21cc50e125bc3c46ff499c7ab34d4ae33848c95"
+  },
+  {
+   "path": "test-vectors/aimer-upstream/v2.1/aimer-256s/PQCsignKAT_96.rsp",
+   "mode": "100644",
+   "bytes": 174976,
+   "sha256": "a3a3b9afebc0617e9b3f60a049bbf18f55b9794f8dfc9df6bbc846768729bde3"
   },
   {
    "path": "test-vectors/falcon-upstream/README.md",
@@ -2098,12 +3064,6 @@
    "mode": "100644",
    "bytes": 31160,
    "sha256": "e612b7a7f628979d6b1240a5a15b9944b7dd662fdc3bffe2b35f84a76b44d343"
-  },
-  {
-   "path": "test-vectors/falcon-upstream/flat/falcon-tierb.tsv",
-   "mode": "100644",
-   "bytes": 30770,
-   "sha256": "2ca1c6355b3200ce8225d938e9a38ffdc0f9347b551f282188cbf30368048ea7"
   },
   {
    "path": "test-vectors/falcon/falcon1024-norm-boundary.json",
@@ -2166,6 +3126,78 @@
    "sha256": "239b6c567e4e0ebdc927d66d4cdcb42315f33473da4c9d92f9a5a0715683d7ad"
   },
   {
+   "path": "test-vectors/haetae-upstream/README.md",
+   "mode": "100644",
+   "bytes": 4361,
+   "sha256": "fe21157f3dbc27c933457be4af2d745a353783e508081ad9887385739693198a"
+  },
+  {
+   "path": "test-vectors/haetae-upstream/SHA256SUMS",
+   "mode": "100644",
+   "bytes": 669,
+   "sha256": "1b4da3e2bdd7615f5a6460e25360b4051e5d3ebef5a1eba867dc6ee6a7a59b37"
+  },
+  {
+   "path": "test-vectors/haetae-upstream/haetae2/PQCsignKAT_haetae_mode2.rsp",
+   "mode": "100644",
+   "bytes": 1124873,
+   "sha256": "508e9664a36eb992d011702cfdbb4816d17b3ea5755c0728ffa84219b8244348"
+  },
+  {
+   "path": "test-vectors/haetae-upstream/haetae3/PQCsignKAT_haetae_mode3.rsp",
+   "mode": "100644",
+   "bytes": 1536673,
+   "sha256": "bb388a12deeb953205429ad1281b38467678f9ebc21aa9d8c8486f20bd02d31a"
+  },
+  {
+   "path": "test-vectors/haetae-upstream/haetae5/PQCsignKAT_haetae_mode5.rsp",
+   "mode": "100644",
+   "bytes": 1906073,
+   "sha256": "3923b6a811942205accb75fff688bbe6cbc4bf3ee031ff1b190ca1e80f7a79d1"
+  },
+  {
+   "path": "test-vectors/haetae-upstream/v1.1.2-verify-only/SHA256SUMS",
+   "mode": "100644",
+   "bytes": 306,
+   "sha256": "d6778b1a30fa6bfbab0bec34ab3bc02eefe922c61becf018840ecf922f461ff6"
+  },
+  {
+   "path": "test-vectors/haetae-upstream/v1.1.2-verify-only/haetae2/PQCsignKAT_haetae_mode2.rsp",
+   "mode": "100644",
+   "bytes": 1124873,
+   "sha256": "8414c29dc5d24b548b748dfc4208796619877a7e2e7605da978a8875fa36951b"
+  },
+  {
+   "path": "test-vectors/haetae-upstream/v1.1.2-verify-only/haetae3/PQCsignKAT_haetae_mode3.rsp",
+   "mode": "100644",
+   "bytes": 1536673,
+   "sha256": "7417b971ab5b28875479c8df3c70aca9d9d85e435b4473ace8347cac44081053"
+  },
+  {
+   "path": "test-vectors/haetae-upstream/v1.1.2-verify-only/haetae5/PQCsignKAT_haetae_mode5.rsp",
+   "mode": "100644",
+   "bytes": 1906073,
+   "sha256": "f5e882ce59939281a6ae11a1a3fc4421356f2baf22c68e056bb4d3d1dba67cdd"
+  },
+  {
+   "path": "test-vectors/haetae/haetae2_kat.json",
+   "mode": "100644",
+   "bytes": 1211597,
+   "sha256": "750ec0513ecc1c9bc24e1f2c88a0d0ab02f9ff74aa7392b0d797e79c0e8827e8"
+  },
+  {
+   "path": "test-vectors/haetae/haetae3_kat.json",
+   "mode": "100644",
+   "bytes": 1623398,
+   "sha256": "0ba53d370f1bddb0bbaf3f5c8e39e674c13242d7de9b1d220dc0daf9ec874a11"
+  },
+  {
+   "path": "test-vectors/haetae/haetae5_kat.json",
+   "mode": "100644",
+   "bytes": 1992798,
+   "sha256": "5fc097c0a1bbb1484231fc343db6a8ab7a9ad889c6f507360411a607de5ed422"
+  },
+  {
    "path": "test-vectors/hmac/hmac-sha256-wycheproof.json",
    "mode": "100644",
    "bytes": 4983,
@@ -2178,6 +3210,60 @@
    "sha256": "21193d3db74010222d58695f6a3c22e6d410bff41c81fa6c8ca8c814c6be4db9"
   },
   {
+   "path": "test-vectors/ml-dsa-upstream/README.md",
+   "mode": "100644",
+   "bytes": 3937,
+   "sha256": "b468cc71ac5c646be8807f6276c384e81c3aa5e08083af8fcf6b9ce62556616a"
+  },
+  {
+   "path": "test-vectors/ml-dsa-upstream/SHA256SUMS",
+   "mode": "100644",
+   "bytes": 648,
+   "sha256": "4bfadc619a35ab92d0e58867ae823a6b2904d05e01f17515f27593aa8c1d57b7"
+  },
+  {
+   "path": "test-vectors/ml-dsa-upstream/keygen.json",
+   "mode": "100644",
+   "bytes": 176269,
+   "sha256": "65156f5e1a67dbee34a4b571655367d1c484e1273c82b1a56e3685dd7e5da81d"
+  },
+  {
+   "path": "test-vectors/ml-dsa-upstream/siggen-tr1.json",
+   "mode": "100644",
+   "bytes": 2372844,
+   "sha256": "e5723712aba06e59302e4a0c9385121e145d0cfba4d9213b784ddf732c6a3b15"
+  },
+  {
+   "path": "test-vectors/ml-dsa-upstream/siggen.json",
+   "mode": "100644",
+   "bytes": 1138696,
+   "sha256": "c261610be1459b150756697cf75b529df39e069d598bd55bb5b10cf290fb4551"
+  },
+  {
+   "path": "test-vectors/ml-dsa-upstream/sigver.json",
+   "mode": "100644",
+   "bytes": 1224081,
+   "sha256": "5c047bc78cc17ceb75dc5f5129971f9ebe1718f416ed1292cfb7e9ba27519f60"
+  },
+  {
+   "path": "test-vectors/ml-dsa/ml-dsa-44-kat.json",
+   "mode": "100644",
+   "bytes": 39861,
+   "sha256": "d41b2f2854bf129c1e22a6ba8ef1c9428632e698dad78f68b04bb456c3a729ef"
+  },
+  {
+   "path": "test-vectors/ml-dsa/ml-dsa-65-kat.json",
+   "mode": "100644",
+   "bytes": 469125,
+   "sha256": "a2547c470aba04097103233b7504b054e441bb11954a9a3972bc719eebe55d96"
+  },
+  {
+   "path": "test-vectors/ml-dsa/ml-dsa-87-kat.json",
+   "mode": "100644",
+   "bytes": 610225,
+   "sha256": "84d192714838350b71039b6bbba55cc57472b3ffa567ef19ac823bffa9897a88"
+  },
+  {
    "path": "test-vectors/ml-kem-upstream/README.md",
    "mode": "100644",
    "bytes": 5599,
@@ -2188,12 +3274,6 @@
    "mode": "100644",
    "bytes": 930,
    "sha256": "6f50850d8436c7188518c8f3251e908425d3849556610dedb3cd93417eaf394f"
-  },
-  {
-   "path": "test-vectors/ml-kem-upstream/flat/encapdecap-tr1.tsv",
-   "mode": "100644",
-   "bytes": 1157927,
-   "sha256": "9acdf5c2f4d3c467dda95f5373b6ad0106d487f7d692cf3192ec8a24394b166c"
   },
   {
    "path": "test-vectors/ml-kem-upstream/gen_flat_tr1.py",
@@ -2310,6 +3390,24 @@
    "sha256": "8bc86257571f6ffaf7f7d1cc8f2e4af73c4e56f09a780e6374712f4f0d12175e"
   },
   {
+   "path": "test-vectors/ntru-plus-upstream/README.md",
+   "mode": "100644",
+   "bytes": 4064,
+   "sha256": "1f692c74842ed39d90302c8ed4ad60ed7def091a171fb6e3e4b6a91ddeee5e39"
+  },
+  {
+   "path": "test-vectors/ntru-plus-upstream/SHA256SUMS",
+   "mode": "100644",
+   "bytes": 251,
+   "sha256": "531437d205895e8955f2936b1d0c4f1fe132809669d02c2a3ba9aad24d0594ff"
+  },
+  {
+   "path": "test-vectors/ntru-plus-upstream/ntru-plus-upstream.json",
+   "mode": "100644",
+   "bytes": 174989,
+   "sha256": "a541e97699f76e314974e2f583cd603c714ed2835befe3aaa5fd64cfff03687c"
+  },
+  {
    "path": "test-vectors/sha-2/sha256-acvp.json",
    "mode": "100644",
    "bytes": 2331,
@@ -2374,6 +3472,120 @@
    "mode": "100644",
    "bytes": 10133,
    "sha256": "60e898c5273198c536b670c2fdc714e11c3e3ace6e99b7c08f47f5659f1d7073"
+  },
+  {
+   "path": "test-vectors/slh-dsa-upstream/README.md",
+   "mode": "100644",
+   "bytes": 2227,
+   "sha256": "6520d8af55a1cb50bde12df9ada0cbbdb3fa51334a8101e27bc3ce04caa5e0e9"
+  },
+  {
+   "path": "test-vectors/slh-dsa-upstream/SHA256SUMS",
+   "mode": "100644",
+   "bytes": 480,
+   "sha256": "fe2dd0924ca94eec2f51365ca73e87df38181160a47b533bfb588f7bc87976b0"
+  },
+  {
+   "path": "test-vectors/slh-dsa-upstream/keygen.json",
+   "mode": "100644",
+   "bytes": 67107,
+   "sha256": "7ea1c68092cdbd3f81de5564461c8b3ffa321a34cb822724ad5ccfc022bd4601"
+  },
+  {
+   "path": "test-vectors/slh-dsa-upstream/siggen.json",
+   "mode": "100644",
+   "bytes": 4446275,
+   "sha256": "745387101ee6cc551df1bd8e159137717e72bb64daa772c65f3ab209034fe8a4"
+  },
+  {
+   "path": "test-vectors/slh-dsa-upstream/sigver.json",
+   "mode": "100644",
+   "bytes": 4300915,
+   "sha256": "9db168fb9a2974d0d1f82d024ddd8575e065ba6a43b2878b6a517024fdb6d100"
+  },
+  {
+   "path": "test-vectors/slh-dsa/README.md",
+   "mode": "100644",
+   "bytes": 1223,
+   "sha256": "65e7fbb368a7ac2afd2b50329d51f0594c1f6464a3b23b9e66066bd5e2201a62"
+  },
+  {
+   "path": "test-vectors/slh-dsa/slh_dsa_acvp_like_vectors.json",
+   "mode": "100644",
+   "bytes": 3831270,
+   "sha256": "e82bfe8f50493284c3c91e41ff5080b307ae731e54573560217dbc63aa8b74f8"
+  },
+  {
+   "path": "test-vectors/slh-dsa/slh_dsa_portable_vectors.json",
+   "mode": "100644",
+   "bytes": 318279,
+   "sha256": "4c699ef049023113e632a2036698fb891eca62136c5b436d0abf1b0dd42e1684"
+  },
+  {
+   "path": "test-vectors/smaug-t/README.md",
+   "mode": "100644",
+   "bytes": 3395,
+   "sha256": "61a4a968adabb5d926d0fe0291864c396f1bfe7a742af04ead3fde4d3a60aa50"
+  },
+  {
+   "path": "test-vectors/smaug-t/v1.1.1-packring/mode1.txt",
+   "mode": "100644",
+   "bytes": 8016,
+   "sha256": "ffbc5889c9eef826c7f71b7722c65b3f34826a9d2515c6320e62e2a470091902"
+  },
+  {
+   "path": "test-vectors/smaug-t/v1.1.1-packring/mode3.txt",
+   "mode": "100644",
+   "bytes": 8080,
+   "sha256": "ea6ef761956a82ed5fe5fa003f4670f08bc4fe06f8f4640b02fe5e176871a666"
+  },
+  {
+   "path": "test-vectors/smaug-t/v1.1.1-packring/mode5.txt",
+   "mode": "100644",
+   "bytes": 8272,
+   "sha256": "196e355167910d6e5fe26bcb6b0323ca2f8abff3e021498a889c7a52c537f456"
+  },
+  {
+   "path": "test-vectors/smaug-t/v1.1.1-packring/modet.txt",
+   "mode": "100644",
+   "bytes": 7887,
+   "sha256": "f7289d036bc502450037864eb956022bab1b4f3f4e421773bcdddd72e998e177"
+  },
+  {
+   "path": "test-vectors/smaug-t/v1.2.0-kat/README.md",
+   "mode": "100644",
+   "bytes": 2053,
+   "sha256": "c371e37870ae4492169b27a63fbef488a5977beae76f5a94f81f9b53b09fe9b0"
+  },
+  {
+   "path": "test-vectors/smaug-t/v1.2.0-kat/SHA256SUMS",
+   "mode": "100644",
+   "bytes": 456,
+   "sha256": "9a048516ab56d8ba8113e6377f564c84bb9f2ac98f7dcecf235582935fae9a54"
+  },
+  {
+   "path": "test-vectors/smaug-t/v1.2.0-kat/smaugt-mode1-v1.2.0-kat.json",
+   "mode": "100644",
+   "bytes": 463163,
+   "sha256": "cfdc4acacb8449d2b91941dc89fd7111402315cbf6acdb6c55c7e5da0de05419"
+  },
+  {
+   "path": "test-vectors/smaug-t/v1.2.0-kat/smaugt-mode3-v1.2.0-kat.json",
+   "mode": "100644",
+   "bytes": 706365,
+   "sha256": "20f57922b917069a7ce140a818dda1dcc5de8bfe5fe54ce78dc92dd16a0a5106"
+  },
+  {
+   "path": "test-vectors/smaug-t/v1.2.0-kat/smaugt-mode5-v1.2.0-kat.json",
+   "mode": "100644",
+   "bytes": 936766,
+   "sha256": "2d34ed0df0d4b161f50dfcf42ac90093bccf3dc95ee7a6832d02d0972433c837"
+  },
+  {
+   "path": "test-vectors/smaug-t/v1.2.0-kat/smaugt-modet-v1.2.0-kat.json",
+   "mode": "100644",
+   "bytes": 450366,
+   "sha256": "b4ae8fbebd4009213150eb9d235b82a43fbf4671ca3a8203b97c0513566d9b79"
   },
   {
    "path": "test-vectors/sp800-185/SHA256SUMS",

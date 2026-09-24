@@ -19,3 +19,7 @@ is in THIRD_PARTY_NOTICES.md. In particular this product includes:
     Round-3 submission package (MIT), PQClean (public domain / MIT),
     the kyber-py project (MIT), Google Wycheproof (Apache-2.0) and RFC
     appendices (IETF Trust)
+  * Known-answer files of the KpqC reference implementations, against which
+    the SMAUG-T, HAETAE, AIMer and NTRU+ crates are written and gated:
+    Copyright (c) 2026 Team SMAUG-T (MIT), Copyright (c) 2026 Team HAETAE
+    (MIT), Copyright (c) 2022-2026 SAMSUNG SDS (MIT), NTRU+ TEAM (MIT)

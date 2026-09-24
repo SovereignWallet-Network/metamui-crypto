@@ -29,10 +29,13 @@ a claim this project makes. Internal review, independent audit and formal
 certification are recorded separately and are never implied by a
 *validated* mark.
 
-This tree is the Rust source of the preview: the `falcon-512.r3-compressed`,
-`falcon-512.r3-padded` and `ml-kem-768` profiles through the
-`metamui-crypto` facade, validated on macOS (arm64) and Linux (x86_64). No
-package has been published to a registry from it.
+This tree is the Rust source of the release candidate: the
+`falcon-512.r3-compressed`, `falcon-512.r3-padded` and `ml-kem-768` profiles
+through the `metamui-crypto` facade, and the ML-DSA, SLH-DSA, SMAUG-T,
+HAETAE, AIMer and NTRU+ crates published directly, each gated on its
+upstream known-answer files. Validation records are kept per profile and
+host; see each crate's README for what its tests replay. No package has
+been published to a registry from it.
 
 ## Versions
 
@@ -64,8 +67,9 @@ release notes of the release that makes them, with the migration.
 ## Standards and errata
 
 The maintainers track the standards the validated profiles implement (FIPS
-203, FIPS 202, SP 800-185, SP 800-38D, SP 800-90A and the Falcon Round-3
-specification) and their errata. A revision that changes bytes produces a
+203, FIPS 204, FIPS 205, FIPS 202, SP 800-185, SP 800-38D, SP 800-90A, the
+Falcon Round-3 specification and the KpqC final-round specifications of
+SMAUG-T, HAETAE, AIMer and NTRU+) and their errata. A revision that changes bytes produces a
 new profile; a revision that does not is noted in the release notes.
 
 ## Where to ask

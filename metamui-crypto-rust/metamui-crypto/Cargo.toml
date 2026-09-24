@@ -18,8 +18,8 @@ default = ["std"]
 std = ["rand/std", "rand/std_rng"]
 
 [dependencies]
-metamui-falcon512 = { version = "=1.0.0-rc.2", path = "../metamui-falcon512", default-features = false, features = ["std"]  }
-metamui-mlkem = { version = "=1.0.0-rc.2", path = "../metamui-mlkem", default-features = false, features = ["std", "mlkem768"]  }
+metamui-falcon512 = { version = "=1.0.0-rc.3", path = "../metamui-falcon512", default-features = false, features = ["std"]  }
+metamui-mlkem = { version = "=1.0.0-rc.3", path = "../metamui-mlkem", default-features = false, features = ["std", "mlkem768"]  }
 rand_core = { workspace = true }
 rand = { workspace = true }
 zeroize = { workspace = true, features = ["alloc"] }

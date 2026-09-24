@@ -53,8 +53,10 @@ export commit rather than as a merge of your branch.
    memory indices or early returns. Documentation may say that code is
    designed for constant time; it may not claim measured resistance.
 6. **No seeded entry point on a public surface.** Known-answer and
-   deterministic functions live behind the `kat-internal` (Falcon) and
-   `fips203-internal` (ML-KEM) features and the facade exposes none.
+   seeded functions live behind the `kat-internal` feature of each
+   algorithm crate (`fips203-internal` in ML-KEM) and the facade exposes
+   none; the deterministic signing variants that FIPS 204 and FIPS 205
+   themselves define are ordinary API.
 
 ## Review
 

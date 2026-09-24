@@ -29,7 +29,7 @@ default = ["std"]
 std = []
 
 [dependencies]
-metamui-aes-256 = { version = "=1.0.0-rc.2", path = "../metamui-aes-256", features = ["native"]  }
+metamui-aes-256 = { version = "=1.0.0-rc.3", path = "../metamui-aes-256", features = ["native"]  }
 zeroize = { workspace = true, features = ["derive", "alloc"] }
 
 [dev-dependencies]

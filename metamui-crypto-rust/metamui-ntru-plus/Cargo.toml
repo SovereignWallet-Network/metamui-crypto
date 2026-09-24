@@ -1,0 +1,62 @@
+[package]
+name = "metamui-ntru-plus"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+authors = ["MetaMUI Crypto Team"]
+license = "Apache-2.0"
+description = "NTRU+ (KpqC) lattice KEM, NTRU+768/864/1152 with q = 3457, a port of the ntruplus.org 2026 reference verified against its PQCgenKAT answer files"
+repository.workspace = true
+keywords = ["cryptography", "post-quantum", "kpqc", "ntru", "kem"]
+categories = ["cryptography", "no-std"]
+
+[dependencies]
+metamui-shake = { version = "=1.0.0-rc.3", path = "../metamui-shake" }
+getrandom = { version = "0.2", default-features = false }
+
+[dev-dependencies]
+# This crate's own tests build with `kat-internal`, so the upstream KAT gate
+# that replays the NIST DRBG schedule is always compiled; a
+# `required-features` on that target would let `cargo test` skip it
+# silently. cargo drops an unversioned dev-dependency when packaging, so
+# nothing published enables the feature.
+metamui-ntru-plus = { path = ".", default-features = false, features = ["kat-internal"] }
+# NIST AES-256-CTR-DRBG (no DF) to replay the PQCgenKAT_kem seed stream.
+metamui-aes-ctr-drbg = { path = "../metamui-aes-ctr-drbg" }
+hex = "0.4"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[features]
+default = ["std"]
+std = ["getrandom/std"]
+
+# Seeded and known-answer entry points — `kem::generate_keypair_det` and
+# `kem::encapsulate_det`, which take the `randombytes` source from the
+# caller. They replay the reference PQCgenKAT_kem answer files and exist for
+# conformance gates and fixture generators only; an application is never
+# offered a seed (the same rule as `metamui-mlkem`'s `fips203-internal`).
+# `tests/kat_surface_gated.rs` fails if one of them is compiled without the
+# feature.
+kat-internal = []
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release.
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+# wasm32 `getrandom` backend. This crate is a cdylib, so cargo links it for
+# wasm32 even when a consumer only wants the rlib, and that link needs a
+# backend to resolve. Taking it from here instead of `getrandom/js` means the
+# link no longer asserts that a browser is present; a consumer that IS a
+# browser enables `js` itself and keeps Web Crypto (getrandom prefers `js`,
+# so this registration is then inert).
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+metamui-getrandom-unavailable = { version = "=1.0.0-rc.3", path = "../metamui-getrandom-unavailable" }
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
