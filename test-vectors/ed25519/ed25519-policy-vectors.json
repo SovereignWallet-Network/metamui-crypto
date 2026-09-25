@@ -1,0 +1,383 @@
+{
+ "algorithm": "Ed25519",
+ "standard": "RFC 8032 \u00a75.1.3 / \u00a75.1.7 as written (MetaMUI policy decided 2026-09-24); ZIP-215",
+ "source": "tools/ed25519-policy-gen (genrun.sh)",
+ "source_type": "independent oracle: gen.py (RFC 8032 / ZIP-215 from the text, plain integers) computes every verdict; zebra-check (ed25519-zebra ZIP-215 + curve25519-dalek canonical encoding) recomputes it; vendored only when both agree",
+ "policy": {
+  "valid_rfc8032": "decode A and R per \u00a75.1.3 (reject y >= p, x = 0 with sign bit, no square root); reject S >= L; accept iff [8][S]B = [8]R + [8][k]A with k = SHA-512(R||A||M) over the received encodings. Small-order A and R are not screened.",
+  "valid_zip215": "ZIP-215: the same equation and S < L, with y reduced mod p and x = 0 with the sign bit accepted."
+ },
+ "numberOfTests": 37,
+ "tests": [
+  {
+   "tcId": 1,
+   "category": "honest",
+   "description": "RFC 8032 section 7.1 test 1",
+   "public_key": "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a",
+   "message": "",
+   "signature": "e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 2,
+   "category": "honest",
+   "description": "RFC 8032 section 7.1 test 2",
+   "public_key": "3d4017c3e843895a92b70aa74d1b7ebc9c982ccf2ec4968cc0cd55f12af4660c",
+   "message": "72",
+   "signature": "92a009a9f0d4cab8720e820b5f642540a2b27b5416503f8fb3762223ebdb69da085ac1e43e15996e458f3613d0f11d8c387b2eaeb4302aeeb00d291612bb0c00",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 3,
+   "category": "honest",
+   "description": "RFC 8032 section 7.1 test 3",
+   "public_key": "fc51cd8e6218a1a38da47ed00230f0580816ed13ba3303ac5deb911548908025",
+   "message": "af82",
+   "signature": "6291d657deec24024827e69c3abe01a30ce548a284743a445e3680d7db5ac3ac18ff9b538d16f290ae67f760984dc6594a7c15e9716ed28dc027beceea1ec40a",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 4,
+   "category": "honest",
+   "description": "honest signature 0",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "686f6e657374206d6573736167652030",
+   "signature": "a2122302acea76f437fa2ac7555898d0e4157f05d955ab9809e47432de6ebf7b21405a1055d0f6574e67eecdaf33253ebdf7b986d41bc88111bf7482d1974e00",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 5,
+   "category": "honest",
+   "description": "honest signature 1",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "686f6e657374206d6573736167652031",
+   "signature": "11a06750c7da73fdef88f5a0398f3bd459c4208eacf213661d1566f1de699b9771a2c7ed9be1bf0b3e0705f890fff4d4de5829572d0bff461f860569b4f32604",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 6,
+   "category": "honest",
+   "description": "honest signature 2",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "686f6e657374206d6573736167652032",
+   "signature": "c486a6f559d455a715e6bf3b4b4abe1bd5a1e45d7b0fd9e8c96e0bf2ebe746be19de311060bebf5b46d9a0b6daafbc88077c114c6fb012321201bf5f01b7ae07",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 7,
+   "category": "tamper",
+   "description": "message changed",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c69637921",
+   "signature": "3e391427a0262625e4ea641220520d8668c8c667bf3aa22c4187d0532e90591bf0c91a2a9d56578a401fa83d0c87dcbda9d17095243390662991e487c026260a",
+   "valid_rfc8032": false,
+   "valid_zip215": false
+  },
+  {
+   "tcId": 8,
+   "category": "tamper",
+   "description": "R byte flipped",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "3f391427a0262625e4ea641220520d8668c8c667bf3aa22c4187d0532e90591bf0c91a2a9d56578a401fa83d0c87dcbda9d17095243390662991e487c026260a",
+   "valid_rfc8032": false,
+   "valid_zip215": false
+  },
+  {
+   "tcId": 9,
+   "category": "tamper",
+   "description": "S byte flipped",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "3e391427a0262625e4ea641220520d8668c8c667bf3aa22c4187d0532e90591bf1c91a2a9d56578a401fa83d0c87dcbda9d17095243390662991e487c026260a",
+   "valid_rfc8032": false,
+   "valid_zip215": false
+  },
+  {
+   "tcId": 10,
+   "category": "tamper",
+   "description": "different public key",
+   "public_key": "74311e834a29c279a1a7520cdb4f5a47db90f15c425cb97dd56e6b9230ce8ac6",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "3e391427a0262625e4ea641220520d8668c8c667bf3aa22c4187d0532e90591bf0c91a2a9d56578a401fa83d0c87dcbda9d17095243390662991e487c026260a",
+   "valid_rfc8032": false,
+   "valid_zip215": false
+  },
+  {
+   "tcId": 11,
+   "category": "s-range",
+   "description": "S + L (same residue, not reduced)",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "3e391427a0262625e4ea641220520d8668c8c667bf3aa22c4187d0532e90591bdd9d1087b7b969e216bc9fe0ea80bbd2a9d17095243390662991e487c026261a",
+   "valid_rfc8032": false,
+   "valid_zip215": false
+  },
+  {
+   "tcId": 12,
+   "category": "s-range",
+   "description": "S with bit 255 set",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "3e391427a0262625e4ea641220520d8668c8c667bf3aa22c4187d0532e90591bf0c91a2a9d56578a401fa83d0c87dcbda9d17095243390662991e487c026268a",
+   "valid_rfc8032": false,
+   "valid_zip215": false
+  },
+  {
+   "tcId": 13,
+   "category": "s-range",
+   "description": "identity A and R, S = 0 (small-order key, cofactored equation holds)",
+   "public_key": "0100000000000000000000000000000000000000000000000000000000000000",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 14,
+   "category": "s-range",
+   "description": "identity A and R, S = L (equal to L, must be refused)",
+   "public_key": "0100000000000000000000000000000000000000000000000000000000000000",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "0100000000000000000000000000000000000000000000000000000000000000edd3f55c1a631258d69cf7a2def9de1400000000000000000000000000000010",
+   "valid_rfc8032": false,
+   "valid_zip215": false
+  },
+  {
+   "tcId": 15,
+   "category": "s-range",
+   "description": "identity A and R, S = L - 1",
+   "public_key": "0100000000000000000000000000000000000000000000000000000000000000",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "0100000000000000000000000000000000000000000000000000000000000000ecd3f55c1a631258d69cf7a2def9de1400000000000000000000000000000010",
+   "valid_rfc8032": false,
+   "valid_zip215": false
+  },
+  {
+   "tcId": 16,
+   "category": "non-canonical",
+   "description": "R = identity encoded with y = p + 1",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "eeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f8adc8f0d726c88cec1ec6d38e72602b95ba1add6e50ca81c89751561023ab700",
+   "valid_rfc8032": false,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 17,
+   "category": "non-canonical",
+   "description": "R = identity encoded with the sign bit set (x = 0)",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "01000000000000000000000000000000000000000000000000000000000000800e6ebb8a31f94adfd2c3687f1e4b184a0e43ca2986daa8890ff00f8980a2030d",
+   "valid_rfc8032": false,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 18,
+   "category": "non-canonical",
+   "description": "A = identity encoded with y = p + 1",
+   "public_key": "eeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "9a1f7f6755a369b312d977931f8d358e511c30bda4051ee8c3a2574657d466d449bede92d4dab59499a4b9e48a3498f5cfef93d631ca0b1a220f1646a8adb909",
+   "valid_rfc8032": false,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 19,
+   "category": "non-canonical",
+   "description": "A = identity encoded with the sign bit set (x = 0)",
+   "public_key": "0100000000000000000000000000000000000000000000000000000000000080",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "9a1f7f6755a369b312d977931f8d358e511c30bda4051ee8c3a2574657d466d449bede92d4dab59499a4b9e48a3498f5cfef93d631ca0b1a220f1646a8adb909",
+   "valid_rfc8032": false,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 20,
+   "category": "non-canonical",
+   "description": "A = (sqrt(-1), 0) encoded with y = p",
+   "public_key": "edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "9a1f7f6755a369b312d977931f8d358e511c30bda4051ee8c3a2574657d466d449bede92d4dab59499a4b9e48a3498f5cfef93d631ca0b1a220f1646a8adb909",
+   "valid_rfc8032": false,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 21,
+   "category": "mixed-order",
+   "description": "R = rB + T8 (order-8 torsion component)",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "5c246ea4823d8a299760d1216a389188ec414676f862151dda06acf2276853e8e614600d3f0ead3471a5d6a84f918528a073bee8ec6a28c9b507189b035b990b",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 22,
+   "category": "mixed-order",
+   "description": "A = aB + T8 (order-8 torsion component)",
+   "public_key": "fa1cacecd4e4f32caf1fb9b4052aa5af8738fb795175ce1eed3e591b7e2022d5",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "9893c674abdeea4dfea37c7774d4e058015335a905b5d9280fa4d3d02133a06b173e32f14b8dc4b6893014307f151878d92c303ed3a43a22c9680f476ffb480d",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 23,
+   "category": "small-order",
+   "description": "A = torsion point 00000000\u20260000, R = identity, S = 0",
+   "public_key": "0000000000000000000000000000000000000000000000000000000000000000",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 24,
+   "category": "small-order",
+   "description": "A = torsion point 00000000\u20260080, R = identity, S = 0",
+   "public_key": "0000000000000000000000000000000000000000000000000000000000000080",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 25,
+   "category": "small-order",
+   "description": "A = torsion point 01000000\u20260000, R = identity, S = 0",
+   "public_key": "0100000000000000000000000000000000000000000000000000000000000000",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 26,
+   "category": "small-order",
+   "description": "A = torsion point 26e8958f\u2026fc05, R = identity, S = 0",
+   "public_key": "26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc05",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 27,
+   "category": "small-order",
+   "description": "A = torsion point 26e8958f\u2026fc85, R = identity, S = 0",
+   "public_key": "26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc85",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 28,
+   "category": "small-order",
+   "description": "A = torsion point c7176a70\u2026037a, R = identity, S = 0",
+   "public_key": "c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac037a",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 29,
+   "category": "small-order",
+   "description": "A = torsion point c7176a70\u202603fa, R = identity, S = 0",
+   "public_key": "c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac03fa",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 30,
+   "category": "small-order",
+   "description": "A = torsion point ecffffff\u2026ff7f, R = identity, S = 0",
+   "public_key": "ecffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 31,
+   "category": "small-order",
+   "description": "R = torsion point 00000000\u20260000, honest key, S = k*a",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "0000000000000000000000000000000000000000000000000000000000000000cf066578162ce8408a3a2771e1c47033fce8d2eb252d71455d65bd857cbd7e01",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 32,
+   "category": "small-order",
+   "description": "R = torsion point 00000000\u20260080, honest key, S = k*a",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "0000000000000000000000000000000000000000000000000000000000000080149e2ec479bec327533032bb169466de78c89407179b4f7eb12903f613cf8301",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 33,
+   "category": "small-order",
+   "description": "R = torsion point 01000000\u20260000, honest key, S = k*a",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "01000000000000000000000000000000000000000000000000000000000000007d1fa524d58de9e4f0d71fa90a713205efd49e843a3ca4dbbdbff7f753043300",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 34,
+   "category": "small-order",
+   "description": "R = torsion point 26e8958f\u2026fc05, honest key, S = k*a",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc0531b460a12aab9de3c238a09c5a4dbb63eca023d977b8eff67691028e140a9a0b",
+   "valid_rfc8032": true,
+   "valid_zip215": true
+  },
+  {
+   "tcId": 35,
+   "category": "off-curve",
+   "description": "R with y = 2 (no square root)",
+   "public_key": "cf1919fff68d1d6d2fda6fead050cdadb0183a6aa055ef5b38a64dd41736153b",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "0200000000000000000000000000000000000000000000000000000000000000f0c91a2a9d56578a401fa83d0c87dcbda9d17095243390662991e487c026260a",
+   "valid_rfc8032": false,
+   "valid_zip215": false
+  },
+  {
+   "tcId": 36,
+   "category": "off-curve",
+   "description": "A with y = 2 (no square root)",
+   "public_key": "0200000000000000000000000000000000000000000000000000000000000000",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "3e391427a0262625e4ea641220520d8668c8c667bf3aa22c4187d0532e90591bf0c91a2a9d56578a401fa83d0c87dcbda9d17095243390662991e487c026260a",
+   "valid_rfc8032": false,
+   "valid_zip215": false
+  },
+  {
+   "tcId": 37,
+   "category": "off-curve",
+   "description": "A with y = 2 + p (non-canonical and off the curve)",
+   "public_key": "efffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+   "message": "4d6574614d5549204564323535313920766572696669636174696f6e20706f6c696379",
+   "signature": "3e391427a0262625e4ea641220520d8668c8c667bf3aa22c4187d0532e90591bf0c91a2a9d56578a401fa83d0c87dcbda9d17095243390662991e487c026260a",
+   "valid_rfc8032": false,
+   "valid_zip215": false
+  }
+ ]
+}

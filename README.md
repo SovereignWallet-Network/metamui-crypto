@@ -23,10 +23,17 @@ package has been published to a registry from this tree.
 | HAETAE (KpqC) | `metamui-haetae` | 2, 3, 5 (one per build) | keygen, sign, verify |
 | AIMer (KpqC) | `metamui-aimer` | 128/192/256 × s/f | keygen, sign, verify |
 | NTRU+ (KpqC) | `metamui-ntru-plus` | 768, 864, 1152 | keygen, encapsulate, decapsulate |
+| BLAKE3 | `metamui-blake3` | hash, keyed hash, derive-key | hash |
+| BLAKE2b (RFC 7693) | `metamui-blake2b` | 256, 384, 512 | hash |
+| Keccak-256 | `metamui-keccak256` | pre-FIPS padding (Ethereum) | hash |
+| HKDF (RFC 5869) | `metamui-hkdf` | HKDF-SHA256 | extract, expand |
+| Ed25519 (RFC 8032) | `metamui-ed25519` | Ed25519 | keygen, sign, verify |
+| sr25519 (schnorrkel) | `metamui-sr25519` | Ristretto255 | keygen, sign, verify |
 
 `metamui-crypto` is the facade for the Falcon-512 and ML-KEM-768 profiles:
 explicit profiles, typed byte boundaries, caller-supplied randomness, no
-seeded entry point. The other algorithm crates are published as they are;
+seeded entry point. The other algorithm crates, post-quantum and classic,
+are published as they are;
 each README states its parameter sets, sizes, API and the known-answer
 files its tests replay. The workspace also carries the crates they are built
 on (SHA-2, SHA-3, SHAKE, AES-256, AES CTR_DRBG, the shared utilities and the
@@ -43,9 +50,11 @@ cd metamui-crypto-rust && cargo test --workspace --release
 
 The tests replay the upstream answer files under `test-vectors/` through
 the public API: the NIST Round-3 Falcon and PQClean `falcon-padded-512`
-files, the NIST ACVP FIPS 203/204/205 vectors, and the KpqC authors' KAT
-files for SMAUG-T, HAETAE, AIMer and NTRU+. A missing vector file fails the
-run.
+files, the NIST ACVP FIPS 203/204/205 vectors, the KpqC authors' KAT
+files for SMAUG-T, HAETAE, AIMer and NTRU+, the BLAKE3 team's official
+vectors, the RFC 7693 / 8032 / 5869 appendices and the schnorrkel and
+Ethereum test suites for sr25519 and Keccak-256. A missing vector file fails
+the run.
 
 ## What is not claimed
 

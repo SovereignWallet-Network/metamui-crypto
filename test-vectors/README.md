@@ -35,7 +35,7 @@ The fourteen genuine-oracle directories are: `aimer-upstream/`,
 | `falcon-upstream/` | Falcon-512/1024 | NIST Round 3 reference | Official `falcon-round3.zip` | Genuine upstream KAT — conformance gate |
 | `sha-2/` | SHA-256/384/512 | FIPS 180-4 | NIST CAVP / Wycheproof | 5 vectors each |
 | `sha-3/` | SHA3-256/512, SHAKE-128/256 | FIPS 202 | NIST ACVP | 5 AFT vectors each |
-| `aes/` | AES-256-GCM, AES-256-CBC | FIPS 197 | Wycheproof | 6–10 vectors |
+| `aes/` | AES-256-GCM, AES-256-CBC | FIPS 197 / SP 800-38D | Wycheproof (6–10 vectors); `aes-256-gcm-oracle.json`: pyca/cryptography + Go `crypto/cipher` agreeing byte for byte (`tools/aes-gcm-oracle-gen/`) | 254 valid + 181 invalid long-input GCM cases |
 | `hmac/` | HMAC-SHA256, HMAC-SHA512 | FIPS 198-1 | Wycheproof | 12 vectors each |
 | `xmss/` | XMSS / XMSS-MT | SP 800-208 | RFC 8391 reference | Parameter set reference |
 | `lms/` | LMS / HSS | SP 800-208 | RFC 8554 reference | LMS-SHA256_M32_H5 |
@@ -60,7 +60,7 @@ The fourteen genuine-oracle directories are: `aimer-upstream/`,
 
 | Directory | Algorithm | RFC | Vectors |
 |---|---|---|---|
-| `ed25519/` | Ed25519 / Ed25519-ZIP-215 | RFC 8032 + ZIP-215 | 5 RFC 8032 vectors + 6 ZIP-215 edge case vectors |
+| `ed25519/` | Ed25519 / Ed25519-ZIP-215 | RFC 8032 + ZIP-215 | 5 RFC 8032 vectors + 6 ZIP-215 edge case vectors + `ed25519-policy-vectors.json`: 37 policy cases, RFC 8032 as written and ZIP-215 verdicts from two independent oracles (`tools/ed25519-policy-gen/`) |
 | `x25519/` | X25519 | RFC 7748 | 4 vectors (one-shot + iterative) |
 | `chacha20/` | ChaCha20 / Poly1305 / AEAD | RFC 8439 | 20+ vectors (Appendix A) |
 | `hkdf/` | HKDF | RFC 5869 | 3 vectors (Appendix A) |
@@ -109,14 +109,22 @@ The fourteen genuine-oracle directories are: `aimer-upstream/`,
   equation. Each of the 6 vectors carries three independent acceptance columns, documented in
   the file's own `verification_profiles` block:
   - `valid_zip215` — ZIP-215 §2 cofactored rules (5 of 6 accepted).
-  - `valid_strict` — this repo's strict profile: cofactorless verification plus canonical-encoding
-    and small-order-public-key screens (1 of 6 accepted). The screens are policy, matching
-    libsodium and ed25519-dalek's `verify_strict`; RFC 8032 permits but does not require them.
+  - `valid_strict` — historical: this repo's strict profile until 2026-09-24, cofactorless
+    verification plus canonical-encoding and small-order-public-key screens (1 of 6 accepted),
+    matching libsodium and ed25519-dalek's `verify_strict`. No target implements it now.
   - `valid_rfc8032_cofactorless` — a bare RFC 8032 §5.1.7 verifier with no added policy, e.g.
     Go's `crypto/ed25519` (2 of 6 accepted).
 
   The strict and bare-RFC-8032 columns differ on exactly one vector, `tc_2` (identity public key,
   s = 0), which a bare verifier accepts because the equation reduces to `O = O + [k]O`. The
   column was renamed from `valid_rfc8032` for that reason: the old name asserted a spec mandate
-  that does not exist. Consumers must pick the column matching what they implement —
-  the Go gate asserts the bare column, the Rust, WASM and C# gates assert `valid_strict`.
+  that does not exist.
+- **Ed25519 verification policy**: `ed25519/ed25519-policy-vectors.json` is the oracle for the
+  policy every target implements since 2026-09-24, **RFC 8032 as written** — §5.1.3 decoding of
+  A and R (y ≥ p, x = 0 with the sign bit and no square root all fail), S < L, the cofactored
+  equation, no small-order screen — and for ZIP-215 where a target has it. 37 cases: honest
+  signatures and RFC 8032 §7.1 tests, tampering, S range, non-canonical R and A, mixed-order R
+  and A, all eight small-order keys, off-curve points. `tools/ed25519-policy-gen/gen.py` computes
+  both verdicts from the text; `zebra-check` recomputes them with ed25519-zebra and
+  curve25519-dalek; `genrun.sh` vendors only when they agree. Every target's policy gate replays
+  it (`documents/public-release/api-contract.md` §12.1).

@@ -1,0 +1,51 @@
+[package]
+rust-version.workspace = true
+name = "metamui-blake2b"
+version.workspace = true
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+license = "Apache-2.0"
+repository.workspace = true
+homepage = "https://metamui.id"
+description = "BLAKE2b (RFC 7693) with 256-, 384- and 512-bit outputs, variable output length and keyed hashing, verified against the RFC 7693 and block-boundary answer files"
+readme = "README.md"
+keywords = ["blake2", "blake2b", "hash", "rfc7693", "crypto"]
+categories = ["cryptography"]
+
+[features]
+default = []
+# `Serialize`/`Deserialize` on the `Blake2b256` wrapper.
+serde = [ "dep:serde",]
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release. The one-shot BLAKE2b-512 entry points go through
+# `backend::install`, which a separate crate may use once per process.
+
+[package.edition]
+workspace = true
+
+[dependencies.hex]
+workspace = true
+
+[dependencies.thiserror]
+workspace = true
+
+[dependencies.serde]
+workspace = true
+optional = true
+
+[dev-dependencies.hex]
+workspace = true
+
+[dev-dependencies.serde_json]
+workspace = true
+
+[dev-dependencies.serde]
+version = "1"
+features = ["derive"]
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["serde"]

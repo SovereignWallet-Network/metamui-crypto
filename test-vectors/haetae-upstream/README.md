@@ -91,4 +91,33 @@ bash tools/haetae-upstream-gen/genrun.sh
 It builds `metamui-crypto-reference/c/cryptoLabInc-HAETAE-v1.2.0/reference_implementation`
 per mode, runs the reference's own `PQCgenKAT_sign`, `cmp`s the output against
 the archive's shipped `kat/*.rsp`, and only then copies the files here and
-rewrites `SHA256SUMS`.
+rewrites its own lines of `SHA256SUMS` (the file also lists the
+`v1.1.2-verify-only/` records and `haetae-negative.json`, which it leaves
+alone).
+
+## Invalid signatures: `haetae-negative.json`
+
+A HAETAE signature is a fixed `CRYPTO_BYTES` buffer — c, the low bits of z1,
+two length bytes, the entropy-coded high bits of z1 and hint h — padded with
+zeros. The reference's `unpack_sig` refuses any non-zero padding byte; that is
+what makes the encoding unique. KAT records hold only valid signatures, so
+this file (45 rows, 3 signatures × 5 cases × 3 modes) carries the rejections:
+
+- `padding_first_byte_nonzero`, `padding_last_byte_nonzero`, `padding_all_0xff` — refused;
+- `control_c_bit_flipped` — refused by the signature equation instead;
+- `valid_signature` — accepted, so a verifier that refuses everything fails.
+
+The KAT signatures bind a context drawn from the DRBG that the `.rsp` does not
+record, so they cannot be checked with an empty-context verify. The reference
+itself makes these signatures (`keypair_internal` from a fixed seed,
+`signature_internal` with `pre = 0x00`) and decides every verdict with
+`crypto_sign_verify` and an empty context:
+
+```sh
+bash tools/haetae-upstream-gen/negatives.sh
+```
+
+C# accepted every padding mutation until 2026-09-25
+(`MetaMUI.Crypto.HAETAE.Tests/NegativeVectorTests.cs`, gate
+`csharp.haetae.negative`); the other nine bindings already rejected them in a
+differential run against the reference.

@@ -1,0 +1,88 @@
+[package]
+name = "metamui-sr25519"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+license = "Apache-2.0"
+description = "sr25519 (schnorrkel) Schnorr signatures over Ristretto255 with Merlin transcripts, verified against w3f/schnorrkel 0.11.4"
+repository.workspace = true
+homepage = "https://metamui.id"
+keywords = ["sr25519", "schnorrkel", "ristretto", "substrate", "signature"]
+categories = ["cryptography", "no-std"]
+
+[lib]
+crate-type = [ "cdylib", "staticlib", "lib",]
+
+[dev-dependencies]
+serde_json = "1.0"
+# Ground-truth reference for STROBE/Merlin compliance KATs.
+# Pinned EXACT; regenerating KATs against a different patch is a
+# conscious decision. Dev-only — never leaks into the shipped dep
+# graph.
+schnorrkel = { version = "=0.11.4", default-features = false, features = ["std", "getrandom"] }
+rand_core = { version = "0.6", features = ["std"] }
+# Reference Merlin for parity tests. Same pin as schnorrkel's
+# transitive dep — see `tests/merlin_parity_kat.rs`.
+merlin = "=3.0.0"
+
+# Every code path is portable scalar Rust; there is no SIMD, assembly or GPU
+# path and no CPU-feature detection. Until 1.0.0-rc.4 this manifest also
+# declared `native` and `debug-strobe`; neither gated any code and both are
+# gone.
+[features]
+default = [ "std",]
+# Without it the crate is `#![no_std]` + `alloc`. Only this crate's own code
+# is checked that way; the dependency closure is not built for a no-std
+# target.
+std = []
+
+[dependencies.hex]
+workspace = true
+
+[dependencies.rand]
+workspace = true
+
+[dependencies.serde]
+workspace = true
+
+[dependencies.metamui-blake2b]
+path = "../metamui-blake2b"
+version = "=1.0.0-rc.4"
+
+[dependencies.metamui-sha2]
+path = "../metamui-sha2"
+version = "=1.0.0-rc.4"
+
+[dependencies.metamui-sha3]
+path = "../metamui-sha3"
+version = "=1.0.0-rc.4"
+
+[dependencies.metamui-security-utils]
+path = "../metamui-security-utils"
+version = "=1.0.0-rc.4"
+features = [ "subtle", "zeroize",]
+
+[dependencies.metamui-crypto-utilities]
+path = "../metamui-crypto-utilities"
+version = "=1.0.0-rc.4"
+
+[dependencies.parity-scale-codec]
+version = "3.6"
+default-features = false
+features = ["derive"]
+
+# wasm32 `getrandom` backend. This crate is a cdylib, so cargo links it for
+# wasm32 even when a consumer only wants the rlib, and that link needs a
+# backend to resolve. Taking it from here instead of `getrandom/js` means the
+# link no longer asserts that a browser is present; a consumer that IS a
+# browser enables `js` itself and keeps Web Crypto (getrandom prefers `js`,
+# so this registration is then inert).
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+metamui-getrandom-unavailable = { version = "=1.0.0-rc.4", path = "../metamui-getrandom-unavailable" }
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["std"]

@@ -1,0 +1,39 @@
+[package]
+name = "metamui-keccak256"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+authors = ["Phantom Seokgu Yun <phantom@metamui.id>"]
+license = "Apache-2.0"
+description = "Keccak-256 with the original 0x01 padding (the pre-FIPS 202 Keccak used by Ethereum), verified against Ethereum answer files"
+repository.workspace = true
+readme = "README.md"
+keywords = ["keccak", "keccak256", "hash", "ethereum", "crypto"]
+categories = ["cryptography", "no-std"]
+
+[dependencies]
+hex = { workspace = true }
+thiserror = { workspace = true }
+
+[features]
+# `no_std` without it; `keccak256_hex` uses `alloc` either way.
+std = []
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release.
+
+[dev-dependencies]
+hex-literal = { workspace = true }
+[dev-dependencies.serde_json]
+workspace = true
+
+[dev-dependencies.serde]
+version = "1"
+features = ["derive"]
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["std"]

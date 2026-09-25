@@ -12,9 +12,9 @@ categories = ["cryptography", "no-std"]
 # Every digest in the table is MetaMUI's own implementation; no RustCrypto
 # crate is in this crate's closure.
 [dependencies]
-metamui-sha2 = { version = "=1.0.0-rc.3", path = "../metamui-sha2", default-features = false }
-metamui-sha3 = { version = "=1.0.0-rc.3", path = "../metamui-sha3", default-features = false }
-metamui-shake = { version = "=1.0.0-rc.3", path = "../metamui-shake", default-features = false }
+metamui-sha2 = { version = "=1.0.0-rc.4", path = "../metamui-sha2", default-features = false }
+metamui-sha3 = { version = "=1.0.0-rc.4", path = "../metamui-sha3", default-features = false }
+metamui-shake = { version = "=1.0.0-rc.4", path = "../metamui-shake", default-features = false }
 
 [features]
 default = ["std"]

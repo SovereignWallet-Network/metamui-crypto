@@ -247,36 +247,33 @@ impl Aes256Gcm {
     }
     
     /// Process 8 blocks at once using Horner's method with precomputed powers
-    fn ghash_update_x8(&self, mut state: [u8; 16], blocks: &[u8]) -> [u8; 16] {
-        // Using Horner's method: 
-        // result = (...((m[0] * h + m[1]) * h + m[2]) * h + ... + m[7]) * h
-        // Which can be rewritten as:
-        // result = m[0]*h^8 + m[1]*h^7 + ... + m[7]*h^1
-        
+    fn ghash_update_x8(&self, state: [u8; 16], blocks: &[u8]) -> [u8; 16] {
+        // Eight serial GHASH steps starting from state X,
+        //   X' = (...((X ^ m[0]) * h ^ m[1]) * h ^ ... ^ m[7]) * h,
+        // expand to
+        //   X' = (X ^ m[0])*h^8 ^ m[1]*h^7 ^ ... ^ m[7]*h^1.
+        // The running state belongs inside the h^8 term. Folding it in after
+        // the sum instead (X ^ m[0]*h^8 ^ ...) gave non-standard tags once a
+        // second batch followed any earlier data, and let identical bit flips
+        // 128 bytes apart cancel — an existential forgery.
         let mut acc = [0u8; 16];
-        
-        // Process blocks with precomputed powers
+
         for i in 0..8 {
-            let block = &blocks[i * 16..(i + 1) * 16];
-            let h_power = &self.h_table.h_powers[7 - i];
-            
-            let mut temp = [0u8; 16];
-            for j in 0..16 {
-                temp[j] = block[j];
+            let mut block = [0u8; 16];
+            block.copy_from_slice(&blocks[i * 16..(i + 1) * 16]);
+            if i == 0 {
+                for j in 0..16 {
+                    block[j] ^= state[j];
+                }
             }
-            
-            let product = ghash_multiply(&temp, h_power);
+
+            let product = ghash_multiply(&block, &self.h_table.h_powers[7 - i]);
             for j in 0..16 {
                 acc[j] ^= product[j];
             }
         }
-        
-        // XOR with previous state
-        for i in 0..16 {
-            state[i] ^= acc[i];
-        }
-        
-        state
+
+        acc
     }
 }
 
@@ -301,31 +298,26 @@ impl GHashTable {
 /// LSB of byte[15] = x^127 coefficient.
 /// Irreducible polynomial: x^128 + x^7 + x^2 + x + 1.
 /// Multiplication by x = right-shift by 1; if x^127 bit was set, XOR with 0xE1_00...00.
+///
+/// Branch-free: both operands depend on the GHASH key H, and a data-dependent
+/// branch here leaks H through timing — H plus any one tag is enough to forge.
+/// The selections are masks, so the instruction trace is the same for every
+/// input.
 fn ghash_multiply(x: &[u8; 16], h: &[u8; 16]) -> [u8; 16] {
-    let mut result = [0u8; 16];
-    let mut v = *h;
+    const R: u128 = 0xe1 << 120; // x^7 + x^2 + x + 1 in the reflected layout
+    let x = u128::from_be_bytes(*x);
+    let mut v = u128::from_be_bytes(*h);
+    let mut z = 0u128;
 
-    for byte_idx in 0..16 {
-        for bit_pos in (0..8).rev() {
-            // If this bit of x is set, XOR result with current v
-            if (x[byte_idx] >> bit_pos) & 1 == 1 {
-                for i in 0..16 {
-                    result[i] ^= v[i];
-                }
-            }
-            // Multiply v by x: right shift v by 1, then reduce if carry
-            let carry = v[15] & 1; // x^127 coefficient
-            for i in (1..16).rev() {
-                v[i] = (v[i] >> 1) | ((v[i - 1] & 1) << 7);
-            }
-            v[0] >>= 1;
-            if carry == 1 {
-                v[0] ^= 0xe1; // reduce: XOR with 0xE1_00...00 (x^7+x^2+x+1)
-            }
-        }
+    // Bit i of x (most significant first) is the coefficient of x^i.
+    for i in (0..128).rev() {
+        let bit = (x >> i) & 1;
+        z ^= v & bit.wrapping_neg();
+        let carry = v & 1; // x^127 coefficient
+        v = (v >> 1) ^ (R & carry.wrapping_neg());
     }
 
-    result
+    z.to_be_bytes()
 }
 
 /// Increment counter (big-endian)

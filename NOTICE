@@ -23,3 +23,10 @@ is in THIRD_PARTY_NOTICES.md. In particular this product includes:
     the SMAUG-T, HAETAE, AIMer and NTRU+ crates are written and gated:
     Copyright (c) 2026 Team SMAUG-T (MIT), Copyright (c) 2026 Team HAETAE
     (MIT), Copyright (c) 2022-2026 SAMSUNG SDS (MIT), NTRU+ TEAM (MIT)
+  * For the classic crates: the sr25519 port follows curve25519-dalek and
+    schnorrkel (BSD-3-Clause, the dalek and schnorrkel contributors) and
+    merlin (MIT); the Ed25519 field arithmetic follows ref10 (public
+    domain); test vectors from the BLAKE3 team (CC0-1.0 OR Apache-2.0),
+    the Web3 Foundation's schnorrkel suite (BSD-3-Clause), the Ethereum
+    js-ethereum-cryptography suite (MIT), ZIP-215 (Zcash, MIT) and RFC
+    appendices (IETF Trust)

@@ -102,6 +102,8 @@ pub enum Error {
     InvalidParameters,
     /// Random number generator error
     RngError,
+    /// Context string longer than [`MAX_CONTEXT_BYTES`] (FIPS 205 Algorithms 22–25)
+    ContextTooLong,
 }
 
 impl fmt::Display for Error {
@@ -112,12 +114,18 @@ impl fmt::Display for Error {
             Error::VerificationFailed => write!(f, "Signature verification failed"),
             Error::InvalidParameters => write!(f, "Invalid parameter set"),
             Error::RngError => write!(f, "Random number generator error"),
+            Error::ContextTooLong => write!(f, "Context longer than 255 bytes"),
         }
     }
 }
 
 #[cfg(feature = "std")]
 impl std::error::Error for Error {}
+
+/// Longest context string FIPS 205 admits. M' carries |ctx| in one byte, so
+/// a longer context would wrap it: a 256-byte ctx C would be encoded as the
+/// empty context followed by C, and (C, m) would sign or verify as (ε, C ‖ m).
+pub const MAX_CONTEXT_BYTES: usize = 255;
 
 /// Result type for SLH-DSA operations
 pub type Result<T> = core::result::Result<T, Error>;

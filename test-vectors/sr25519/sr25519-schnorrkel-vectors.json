@@ -1,0 +1,19 @@
+{
+  "algorithm": "sr25519",
+  "standard": "W3F Schnorrkel — Ristretto255 Schnorr signatures",
+  "source": "https://github.com/w3f/schnorrkel",
+  "date": "2026-05-03",
+  "note": "sr25519 uses Ristretto255 group with Schnorr signatures and includes a VRF. Unlike Ed25519, sr25519 is non-deterministic (signatures include random nonces). The vector below is from w3f/schnorrkel's `can_verify_know_preaudit_deprecated_message` test; it uses a DEPRECATED pre-audit signature format whose transcript layout differs from modern schnorrkel. The Phase 1.5 audit (see tools/swift-review/PHASE_2_STATUS.md) fixed Swift's transcript to match modern rust-schnorrkel exactly: SigningContext + sign-bytes:context + sign-bytes:message + proto-name:Schnorr-sig + sign:pk + sign:R + sign:c. Verifying this deprecated vector under modern transcripts naturally fails — the test is currently XCTSkip with a Phase K follow-up reference (also blocks `testSignFlowEndToEnd` per the existing diagnostic file's note). A future commit can either (a) implement a separate `verify_simple_preaudit_deprecated` path or (b) replace this vector with a modern-format one generated via metamui-crypto-rust/metamui-sr25519. Note: the `context` field is the actual signing context the upstream test uses (`Substrate node`), not the JSON's previously-incorrect `substrate`.",
+  "test_vectors": [
+    {
+      "tc_id": 1,
+      "description": "Known-good sign/verify from w3f/schnorrkel can_verify_know_preaudit_deprecated_message",
+      "context": "Substrate node",
+      "message_utf8": "Verifying that I am the owner of 5G9hQLdsKQswNPgB499DeA5PkFBbgkLPJWkkS6FAM6xGQ8xD. Hash: 221455a3\n",
+      "public_key": "b4bfa1f7a5166695eb75299fd1c4c03ea212871c342f2c5dfea0902b2c246918",
+      "signature": "5a9755f069939f45d96aaf125cf5ce7ba1db998686f87f2fb3cbdea922078741a73891ba265f70c31436e18a9acd14d189d73c12317ab6c313285cd938453202",
+      "result": "valid",
+      "format": "deprecated_preaudit"
+    }
+  ]
+}

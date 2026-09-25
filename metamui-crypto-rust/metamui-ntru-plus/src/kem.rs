@@ -218,9 +218,18 @@ pub fn generate_keypair<P: NtruPlusParams>() -> Result<(PublicKey, SecretKey), N
     result
 }
 
-/// Encapsulate with an explicit N/8-byte message `coins`.
-fn encapsulate_derand<P: NtruPlusParams>(pk: &PublicKey, coins: &[u8]) -> (Ciphertext, SharedSecret) {
+/// Encapsulate with an explicit N/8-byte message `coins`. Refuses a public key
+/// with a coefficient `>= q`, as the reference's `crypto_kem_enc_derand` does.
+fn encapsulate_derand<P: NtruPlusParams>(
+    pk: &PublicKey,
+    coins: &[u8],
+) -> Result<(Ciphertext, SharedSecret), NtruPlusError> {
     let n = P::N;
+
+    let mut h = Poly::zero(n);
+    if poly::poly_frombytes::<P>(&mut h, &pk.h) != 0 {
+        return Err(NtruPlusError::InvalidPublicKey);
+    }
 
     let mut msg = vec![0u8; n / 8 + P::SYMBYTES];
     msg[..n / 8].copy_from_slice(&coins[..n / 8]);
@@ -242,8 +251,6 @@ fn encapsulate_derand<P: NtruPlusParams>(pk: &PublicKey, coins: &[u8]) -> (Ciphe
     poly::poly_sotp_encode::<P>(&mut m, &msg[..n / 8], &buf2);
     poly::poly_ntt::<P>(&mut m);
 
-    let mut h = Poly::zero(n);
-    poly::poly_frombytes::<P>(&mut h, &pk.h);
     let mut c = Poly::zero(n);
     poly::poly_basemul_add::<P>(&mut c, &h, &r, &m);
 
@@ -253,7 +260,7 @@ fn encapsulate_derand<P: NtruPlusParams>(pk: &PublicKey, coins: &[u8]) -> (Ciphe
     let mut ss = SharedSecret { ss: [0u8; 32] };
     ss.ss.copy_from_slice(&buf1[..P::SSBYTES]);
 
-    (Ciphertext { c: ct }, ss)
+    Ok((Ciphertext { c: ct }, ss))
 }
 
 /// Deterministic encapsulation: the N/8-byte message is drawn from
@@ -281,7 +288,7 @@ pub(crate) fn encapsulate_from_randombytes<P: NtruPlusParams, F: FnMut(&mut [u8]
     }
     let mut coins = vec![0u8; P::N / 8];
     randombytes(&mut coins);
-    Ok(encapsulate_derand::<P>(pk, &coins))
+    encapsulate_derand::<P>(pk, &coins)
 }
 
 /// Encapsulate with OS randomness.
@@ -298,9 +305,15 @@ pub fn encapsulate<P: NtruPlusParams>(pk: &PublicKey) -> Result<(Ciphertext, Sha
     result
 }
 
-/// Decapsulate. Always returns a 32-byte value: the shared secret when the
-/// ciphertext is valid, all zeros when the re-encryption check fails, exactly
-/// like the reference's `ss[i] & ~(-fail)`.
+/// Decapsulate.
+///
+/// NTRU+ uses explicit rejection (FO⊥): the reference's `crypto_kem_dec`
+/// returns 1 with an all-zero ss when the ciphertext or secret key carries a
+/// coefficient `>= q` or the re-encryption check fails. That return code is
+/// the failure signal, so this returns `Err(DecapsulationFailed)` in exactly
+/// those cases. (It used to return `Ok` with the zero ss, which left every
+/// caller that did not compare against zeros agreeing on the key 0^32 with
+/// whoever sent the junk ciphertext.)
 pub fn decapsulate<P: NtruPlusParams>(ct: &Ciphertext, sk: &SecretKey) -> Result<SharedSecret, NtruPlusError> {
     let n = P::N;
     if ct.c.len() != P::CIPHERTEXT_SIZE {
@@ -310,12 +323,18 @@ pub fn decapsulate<P: NtruPlusParams>(ct: &Ciphertext, sk: &SecretKey) -> Result
         return Err(NtruPlusError::InvalidKeySize);
     }
 
+    // Canonical-encoding checks (specification 2026-07-10 §6.3). The
+    // reference also stops early here; which input was malformed is not
+    // secret-dependent.
     let mut c = Poly::zero(n);
-    poly::poly_frombytes::<P>(&mut c, &ct.c);
     let mut f = Poly::zero(n);
-    poly::poly_frombytes::<P>(&mut f, &sk.f);
     let mut hinv = Poly::zero(n);
-    poly::poly_frombytes::<P>(&mut hinv, &sk.hinv);
+    if poly::poly_frombytes::<P>(&mut c, &ct.c) != 0
+        || poly::poly_frombytes::<P>(&mut f, &sk.f) != 0
+        || poly::poly_frombytes::<P>(&mut hinv, &sk.hinv) != 0
+    {
+        return Err(NtruPlusError::DecapsulationFailed);
+    }
 
     // m1 = crepmod3(INTT(c · f))
     let mut m1 = Poly::zero(n);
@@ -352,10 +371,15 @@ pub fn decapsulate<P: NtruPlusParams>(ct: &Ciphertext, sk: &SecretKey) -> Result
 
     fail |= poly::verify(&buf1, &r1_bytes);
 
+    // The masked copy stays branch-free, as in the reference; only the final
+    // verdict — which the caller learns either way — is a branch.
     let mask: u8 = !((fail as u8).wrapping_neg());
     let mut ss = SharedSecret { ss: [0u8; 32] };
     for i in 0..P::SSBYTES {
         ss.ss[i] = buf3[i] & mask;
+    }
+    if fail != 0 {
+        return Err(NtruPlusError::DecapsulationFailed);
     }
     Ok(ss)
 }

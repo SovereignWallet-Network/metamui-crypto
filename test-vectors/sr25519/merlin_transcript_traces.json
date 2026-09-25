@@ -1,0 +1,134 @@
+{
+  "cases": [
+    {
+      "after": {
+        "cur_flags": 2,
+        "pos": 41,
+        "pos_begin": 27,
+        "state": "9c7f5bea8a913cb40ad10d0d65642707b3616a2f30652bf6733be4208509c608f36f1a4112618a7dee4a772201ee1394226f4afcb62d331293cc92e8a624acf6e1b60095e322bbfbc845e5b26995fe7d7c841374d1ff5898c92ee0636b06727321c92a603907035349ccbb1b92b7b0057e8fa87fcebc7e88656fcb45ae04bc34cabeaebe79d91750c0e8bf13b966504d1343597265dd8865adf91409cc9b20d5f47444041f97b699ddfbdee91ea87bd09bf8b02da75a96e947f07f5b65bb4e6efefaa16abfd9fbf6"
+      },
+      "name": "new_only",
+      "ops": [
+        {
+          "label_hex": "746573742070726f746f636f6c",
+          "op": "new"
+        }
+      ]
+    },
+    {
+      "after": {
+        "cur_flags": 2,
+        "pos": 68,
+        "pos_begin": 58,
+        "state": "9c7f5bea8a913cb40ad10d0d65642707b3616a2f30652bf6733be4208509c608f36f1a4112618a7dee5165516e8376b44e0e2899da24331293e6909bc949c9d685d774f4e322bbfbc845e5b26995fe7d7c841374d1ff5898c92ee0636b06727321c92a603907035349ccbb1b92b7b0057e8fa87fcebc7e88656fcb45ae04bc34cabeaebe79d91750c0e8bf13b966504d1343597265dd8865adf91409cc9b20d5f47444041f97b699ddfbdee91ea87bd09bf8b02da75a96e947f07f5b65bb4e6efefaa16abfd9fbf6"
+      },
+      "name": "new_plus_append",
+      "ops": [
+        {
+          "label_hex": "746573742070726f746f636f6c",
+          "op": "new"
+        },
+        {
+          "label_hex": "736f6d65206c6162656c",
+          "message_hex": "736f6d652064617461",
+          "op": "append_message"
+        }
+      ]
+    },
+    {
+      "after": {
+        "cur_flags": 7,
+        "pos": 32,
+        "pos_begin": 0,
+        "state": "000000000000000000000000000000000000000000000000000000000000000046a7f82f838e23918aeaaff28dd25257ab0ee07adedf424da4328b2b4c34fd518352292c57a4e4260a23d03643d1e9ed900c6c717e72230e02f3beaa3613a27ad5c346b8750329015d60c60510b56dc8c51137d0dad4ddcf2d540e5a0608782b62acd57bb9c90091ebea45a4bb4777f056ce055862a5bf73b21f9b78258afb5216b20263e31cc6ff3f519b5332f3a6fd7351f7c6bca667c63865037c03d5bced6788f8390205a3b3"
+      },
+      "challenge_hex": "d5a21972d0d5fe320c0d263fac7fffb8145aa640af6e9bca177c03c7efcf0615",
+      "name": "equivalence_simple_after_challenge",
+      "ops": [
+        {
+          "label_hex": "746573742070726f746f636f6c",
+          "op": "new"
+        },
+        {
+          "label_hex": "736f6d65206c6162656c",
+          "message_hex": "736f6d652064617461",
+          "op": "append_message"
+        },
+        {
+          "label_hex": "6368616c6c656e6765",
+          "length": 32,
+          "op": "challenge_bytes"
+        }
+      ]
+    },
+    {
+      "after": {
+        "cur_flags": 2,
+        "pos": 116,
+        "pos_begin": 0,
+        "state": "1da8b91fca8a2a237d5046132745dbe999c8be1c5771ede0b45ca82d2855402663bcf60f43f7501995b8e3fa842da770a19a2671c6a69adc3ece9ea5ccc62c5893891b6a18ab980a2fd6863ac2fab647747d9d40ca0c81f79a2dc491376a44176b21733919da52cd8bf56f3307aea89d43c88c70eab7670fdac645a1b2112c0f7150feab6220925f5baf9a65464e60bcf7964f32fb4d4ee6fc45168ca1a63bc56c0fd5483b4d507d6642bc26bd6ae4848c390858e2acebb552e5b485dcb75486ccfc4ecb65cb8893"
+      },
+      "name": "big_message_wrap",
+      "ops": [
+        {
+          "label_hex": "777261702074657374",
+          "op": "new"
+        },
+        {
+          "label_hex": "626967",
+          "message_hex": "55555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555",
+          "op": "append_message"
+        }
+      ]
+    },
+    {
+      "after": {
+        "cur_flags": 7,
+        "pos": 48,
+        "pos_begin": 0,
+        "state": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f422a99230b3861430fbcde18f4cf8a9b9668d4cbbbdc49876c3a51658a7b9742676c168e61b85ba4b4e980539b10e9c255a6b72595fe2495ee621f5096c70419b9ae763bb51ac06e2667931edbd00b8a0d660e41fc2636036e2ec8e68e6c5ad42e2f4e5384c71def82d3186bef1f0c22b0341d63ad86ae1266b9fc833cf5cf091b2b4e59ec6bba43ebb8bd2738a71d1d5e21de4cca5f28e"
+      },
+      "c1_hex": "0d5359b20da3f898b504cf7220e6f69d",
+      "c2_hex": "a7a4efef2a3e255f867103217534db7c327de5046e8a4dcbeb767fa32866671a5d6298d2733631af6c6ba2039b643320",
+      "name": "interleaved_rounds",
+      "ops": [
+        {
+          "label_hex": "696e7465726c65617665",
+          "op": "new"
+        },
+        {
+          "label_hex": "6d31",
+          "message_hex": "68656c6c6f",
+          "op": "append_message"
+        },
+        {
+          "label_hex": "6331",
+          "length": 16,
+          "op": "challenge_bytes"
+        },
+        {
+          "label_hex": "6d32",
+          "message_hex": "776f726c64",
+          "op": "append_message"
+        },
+        {
+          "label_hex": "6332",
+          "length": 48,
+          "op": "challenge_bytes"
+        }
+      ]
+    },
+    {
+      "after": {
+        "cur_flags": 7,
+        "pos": 32,
+        "pos_begin": 0,
+        "state": "0000000000000000000000000000000000000000000000000000000000000000fa07d5361f3a4deaf60d8842f0af8b57f0dc62939ce52a2b42909cb9e3fe7253039f6d0db9b29a845107cfcf4bf44a1b37bbed12b45b92fa1174680727f246eb83f9c9fcd50834fac7169429189dac8df9673d22e239ee5c8d972663b8cb44699e9a4e1d5f1a97d96cb56d60a76d206e14b20ecb86d21e0265cc2603681b9dc79a713cad98719789b9439b56127b1f145e2d80f5e9475b357e98243d8c67d35b98d3695163bfa303"
+      },
+      "challenge_hex": "3b4cacd205270441b22c40cb86aad4e96d26d37abe2a283a99dd7f762e5674ef",
+      "name": "empty_message_then_challenge"
+    }
+  ],
+  "description": "Merlin Transcript state traces from merlin-3.0.0 transcript.rs (verbatim port).",
+  "source": "merlin-3.0.0"
+}

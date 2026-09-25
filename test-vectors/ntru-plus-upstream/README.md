@@ -4,11 +4,36 @@ The NTRU+ authors' own published Known-Answer-Test records for the three
 parameter sets of the 2026 revision (ntruplus768 / 864 / 1152), copied
 verbatim from the reference implementation's `KAT/` directory:
 
-    https://github.com/ntruplus/ntruplus — commit 621c667 (2026-03-19),
-    specification dated 2026-02-02, vendored as the git submodule
-    metamui-crypto-reference/c/ntruplus-ref
+    https://github.com/ntruplus/ntruplus — commit 3991b2a (2026-08-14),
+    specification dated 2026-07-10 ("Final Version – KpqC Competition",
+    https://data.ntruplus.org/NTRU+_20260710.pdf), vendored as the git
+    submodule metamui-crypto-reference/c/ntruplus-ref
 
 `ntru-plus-upstream.json` records the SHA-256 of each source `.rsp` file.
+The `.rsp` files are byte-identical between 621c667 (the previous pin) and
+3991b2a: valid inputs did not change.
+
+## Invalid inputs: `ntru-plus-negative.json`, `flat/ntru-plus-negative.tsv`
+
+The 2026-07-10 specification adds one requirement to the 2026-02-02 text
+(§6.3): every algorithm aborts when Decode_q yields a coefficient outside
+`0..q-1`. The reference implements it from e12445a: `crypto_kem_enc` returns 1
+on such a public key, and `crypto_kem_dec` returns 1 with ss = 0 on such a
+ciphertext or secret key — as it always did when the re-encryption check
+fails. Without the check a ciphertext coefficient `v <= 638` can be rewritten
+as `v + q` and still decapsulates to the original secret.
+
+KAT records never contain malformed input, so these 72 records (2 KAT records
+× 12 cases × 3 sets) do. `negatives.py` mutates the records above — a
+coefficient raised by q, set to 0xFFF or to exactly q in ct / pk / f / h⁻¹, an
+all-0xFF ciphertext, a canonical-but-wrong ciphertext — and
+`negative_harness.c`, compiled against the reference, decides every verdict
+and shared secret. Accepting rows are included on purpose: the unmodified
+record, and a public key whose coefficient is exactly q-1 (canonical), so a
+binding that rejects everything, or rejects `>= q-1`, fails.
+
+A binding must report every `dec/reject` row as a decapsulation **error**, not
+as an all-zero shared secret, and refuse every `enc/reject` public key.
 
 ## Why this replaces the previous oracle
 
@@ -59,19 +84,24 @@ of them.
 | ntruplus864  | 1296 | 2624 | 1296 | 32 |
 | ntruplus1152 | 1728 | 3488 | 1728 | 32 |
 
-## Status — all 10 bindings conformant (2026-09-05)
+## Status — all 10 bindings conformant to the 2026-07-10 specification (2026-09-24)
 
-| Binding | Gate | 2026 revision |
-|---|---|---|
-| Rust (canonical) | `metamui-ntru-plus/tests/upstream_ntru_plus_kat.rs` | conformant — all 300 upstream records verified at port time, 15 vendored |
-| WASM / TypeScript | `tests/test-upstream-kat-ntru-plus.cjs` (inherits Rust) | conformant, 15/15 |
-| Go | `ntru-plus/upstream_kat_test.go` | conformant, 15/15 |
-| Python | `tests/test_ntru_plus_upstream.py` | conformant, 15/15 |
-| Java | `.../ntruplus/NtruPlusUpstreamKatTest.java` | conformant, 15/15 |
-| Kotlin | `.../ntruplus/NtruPlusUpstreamKatTest.kt` | conformant, 15/15 |
-| C# | `.../NtruPlusUpstreamKatTests.cs` | conformant, 15/15 |
-| Swift | `MetaMUINTRUPlusUpstreamGate` | conformant, 15/15 |
-| C | `metamui-ntru-plus/tests/test_ntru_plus_upstream_kat.c` | conformant, 15/15 |
+| Binding | KAT gate | Negative gate | KAT | Negative |
+|---|---|---|---|---|
+| Rust (canonical) | `metamui-ntru-plus/tests/upstream_ntru_plus_kat.rs` | `tests/upstream_ntru_plus_negative.rs` | 15/15 (300 at port time) | 72/72 |
+| WASM / TypeScript | `tests/test-upstream-kat-ntru-plus.cjs` (inherits Rust) | same script | 15/15 | 72/72 |
+| Go | `ntru-plus/upstream_kat_test.go` | `ntru-plus/upstream_negative_test.go` | 15/15 | 72/72 |
+| Python | `tests/test_ntru_plus_upstream.py` | `tests/test_ntru_plus_negative.py` | 15/15 | 72/72 |
+| Java | `.../ntruplus/NtruPlusUpstreamKatTest.java` | `.../ntruplus/NtruPlusNegativeGateTest.java` | 15/15 | 72/72 |
+| Kotlin | `.../ntruplus/NtruPlusUpstreamKatTest.kt` | `.../ntruplus/NtruPlusNegativeGateTest.kt` | 15/15 | 72/72 |
+| C# | `.../NtruPlusUpstreamKatTests.cs` | `.../NtruPlusNegativeTests.cs` (same gate filter) | 15/15 | 72/72 |
+| Swift | `MetaMUINTRUPlusUpstreamGate` | same executable | 15/15 | 72/72 |
+| C | `metamui-ntru-plus/tests/test_ntru_plus_upstream_kat.c` | `tests/test_ntru_plus_negative.c` | 15/15 | 72/72 |
+
+Every negative gate was red against the binding's previous code — the old
+code accepted the non-canonical rows, and in nine bindings returned an
+all-zero secret instead of failing — and each fails, never skips, on a
+missing file.
 
 Every binding was ported in the same commit series: none of the ten
 implemented the 2026 revision before it, and each gate was red against this

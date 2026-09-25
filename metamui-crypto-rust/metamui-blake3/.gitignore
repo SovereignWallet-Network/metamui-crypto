@@ -1,0 +1,24 @@
+# Temporary and test files
+*.txt
+!docs/**/*.txt
+test_*.rs
+*_repro*.rs
+*_temp*.rs
+*.tmp
+
+# Build artifacts
+/target/
+Cargo.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# Test outputs
+/test-results/

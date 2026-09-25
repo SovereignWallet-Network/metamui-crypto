@@ -43,12 +43,28 @@ pub fn poly_tobytes<P: NtruPlusParams>(r: &mut [u8], a: &Poly) {
     }
 }
 
-/// Deserialize: inverse of [`poly_tobytes`]; each coefficient masked to 12 bits.
-pub fn poly_frombytes<P: NtruPlusParams>(r: &mut Poly, a: &[u8]) {
+/// Deserialize: inverse of [`poly_tobytes`]. Returns 1 if any 12-bit
+/// coefficient is `>= q`, else 0.
+///
+/// Specification 2026-07-10 §6.3: every algorithm aborts when Decode_q yields
+/// a coefficient outside `0..q-1`. A 12-bit field holds values up to 4095 and
+/// q = 3457, so every coefficient `v <= 638` has a second encoding `v + q`
+/// that the arithmetic reduces to the same residue; decapsulation compares
+/// recomputed polynomials rather than ciphertext bytes, so without this check
+/// a modified ciphertext decapsulates to the original shared secret. The flag
+/// is accumulated without branching, as in the reference (e12445a).
+pub fn poly_frombytes<P: NtruPlusParams>(r: &mut Poly, a: &[u8]) -> u8 {
+    let q_minus_1 = (P::Q - 1) as u32;
+    let mut fail = 0u32;
     for i in 0..P::N / 2 {
-        r.coeffs[2 * i] = (((a[3 * i] as u16) | ((a[3 * i + 1] as u16) << 8)) & 0xFFF) as i16;
-        r.coeffs[2 * i + 1] = ((((a[3 * i + 1] as u16) >> 4) | ((a[3 * i + 2] as u16) << 4)) & 0xFFF) as i16;
+        let t0 = ((a[3 * i] as u16) | ((a[3 * i + 1] as u16) << 8)) & 0xFFF;
+        let t1 = (((a[3 * i + 1] as u16) >> 4) | ((a[3 * i + 2] as u16) << 4)) & 0xFFF;
+        r.coeffs[2 * i] = t0 as i16;
+        r.coeffs[2 * i + 1] = t1 as i16;
+        fail |= q_minus_1.wrapping_sub(t0 as u32);
+        fail |= q_minus_1.wrapping_sub(t1 as u32);
     }
+    (fail >> 31) as u8
 }
 
 // ── coefficient-domain arithmetic ──────────────────────────────────────

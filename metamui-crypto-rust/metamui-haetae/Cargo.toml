@@ -46,11 +46,11 @@ kat-internal = []
 # Core dependencies (from full implementation)
 rand = { version = "0.8", default-features = false }
 getrandom = { version = "0.2", optional = true, default-features = false }
-metamui-shake = { version = "=1.0.0-rc.3", path = "../metamui-shake", default-features = false }
+metamui-shake = { version = "=1.0.0-rc.4", path = "../metamui-shake", default-features = false }
 zeroize = { workspace = true, features = ["derive"] }
 
 # Internal dependencies (minimal - only for error handling)
-metamui-error = { version = "=1.0.0-rc.3", path = "../metamui-error" }
+metamui-error = { version = "=1.0.0-rc.4", path = "../metamui-error" }
 
 [dev-dependencies]
 # This crate's own tests, examples and benches build with `kat-internal`, so

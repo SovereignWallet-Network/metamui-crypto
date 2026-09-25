@@ -1,0 +1,95 @@
+{
+  "algorithm": "Ed25519-ZIP-215",
+  "standard": "Zcash Improvement Proposal 215",
+  "source": "https://zips.z.cash/zip-0215",
+  "reference_impl": "https://github.com/ZcashFoundation/ed25519-zebra",
+  "date": "2026-03-09",
+  "note": "ZIP-215 redefines Ed25519 acceptance rules for cross-implementation compatibility. Key differences from RFC 8032: (1) non-canonical field element encodings are accepted as public keys or R-points; (2) all 8-torsion points (including identity) are accepted as public keys; (3) cofactored verification equation [8][s]B = [8]R + [8][k]A is used instead of [s]B = R + [k]A. This means signatures with s=0 over torsion-point public keys and R-points are valid under ZIP-215 for any message, because [8][0]B = O = [8]R + [8][k]A when both R and A have order dividing 8.",
+  "parameters": {
+    "key_size_bits": 256,
+    "signature_size_bits": 512
+  },
+  "test_vectors": [
+    {
+      "tc_id": 1,
+      "description": "RFC 8032 Test 1 (empty message) — valid under both ZIP-215 and RFC 8032",
+      "public_key": "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a",
+      "message": "",
+      "signature": "e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b",
+      "valid_zip215": true,
+      "valid_strict": true,
+      "valid_rfc8032_cofactorless": true,
+      "category": "normal"
+    },
+    {
+      "tc_id": 2,
+      "description": "Identity public key (order-1 torsion point) with zero scalar — ZIP-215 valid, strict-profile invalid, bare RFC 8032 VALID",
+      "public_key": "0100000000000000000000000000000000000000000000000000000000000000",
+      "message": "5a63617368",
+      "message_utf8": "Zcash",
+      "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "valid_zip215": true,
+      "valid_strict": false,
+      "valid_rfc8032_cofactorless": true,
+      "category": "small_order_pubkey",
+      "note": "Identity (order-1 torsion point) as public key, R = identity, s = 0. This vector is the one place the three profiles disagree, so it is worth stating precisely. Under a bare RFC 8032 verifier the check is [s]B = R + [k]A, i.e. O = O + [k]O = O, which HOLDS for any message: Go's crypto/ed25519 accepts it. RFC 8032 does not require rejecting small-order public keys anywhere — §5.1.3 fails only when x^2 has no square root or when x = 0 with the sign bit set (this encoding is canonical), and §5.1.7 offers the cofactored equation as an explicitly optional alternative, not an extra screen. The rejection recorded in valid_strict is therefore this repo's deliberate policy, shared with libsodium and ed25519-dalek's verify_strict, and not a spec mandate. An earlier revision of this file claimed 'RFC 8032 explicitly rejects identity as a valid public key'; that was wrong and is corrected here."
+    },
+    {
+      "tc_id": 3,
+      "description": "Order-2 torsion point public key with zero scalar — ZIP-215 valid, strict-profile invalid",
+      "public_key": "ecffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+      "message": "5a63617368",
+      "message_utf8": "Zcash",
+      "signature": "ecffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f0000000000000000000000000000000000000000000000000000000000000000",
+      "valid_zip215": true,
+      "valid_strict": false,
+      "valid_rfc8032_cofactorless": false,
+      "category": "small_order_pubkey",
+      "note": "Order-2 torsion point (the unique point of order 2 on the Ed25519 curve) as public key. R = same order-2 point, s = 0. ZIP-215 accepts via the cofactored equation. The strict profile rejects on its small-order screen. A bare RFC 8032 verifier also rejects, but for a different and weaker reason: the check becomes O = [1+k]P, which holds iff k is odd, so the answer depends on the message through k rather than on any rule about small-order keys. valid_rfc8032_cofactorless is false here because it is false for THIS message."
+    },
+    {
+      "tc_id": 4,
+      "description": "Order-8 torsion point public key (canonical encoding) with zero scalar — ZIP-215 valid, strict-profile invalid",
+      "public_key": "c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac037a",
+      "message": "5a63617368",
+      "message_utf8": "Zcash",
+      "signature": "c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac037a0000000000000000000000000000000000000000000000000000000000000000",
+      "valid_zip215": true,
+      "valid_strict": false,
+      "valid_rfc8032_cofactorless": false,
+      "category": "small_order_pubkey",
+      "note": "Canonical encoding of an order-8 torsion point. This encoding is in libsodium's EXCLUDED_POINT_ENCODINGS list (rejected by legacy implementations). ZIP-215 explicitly accepts all torsion points including those previously excluded. As with tc_3, a bare RFC 8032 verifier rejects this for the message-dependent parity reason and not because of any small-order rule."
+    },
+    {
+      "tc_id": 5,
+      "description": "Non-canonical public key encoding of the identity — ZIP-215 valid, strict-profile invalid",
+      "public_key": "edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+      "message": "5a63617368",
+      "message_utf8": "Zcash",
+      "signature": "edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f0000000000000000000000000000000000000000000000000000000000000000",
+      "valid_zip215": true,
+      "valid_strict": false,
+      "valid_rfc8032_cofactorless": false,
+      "category": "non_canonical_encoding",
+      "note": "Non-canonical encoding of the identity point. The canonical y-coordinate of the identity is 1 = 0x01. The value 2^255 - 18 = 0xedfff...ff7f is a non-canonical representation because the field prime p = 2^255 - 19, so edfff...ff7f = 1 (mod p). RFC 8032 §5.1.3 requires rejecting non-canonical encodings. ZIP-215 §2 explicitly accepts them. The signature R-point uses the same non-canonical encoding; s=0 makes it valid under ZIP-215's cofactored equation."
+    },
+    {
+      "tc_id": 6,
+      "description": "Both-invalid: scalar s not reduced mod ell — rejected by both ZIP-215 and RFC 8032",
+      "public_key": "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a",
+      "message": "5a63617368",
+      "message_utf8": "Zcash",
+      "signature": "e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901550000000000000000000000000000000000000000000000000000000001000000",
+      "valid_zip215": false,
+      "valid_strict": false,
+      "valid_rfc8032_cofactorless": false,
+      "category": "invalid_both",
+      "note": "Signature with s > ell (scalar field order). ZIP-215 §3 requires s < ell; both ZIP-215 and RFC 8032 reject unreduced scalars."
+    }
+  ],
+  "verification_profiles": {
+    "valid_zip215": "ZIP-215 §2: cofactored equation [8][s]B = [8]R + [8][k]A, non-canonical encodings accepted, all 8-torsion points accepted as public keys.",
+    "valid_strict": "Historical, no target implements it any more: cofactorless RFC 8032 verification PLUS two screens RFC 8032 permits but does not mandate — canonical encodings only, and small-order (torsion) public keys rejected (libsodium / ed25519-dalek verify_strict). Until 2026-09-24 it was this repository's strict profile. The policy every target implements now is RFC 8032 as written (canonical decoding, S < L, cofactored equation, no small-order screen); its oracle is ed25519-policy-vectors.json, whose valid_rfc8032 column is that policy. On this file's six cases it accepts tc_1 to tc_4 and rejects tc_5 and tc_6.",
+    "valid_rfc8032_cofactorless": "A bare RFC 8032 §5.1.7 implementation with no added policy: decode, reject s >= L, check [s]B = R + [k]A. Go's crypto/ed25519 is exactly this, and these values were produced by running it over this corpus. It differs from valid_strict on tc_2 alone."
+  }
+}

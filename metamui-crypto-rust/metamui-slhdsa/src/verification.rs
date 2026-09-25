@@ -84,6 +84,10 @@ pub fn slh_verify<P: Parameters>(
         return Err(Error::InvalidSignatureSize);
     }
 
+    if context.len() > crate::MAX_CONTEXT_BYTES {
+        return Err(Error::ContextTooLong);
+    }
+
     // Build M' = 0x00 || len(ctx) || ctx || msg per FIPS 205 Algorithm 24
     let mut m_prime = Vec::with_capacity(1 + 1 + context.len() + msg.len());
     m_prime.push(0x00);
@@ -136,6 +140,10 @@ pub fn slh_hash_verify<P: Parameters>(
 
     let oid = hash_alg.oid();
     let ph = hash_alg.hash(msg);
+
+    if context.len() > crate::MAX_CONTEXT_BYTES {
+        return Err(Error::ContextTooLong);
+    }
 
     // M' = 0x01 || len(ctx) || ctx || OID || PH(msg)
     let mut m_prime = Vec::with_capacity(1 + 1 + context.len() + oid.len() + ph.len());

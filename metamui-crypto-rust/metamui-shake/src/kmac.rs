@@ -99,17 +99,38 @@ impl<const RATE: usize> Kmac<RATE> {
         k.finalize_xof().read(out_len)
     }
 
-    /// Constant-time verification of a KMAC tag (non-XOF form, tag length
-    /// taken from `expected`).
-    pub fn verify(key: &[u8], message: &[u8], customization: &[u8], expected: &[u8]) -> bool {
-        let got = Self::mac(key, message, expected.len(), customization);
+    /// Constant-time verification of a `mac_len`-byte KMAC tag (non-XOF form).
+    ///
+    /// The caller states the MAC length its protocol uses. It is part of the
+    /// KMAC input (`right_encode(L)`), so it must not come from the tag being
+    /// checked: taking it from `expected` let an empty tag verify for every
+    /// message, and let whoever presents a tag choose L. A tag that is not
+    /// `mac_len` bytes fails.
+    ///
+    /// # Panics
+    /// If `mac_len` is below [`KMAC_MIN_TAG_BYTES`] — SP 800-185 §8.4.2: a
+    /// MAC output shall not be shorter than 32 bits.
+    pub fn verify(key: &[u8], message: &[u8], customization: &[u8], expected: &[u8], mac_len: usize) -> bool {
+        assert!(
+            mac_len >= KMAC_MIN_TAG_BYTES,
+            "KMAC tag length {mac_len} bytes is below the SP 800-185 minimum of {KMAC_MIN_TAG_BYTES}"
+        );
+        if expected.len() != mac_len {
+            return false;
+        }
+        let got = Self::mac(key, message, mac_len, customization);
         let mut diff = 0u8;
         for (a, b) in got.iter().zip(expected.iter()) {
             diff |= a ^ b;
         }
-        diff == 0 && got.len() == expected.len()
+        diff == 0
     }
 }
+
+/// Shortest KMAC tag `verify` accepts: 4 bytes. SP 800-185 §8.4.2 — a MAC
+/// output length L shall not be less than 32 bits, and 32–64 bits only after
+/// a careful risk analysis.
+pub const KMAC_MIN_TAG_BYTES: usize = 4;
 
 /// `KMAC128(K, X, 8·mac_len, S)`.
 pub fn kmac128(key: &[u8], message: &[u8], mac_len: usize, customization: &[u8]) -> Vec<u8> {
@@ -145,7 +166,7 @@ mod tests {
         let mut k = Kmac128::new(&key, b"");
         k.update(&msg[..1]).update(&msg[1..]);
         assert_eq!(k.finalize(32), mac);
-        assert!(Kmac128::verify(&key, msg, b"", &mac));
-        assert!(!Kmac128::verify(&key, msg, b"x", &mac));
+        assert!(Kmac128::verify(&key, msg, b"", &mac, 32));
+        assert!(!Kmac128::verify(&key, msg, b"x", &mac, 32));
     }
 }

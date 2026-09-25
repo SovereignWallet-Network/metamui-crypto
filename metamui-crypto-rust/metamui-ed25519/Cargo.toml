@@ -1,0 +1,59 @@
+[package]
+name = "metamui-ed25519"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+license = "Apache-2.0"
+description = "Ed25519 signatures (RFC 8032) with cofactored verification, verified against the RFC 8032 section 7.1 vectors"
+repository.workspace = true
+homepage = "https://metamui.id"
+keywords = ["ed25519", "eddsa", "signature", "curve25519", "cryptography"]
+categories = ["cryptography"]
+
+[lib]
+crate-type = [ "cdylib", "staticlib", "lib",]
+
+[dependencies]
+rand = { workspace = true }
+thiserror = "1.0"
+subtle = { workspace = true, features = ["std"] }
+getrandom = "0.2"
+
+[dependencies.metamui-security-utils]
+path = "../metamui-security-utils"
+version = "=1.0.0-rc.4"
+features = [ "subtle", "zeroize",]
+
+[dependencies.metamui-sha2]
+path = "../metamui-sha2"
+version = "=1.0.0-rc.4"
+
+# No features. Every code path is portable scalar Rust; there is no SIMD,
+# assembly or GPU path and no CPU-feature detection. Until 1.0.0-rc.4 this
+# manifest declared `native` (gated nothing) and `test-compare` (enabled an
+# optional RustCrypto `sha2` that no code used); both are gone, and the
+# default build has no external crypto crate in its closure.
+[features]
+default = []
+
+[dev-dependencies]
+hex = "0.4"
+hex-literal = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# wasm32 `getrandom` backend. This crate is a cdylib, so cargo links it for
+# wasm32 even when a consumer only wants the rlib, and that link needs a
+# backend to resolve. Taking it from here instead of `getrandom/js` means the
+# link no longer asserts that a browser is present; a consumer that IS a
+# browser enables `js` itself and keeps Web Crypto (getrandom prefers `js`,
+# so this registration is then inert).
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+metamui-getrandom-unavailable = { version = "=1.0.0-rc.4", path = "../metamui-getrandom-unavailable" }
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = []

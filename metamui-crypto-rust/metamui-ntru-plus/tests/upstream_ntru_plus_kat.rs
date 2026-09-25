@@ -70,11 +70,11 @@ fn check<P: NtruPlusParams>(v: &Value) {
     let dec = decapsulate::<P>(&ct, &sk).unwrap();
     assert_eq!(&dec.ss[..], &want_ss[..], "{ps} #{count}: decapsulated shared secret mismatch");
 
-    // Tamper control: a flipped ciphertext byte must not recover ss.
+    // Tamper control: a flipped ciphertext byte must be reported as a failure
+    // (the reference returns 1), never as a shared secret.
     let mut bad = ct.clone();
     bad.c[7] ^= 0x01;
-    let dec_bad = decapsulate::<P>(&bad, &sk).unwrap();
-    assert_ne!(&dec_bad.ss[..], &want_ss[..], "{ps} #{count}: tampered ciphertext accepted");
+    assert!(decapsulate::<P>(&bad, &sk).is_err(), "{ps} #{count}: tampered ciphertext accepted");
 }
 
 #[test]

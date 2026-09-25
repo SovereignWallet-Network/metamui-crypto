@@ -1,9 +1,15 @@
 //! # NTRU+ — the KpqC final-round NTRU-based KEM
 //!
-//! A port of the ntruplus.org reference implementation (commit 621c667,
-//! specification dated 2026-02-02), vendored under
-//! `metamui-crypto-reference/c/ntruplus-ref/`. Ring: R_q = Z_q[X]/(X^N -
-//! X^{N/2} + 1), q = 3457 (prime).
+//! A port of the ntruplus.org reference implementation (commit 3991b2a,
+//! specification dated 2026-07-10, "Final Version – KpqC Competition"),
+//! vendored under `metamui-crypto-reference/c/ntruplus-ref/`. Ring: R_q =
+//! Z_q[X]/(X^N - X^{N/2} + 1), q = 3457 (prime).
+//!
+//! - Decoding rejects any coefficient `>= q` (specification §6.3): a
+//!   non-canonical public key fails encapsulation with `InvalidPublicKey`,
+//!   and a non-canonical ciphertext or secret key fails decapsulation.
+//! - Decapsulation failure — non-canonical input or the re-encryption check —
+//!   is `Err(DecapsulationFailed)`, the reference's return code 1.
 //!
 //! - Three parameter sets: 768 (Level 1), 864 (Level 3), 1152 (Level 5).
 //!   The 2025 KpqClean revision's 576 set was dropped by the 2026 revision.
@@ -89,17 +95,24 @@ mod tests {
     fn wrong_key_and_tamper<P: NtruPlusParams>() {
         let (pk1, _sk1) = NtruPlus::<P>::generate_keypair().unwrap();
         let (_pk2, sk2) = NtruPlus::<P>::generate_keypair().unwrap();
-        let (ct, ss_enc) = NtruPlus::<P>::encapsulate(&pk1).unwrap();
-        let ss_wrong = NtruPlus::<P>::decapsulate(&ct, &sk2).unwrap();
-        assert_ne!(ss_enc.ss, ss_wrong.ss, "{}: wrong key must not recover ss", P::NAME);
-        assert_eq!(ss_wrong.ss, [0u8; 32], "{}: failure is signalled by an all-zero ss", P::NAME);
+        let (ct, _ss_enc) = NtruPlus::<P>::encapsulate(&pk1).unwrap();
+        assert_eq!(
+            NtruPlus::<P>::decapsulate(&ct, &sk2).err(),
+            Some(NtruPlusError::DecapsulationFailed),
+            "{}: a wrong key must be reported as a failure, not as a zero ss",
+            P::NAME
+        );
 
-        let (_pk, sk) = NtruPlus::<P>::generate_keypair().unwrap();
-        let (mut ct, ss_enc) = NtruPlus::<P>::encapsulate(&_pk).unwrap();
+        let (pk, sk) = NtruPlus::<P>::generate_keypair().unwrap();
+        let (mut ct, _ss_enc) = NtruPlus::<P>::encapsulate(&pk).unwrap();
         ct.c[0] ^= 0xFF;
         ct.c[10] ^= 0x42;
-        let ss_dec = NtruPlus::<P>::decapsulate(&ct, &sk).unwrap();
-        assert_ne!(ss_enc.ss, ss_dec.ss, "{}: tampered ct must not recover ss", P::NAME);
+        assert_eq!(
+            NtruPlus::<P>::decapsulate(&ct, &sk).err(),
+            Some(NtruPlusError::DecapsulationFailed),
+            "{}: a tampered ct must be reported as a failure",
+            P::NAME
+        );
     }
 
     /// INTT(NTT(a)) == a mod q: the 2026 reference keeps NTT-domain values in

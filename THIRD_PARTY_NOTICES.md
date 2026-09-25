@@ -22,6 +22,8 @@ cryptographic library is compiled into them.
 | MIT — Team HAETAE (HAETAE v1.2.0 reference, https://www.kpqc.cryptolab.co.kr/haetae) | `metamui-haetae` is a port of the reference and is gated on its known-answer files | `metamui-crypto-rust/metamui-haetae`, `test-vectors/haetae-upstream` |
 | MIT — SAMSUNG SDS (AIMer, https://github.com/samsungsds-opensource/AIMer) | `metamui-aimer` is a port of the v3 and v2.1 references and is gated on their known-answer files | `metamui-crypto-rust/metamui-aimer`, `test-vectors/aimer-upstream` |
 | MIT — NTRU+ TEAM (https://github.com/ntruplus/ntruplus, commit 621c667) | `metamui-ntru-plus` is a port of the reference and is gated on its known-answer files | `metamui-crypto-rust/metamui-ntru-plus`, `test-vectors/ntru-plus-upstream` |
+| BSD-3-Clause — curve25519-dalek and schnorrkel contributors; MIT — merlin (Henry de Valence and contributors) | `metamui-sr25519` is an own port written against these references and gated on the schnorrkel-generated known-answer files | `metamui-crypto-rust/metamui-sr25519` |
+| Public domain — ref10 (Daniel J. Bernstein et al., SUPERCOP) | the Ed25519 field arithmetic in `metamui-ed25519` follows ref10 | `metamui-crypto-rust/metamui-ed25519` |
 
 
 ## Test vectors redistributed with this tree
@@ -42,6 +44,11 @@ cryptographic library is compiled into them.
 | `test-vectors/haetae-upstream` | HAETAE v1.2.0 / v1.1.2 KAT (`PQCgenKAT_sign`) | MIT — Team HAETAE |
 | `test-vectors/aimer-upstream` | Samsung SDS AIMer v3 and v2.1 KAT | MIT — SAMSUNG SDS |
 | `test-vectors/ntru-plus-upstream` | NTRU+ authors' KAT (commit 621c667) | MIT — NTRU+ TEAM |
+| `test-vectors/blake3` | BLAKE3 team official test vectors | CC0-1.0 OR Apache-2.0 — BLAKE3 team |
+| `test-vectors/blake2`, `hkdf` | RFC 7693 and RFC 5869 appendices | IETF Trust (test data) |
+| `test-vectors/ed25519` | RFC 8032 vectors and ZIP-215 vectors | IETF Trust; MIT — Zcash (ZIP-215) |
+| `test-vectors/keccak256` | Ethereum js-ethereum-cryptography suite | MIT — ethereum/js-ethereum-cryptography |
+| `test-vectors/sr25519` | w3f/schnorrkel-generated KAT | BSD-3-Clause — Web3 Foundation |
 
 `test-vectors/README.md` and each corpus's own README state the provenance
 of every file.
@@ -87,6 +94,51 @@ The same MIT text as above applies, with the copyright lines
 `Copyright (c) 2022-2026 SAMSUNG SDS` and the NTRU+ TEAM's notice
 respectively (the reference archives' `LICENSE` files, recorded in the
 source repository's provenance register).
+
+### MIT License — merlin, Zcash (ZIP-215) and ethereum/js-ethereum-cryptography
+
+The same MIT text as above applies, with the respective copyright lines of
+the merlin authors, the Zcash contributors and the js-ethereum-cryptography
+authors.
+
+### BSD 3-Clause License — curve25519-dalek, schnorrkel, Web3 Foundation
+
+```
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+3. Neither the name of the copyright holder nor the names of its contributors
+   may be used to endorse or promote products derived from this software
+   without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+```
+
+with the copyright lines `Copyright (c) 2016-2021 isis agora lovecruft,
+Henry de Valence` (curve25519-dalek), `Copyright (c) 2017-2019 isis agora
+lovecruft, Jeffrey Burdges, Web3 Foundation` (schnorrkel) and the Web3
+Foundation for the generated vectors.
+
+### CC0 1.0 Universal OR Apache License 2.0 — BLAKE3 team test vectors
+
+The BLAKE3 team publishes its test vectors under CC0-1.0 or Apache-2.0 at
+the recipient's choice; this tree takes them under Apache-2.0 (the
+`LICENSE` file at the root).
 
 ### Apache License 2.0 — Google Wycheproof
 

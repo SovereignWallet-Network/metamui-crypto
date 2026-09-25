@@ -25,6 +25,6 @@ pub mod shake256;
 // Top-level convenience re-exports
 pub use cshake::{cshake128, cshake256, Cshake128, Cshake256};
 pub use keccak::{keccak_f1600, KeccakReader, KeccakSponge};
-pub use kmac::{kmac128, kmac256, kmacxof128, kmacxof256, Kmac128, Kmac256};
+pub use kmac::{kmac128, kmac256, kmacxof128, kmacxof256, Kmac128, Kmac256, KMAC_MIN_TAG_BYTES};
 pub use shake128::{shake128, Shake128, Shake128Reader};
 pub use shake256::{shake256, Shake256, Shake256Reader};

@@ -1,0 +1,75 @@
+[package]
+name = "metamui-blake3"
+version.workspace = true
+repository.workspace = true
+license = "Apache-2.0"
+description = "BLAKE3 hash, keyed hash, key derivation and extendable output in portable Rust, verified against the official BLAKE3 vectors"
+edition = "2021"
+rust-version.workspace = true
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+homepage.workspace = true
+readme = "README.md"
+keywords = ["blake3", "hash", "kdf", "xof", "cryptography"]
+categories = ["cryptography", "no-std"]
+
+[features]
+default = ["std"]
+# Standard library: operating-system randomness for `Blake3Key::random`.
+std = []
+# `serde` derives on the hash and key types.
+serde = ["dep:serde"]
+# Rayon: the `parallel` module (tree hashing of one message across threads,
+# many messages at once). The outputs are the same bytes.
+multithreading = ["std", "dep:rayon"]
+# The `batch` module: up to sixteen messages per call; the same bytes.
+batch-api = []
+# `batch::lthash`, a homomorphic (LtHash) construction over BLAKE3 — not part
+# of BLAKE3 itself.
+lthash = ["batch-api"]
+# The `kdf` module, a convenience wrapper around derive_key mode.
+kdf = []
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release. The many-input operations go through `backend::install`,
+# whose default is the portable implementation.
+
+[dependencies]
+hex = { workspace = true }
+serde = { workspace = true, optional = true }
+metamui-security-utils = { version = "=1.0.0-rc.4", path = "../metamui-security-utils", features = ["subtle", "zeroize"] }
+metamui-crypto-utilities = { version = "=1.0.0-rc.4", path = "../metamui-crypto-utilities" }
+rayon = { version = "=1.10.0", optional = true }
+
+# wasm32 `getrandom` backend: `metamui-security-utils` reaches `getrandom`,
+# which refuses to compile for wasm32-unknown-unknown until the graph names a
+# backend. Taking it from here means a plain `--target wasm32-unknown-unknown`
+# check resolves without asserting that a browser is present; a consumer that
+# IS a browser enables `getrandom/js` itself and keeps Web Crypto (getrandom
+# prefers `js`, so this registration is then inert).
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+metamui-getrandom-unavailable = { version = "=1.0.0-rc.4", path = "../metamui-getrandom-unavailable" }
+
+[dev-dependencies]
+# This crate's own tests, examples and benches build with every module
+# enabled, so the official-vector gate always covers the `parallel` and
+# `batch` paths; a `required-features` on those targets would let
+# `cargo test` skip them silently. cargo drops an unversioned dev-dependency
+# when packaging, so nothing published enables the features.
+metamui-blake3 = { path = ".", default-features = false, features = ["multithreading", "batch-api", "lthash", "kdf"] }
+hex-literal = { workspace = true }
+criterion = { version = "=0.5.1", default-features = false }
+num_cpus = "1.16"
+serde_json = { workspace = true }
+serde = { version = "1", features = ["derive"] }
+
+[[bench]]
+name = "blake3_bench"
+harness = false
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["multithreading", "batch-api", "lthash", "kdf", "serde"]
+rustdoc-args = ["--cfg", "docsrs"]
