@@ -250,17 +250,23 @@ impl SmaugT {
 
     /// Generate a keypair deterministically from `seed`.
     ///
-    /// The seed expansion is the cross-binding convention shared with the
-    /// Python, Go, Java, Kotlin, C# and TypeScript ports; it is **not** the
-    /// NIST KAT DRBG. For byte-equality against the reference vectors
-    /// use [`SmaugTV1::keygen_internal`].
+    /// The expansion is [`SmaugTV1::keygen_from_seed`]: `SHAKE-256(seed)` →
+    /// `d ‖ inner_seed`. The C binding (`metamui_smaugt_keypair_from_seed`),
+    /// the Python binding built on it and C#'s `SmaugT.GenerateKeyPair(seed)`
+    /// use the same expansion and give the same keypair for the same seed.
+    /// The Go, Java, Kotlin and TypeScript seeded entry points do **not**:
+    /// Go and Java take the seed verbatim as the IND-CPA seed and draw `d`
+    /// fresh, Kotlin splits the SHAKE-256 output the other way round
+    /// (`inner_seed ‖ d`), and TypeScript uses the seed bytes directly. It is
+    /// **not** the NIST KAT DRBG either; for byte-equality against the
+    /// reference vectors use [`SmaugTV1::keygen_internal`].
     ///
     /// Compiled only with the `kat-internal` feature: seeded key generation
     /// exists for conformance gates and fixture generators, and an
     /// application is never offered a seed.
     #[cfg(feature = "kat-internal")]
     pub fn keygen_from_seed(&self, seed: &[u8; 32]) -> Result<(PublicKey, SecretKey), SmaugError> {
-        let (pk, sk) = self.inner.keygen_from_seed(seed);
+        let (pk, sk) = self.inner.keygen_from_seed(seed)?;
         Ok((PublicKey(pk), SecretKey(sk)))
     }
 

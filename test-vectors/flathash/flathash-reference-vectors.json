@@ -1,0 +1,93 @@
+{
+  "algorithm": "FlatHash",
+  "standard": "MetaMUI internal (metamui-flathash v3.0.0)",
+  "source": "Generated from metamui-crypto-utilities/src/flathash/mod.rs Rust reference implementation",
+  "date": "2026-03-09",
+  "description": "FlatHash hashes JSON objects by flattening to dot/bracket notation, sorting keys with BTreeMap, concatenating as key:value pairs, then SHA-256 hashing the result. Object key order is irrelevant; array element order is significant.",
+  "properties": {
+    "output_size_bytes": 32,
+    "underlying_hash": "SHA-256",
+    "object_key_order": "independent (BTreeMap sorted)",
+    "array_element_order": "dependent"
+  },
+  "test_vectors": [
+    {
+      "tc_id": 1,
+      "description": "Empty object",
+      "input": "{}",
+      "hash": "0x06ae4b370bc2a97350a09bf74f2838b9489d5fc31a71675232b4adcb208bb7bd"
+    },
+    {
+      "tc_id": 2,
+      "description": "Empty array",
+      "input": "[]",
+      "hash": "0x89be72e47a1f976cd96fc11a41c81a42bb97de10a9073a102d10d6afc7ad97a3"
+    },
+    {
+      "tc_id": 3,
+      "description": "Simple flat object",
+      "input": "{\"name\": \"test\", \"value\": 42}",
+      "hash": "0x70525c66b1cac93312300e6498be9993d05d2d76b1694e738d492ca87470692e"
+    },
+    {
+      "tc_id": 4,
+      "description": "Same object, different key order — must match tc_id 3 (order independence)",
+      "input": "{\"value\": 42, \"name\": \"test\"}",
+      "hash": "0x70525c66b1cac93312300e6498be9993d05d2d76b1694e738d492ca87470692e"
+    },
+    {
+      "tc_id": 5,
+      "description": "Nested object with boolean",
+      "input": "{\"user\": {\"name\": \"Alice\", \"age\": 30}, \"active\": true}",
+      "hash": "0xc0012531b64459f4d67843679b12ac08c81d144ab5efeff40b7ab8cd6b7fa703"
+    },
+    {
+      "tc_id": 6,
+      "description": "Simple array [1,2,3]",
+      "input": "[1, 2, 3]",
+      "hash": "0xaf77b81b9aa6ec1edd1bd942aa68257a81e54e0c4bf3986e7e492791e00ca8e8"
+    },
+    {
+      "tc_id": 7,
+      "description": "Array [2,1] — must differ from tc_id 6 (order dependence)",
+      "input": "[2, 1]",
+      "hash": "0x12c4139e4437b02899f322a4132994c944e850b9d3ff78652fea54a92498feb9"
+    },
+    {
+      "tc_id": 8,
+      "description": "Two-key object {a,b}",
+      "input": "{\"a\": 1, \"b\": 2}",
+      "hash": "0x81eb42d9b7f448d9d35d384a3d4e57cbf9566765fff5744a9635609ce64d72e6"
+    },
+    {
+      "tc_id": 9,
+      "description": "Same object reversed {b,a} — must match tc_id 8",
+      "input": "{\"b\": 2, \"a\": 1}",
+      "hash": "0x81eb42d9b7f448d9d35d384a3d4e57cbf9566765fff5744a9635609ce64d72e6"
+    },
+    {
+      "tc_id": 10,
+      "description": "Single string value",
+      "input": "{\"test\": \"data\"}",
+      "hash": "0xcb16d4ebca5e605bae2bd99cd7455fe0c28baba8282ca93a57f102efdc623970"
+    },
+    {
+      "tc_id": 11,
+      "description": "Deeply nested object",
+      "input": "{\"nested\": {\"deep\": {\"value\": \"hello\"}}}",
+      "hash": "0xc692d1f3a38b91a44c6637f3db4cde8cfb9bdb83f82894bb68e3647539866ea6"
+    },
+    {
+      "tc_id": 12,
+      "description": "Mixed object with array",
+      "input": "{\"items\": [1, 2, 3], \"count\": 3}",
+      "hash": "0x365ed5a45c02e86491ebfec44faa8614b063e8ba8d6955ca7a86a8f88b51c405"
+    },
+    {
+      "tc_id": 13,
+      "description": "Object with null, boolean, and float",
+      "input": "{\"null_val\": null, \"bool_val\": false, \"num\": 3.14}",
+      "hash": "0xb6d6cb3f410660469feefa9980f51467e2798d4cbb65238bc0dd9889128c158d"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "algorithm": "Ascon-Hash256",
+  "standard": "NIST SP 800-232",
+  "source": "https://github.com/ascon/ascon-c/blob/main/crypto_hash/asconhash256/ref/LWC_HASH_KAT_128_256.txt",
+  "date": "2026-03-09",
+  "note": "256-bit hash output. Empty Msg means zero-length input. Input bytes are incrementing: 0x00, 0x0001, 0x000102, etc.",
+  "test_vectors": [
+    {
+      "tc_id": 1,
+      "message": "",
+      "digest": "0B3BE5850F2F6B98CAF29F8FDEA89B64A1FA70AA249B8F839BD53BAA304D92B2"
+    },
+    {
+      "tc_id": 2,
+      "message": "00",
+      "digest": "0728621035AF3ED2BCA03BF6FDE900F9456F5330E4B5EE23E7F6A1E70291BC80"
+    },
+    {
+      "tc_id": 3,
+      "message": "0001",
+      "digest": "6115E7C9C4081C2797FC8FE1BC57A836AFA1C5381E556DD583860CA2DFB48DD2"
+    },
+    {
+      "tc_id": 4,
+      "message": "000102",
+      "digest": "265AB89A609F5A05DCA57E83FBBA700F9A2D2C4211BA4CC9F0A1A369E17B915C"
+    },
+    {
+      "tc_id": 5,
+      "message": "00010203",
+      "digest": "D7E4C7ED9B8A325CD08B9EF259F8877054ECD8304FE1B2D7FD847137DF6727EE"
+    }
+  ]
+}

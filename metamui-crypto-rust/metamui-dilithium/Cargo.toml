@@ -36,9 +36,9 @@ kat-internal = []
 [dependencies]
 rand = { workspace = true }
 rand_chacha = "0.3"
-metamui-security-utils = { version = "=1.0.0-rc.4", path = "../metamui-security-utils" }
-metamui-acvp-core = { version = "=1.0.0-rc.4", path = "../metamui-acvp-core" }
-metamui-prehash-oids = { version = "=1.0.0-rc.4", path = "../metamui-prehash-oids" }
+metamui-security-utils = { version = "=1.0.0-rc.5", path = "../metamui-security-utils" }
+metamui-acvp-core = { version = "=1.0.0-rc.5", path = "../metamui-acvp-core" }
+metamui-prehash-oids = { version = "=1.0.0-rc.5", path = "../metamui-prehash-oids" }
 hex = "0.4"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -46,15 +46,15 @@ signature = { version = "2.0", features = ["rand_core"] }
 
 [dependencies.metamui-sha2]
 path = "../metamui-sha2"
-version = "=1.0.0-rc.4"
+version = "=1.0.0-rc.5"
 
 [dependencies.metamui-shake]
 path = "../metamui-shake"
-version = "=1.0.0-rc.4"
+version = "=1.0.0-rc.5"
 
 [dependencies.metamui-crypto-utilities]
 path = "../metamui-crypto-utilities"
-version = "=1.0.0-rc.4"
+version = "=1.0.0-rc.5"
 
 [dev-dependencies]
 # This crate's own tests, examples and benches build with `kat-internal`, so
@@ -99,7 +99,7 @@ features = [ "getrandom",]
 # browser enables `js` itself and keeps Web Crypto (getrandom prefers `js`,
 # so this registration is then inert).
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-metamui-getrandom-unavailable = { version = "=1.0.0-rc.4", path = "../metamui-getrandom-unavailable" }
+metamui-getrandom-unavailable = { version = "=1.0.0-rc.5", path = "../metamui-getrandom-unavailable" }
 
 # What docs.rs builds: the public API on one target, with only the features listed —
 # never all-features, which unions host-gated and test-only features.

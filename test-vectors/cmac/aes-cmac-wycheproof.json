@@ -1,0 +1,52 @@
+{
+  "algorithm": "AES-CMAC",
+  "standard": "NIST SP 800-38B",
+  "schema": "mac_test_schema_v1.json",
+  "source": "https://github.com/google/wycheproof/blob/master/testvectors_v1/aes_cmac_test.json",
+  "date": "2026-03-09",
+  "note": "Filtered to AES-256 (keySize=256) test groups only.",
+  "keySize": 256,
+  "tagSize": 128,
+  "test_vectors": [
+    {
+      "tc_id": 205,
+      "comment": "empty message",
+      "key": "7bf9e536b66a215c22233fe2daaa743a898b9acb9f7802de70b40e3d6e43ef97",
+      "msg": "",
+      "tag": "736c7b56957db774c5ddf7c7a70ba8a8",
+      "result": "valid"
+    },
+    {
+      "tc_id": 206,
+      "comment": "short message",
+      "key": "e754076ceab3fdaf4f9bcab7d4f0df0cbbafbc87731b8f9b7cd2166472e8eebc",
+      "msg": "40",
+      "tag": "9d47482c2d9252bace43a75a8335b8b8",
+      "result": "valid"
+    },
+    {
+      "tc_id": 207,
+      "comment": "short message",
+      "key": "ea3b016bdd387dd64d837c71683808f335dbdc53598a4ea8c5f952473fafaf5f",
+      "msg": "6601",
+      "tag": "c7c44e31c466334992d6f9de3c771634",
+      "result": "valid"
+    },
+    {
+      "tc_id": 208,
+      "comment": "short message",
+      "key": "73d4709637857dafab6ad8b2b0a51b06524717fedf100296644f7cfdaae1805b",
+      "msg": "f1d300",
+      "tag": "b7086603a85e11fceb8cadea9bd30939",
+      "result": "valid"
+    },
+    {
+      "tc_id": 209,
+      "comment": "short message",
+      "key": "d5c81b399d4c0d1583a13da56de6d2dc45a66e7b47c24ab1192e246dc961dd77",
+      "msg": "2ae63cbf",
+      "tag": "ba383a3a15c9df64bba50d611113a024",
+      "result": "valid"
+    }
+  ]
+}

@@ -29,6 +29,18 @@ package has been published to a registry from this tree.
 | HKDF (RFC 5869) | `metamui-hkdf` | HKDF-SHA256 | extract, expand |
 | Ed25519 (RFC 8032) | `metamui-ed25519` | Ed25519 | keygen, sign, verify |
 | sr25519 (schnorrkel) | `metamui-sr25519` | Ristretto255 | keygen, sign, verify |
+| X25519 (RFC 7748) | `metamui-x25519` | Curve25519 | keygen, key agreement |
+| Argon2 (RFC 9106) | `metamui-argon2` | Argon2d, Argon2i, Argon2id | password hash |
+| PBKDF2 (RFC 8018) | `metamui-pbkdf2` | HMAC-SHA256, HMAC-SHA512 | key derivation |
+| BIP-39 | `metamui-bip39` | English wordlist | mnemonic, seed |
+| HMAC_DRBG (SP 800-90A) | `metamui-hmac-drbg` | SHA-256, SHA-384, SHA-512 | instantiate, generate, reseed |
+| Camellia (RFC 3713) | `metamui-camellia` | 128, 192, 256; ECB, CBC, CTR, GCM | encrypt, decrypt |
+| Deoxys-II (CAESAR) | `metamui-deoxys` | Deoxys-II-256-128 | AEAD encrypt, decrypt |
+| Ascon (SP 800-232) | `metamui-ascon` | AEAD128, Hash256, XOF128, CXOF128 | AEAD, hash, XOF |
+| AES-CMAC (SP 800-38B) | `metamui-cmac` | AES-256 | mac, verify |
+| Poly1305 (RFC 8439) | `metamui-poly1305` | one-time key | mac, verify |
+| SipHash | `metamui-siphash` | 2-4, 1-3, 4-8; 64- and 128-bit | prf, mac |
+| FlatHash | `metamui-flathash` | MetaMUI canonical JSON hash | hash |
 
 `metamui-crypto` is the facade for the Falcon-512 and ML-KEM-768 profiles:
 explicit profiles, typed byte boundaries, caller-supplied randomness, no
@@ -52,9 +64,11 @@ The tests replay the upstream answer files under `test-vectors/` through
 the public API: the NIST Round-3 Falcon and PQClean `falcon-padded-512`
 files, the NIST ACVP FIPS 203/204/205 vectors, the KpqC authors' KAT
 files for SMAUG-T, HAETAE, AIMer and NTRU+, the BLAKE3 team's official
-vectors, the RFC 7693 / 8032 / 5869 appendices and the schnorrkel and
-Ethereum test suites for sr25519 and Keccak-256. A missing vector file fails
-the run.
+vectors, the RFC 7693 / 8032 / 5869 / 3713 / 7748 / 8439 appendices, the RFC 7914
+PBKDF2 vectors, the schnorrkel and Ethereum test suites for sr25519 and
+Keccak-256, the ascon-c, argon2-cffi, oasisprotocol Deoxys-II, Trezor
+BIP-39 and SipHash reference answers, Wycheproof for AES-CMAC and the NIST
+ACVP hmacDRBG vectors. A missing vector file fails the run.
 
 ## What is not claimed
 

@@ -46,12 +46,20 @@ impl AesCtrDrbg {
     ///
     /// # Arguments
     /// * `entropy` - Exactly 48 bytes of initial entropy.
-    /// * `personalization` - Optional personalization string (XORed with
-    ///   entropy, zero-padded/truncated to 48 bytes).
+    /// * `personalization` - Optional personalization string, at most
+    ///   48 bytes (seedlen); zero-padded to 48 bytes and XORed with entropy.
     pub fn new(entropy: &[u8], personalization: Option<&[u8]>) -> Result<Self> {
         if entropy.len() != SEEDLEN {
             return Err(AesCtrDrbgError::EntropyError(entropy.len()));
         }
+
+        // §10.2.1.3.1: seed_material = entropy XOR pad(personalization, seedlen).
+        // A string longer than seedlen used to be truncated silently; Table 3
+        // caps max_personalization_string_length at seedlen, so refuse it.
+        let mut seed_material = [0u8; SEEDLEN];
+        seed_material.copy_from_slice(entropy);
+        xor_padded(&mut seed_material, personalization)
+            .map_err(|()| AesCtrDrbgError::InvalidRequest("personalization_string longer than 48 bytes"))?;
 
         // Start with zero key and V
         let mut drbg = Self {
@@ -61,17 +69,8 @@ impl AesCtrDrbg {
             cipher: Aes256::new(&[0u8; KEY_SIZE]),
         };
 
-        // seed_material = entropy XOR pad(personalization, SEEDLEN)
-        let mut seed_material = [0u8; SEEDLEN];
-        seed_material.copy_from_slice(entropy);
-        if let Some(pers) = personalization {
-            let plen = core::cmp::min(pers.len(), SEEDLEN);
-            for i in 0..plen {
-                seed_material[i] ^= pers[i];
-            }
-        }
-
         drbg.update(&seed_material);
+        seed_material.zeroize();
         drbg.reseed_counter = 1;
 
         Ok(drbg)
@@ -81,7 +80,9 @@ impl AesCtrDrbg {
     ///
     /// # Arguments
     /// * `output` - Buffer to fill with random bytes (1..65536).
-    /// * `additional_input` - Optional additional input (exactly 48 bytes).
+    /// * `additional_input` - Optional additional input, at most 48 bytes;
+    ///   zero-padded to 48 bytes. Empty is the same as `None` (§4: Null is
+    ///   the empty string).
     pub fn generate(
         &mut self,
         output: &mut [u8],
@@ -94,12 +95,15 @@ impl AesCtrDrbg {
             return Err(AesCtrDrbgError::ReseedRequired);
         }
 
-        // If additional_input provided, update state first
-        if let Some(ai) = additional_input {
-            let ai_arr: &[u8; SEEDLEN] = ai.try_into().map_err(|_| {
-                AesCtrDrbgError::InvalidRequest("additional_input must be exactly 48 bytes")
-            })?;
-            self.update(ai_arr);
+        // §10.2.1.5.1 step 2: if additional_input ≠ Null, pad it to seedlen and
+        // update; otherwise it is 0^seedlen. This used to demand exactly
+        // 48 bytes, so a shorter (or empty) input the spec pads was refused.
+        let mut ai_padded = [0u8; SEEDLEN];
+        xor_padded(&mut ai_padded, additional_input)
+            .map_err(|()| AesCtrDrbgError::InvalidRequest("additional_input longer than 48 bytes"))?;
+        let has_ai = additional_input.is_some_and(|ai| !ai.is_empty());
+        if has_ai {
+            self.update(&ai_padded);
         }
 
         // Generate output blocks
@@ -112,14 +116,10 @@ impl AesCtrDrbg {
             pos += copy_len;
         }
 
-        // Update state for backtracking resistance
-        match additional_input {
-            Some(ai) => {
-                let ai_arr: &[u8; SEEDLEN] = ai.try_into().unwrap(); // validated above
-                self.update(ai_arr);
-            }
-            None => self.update(&[0u8; SEEDLEN]),
-        }
+        // §10.2.1.5.1 step 6: update with the padded additional input
+        // (0^seedlen when it was Null) for backtracking resistance.
+        self.update(&ai_padded);
+        ai_padded.zeroize();
         self.reseed_counter += 1;
 
         Ok(())
@@ -129,7 +129,8 @@ impl AesCtrDrbg {
     ///
     /// # Arguments
     /// * `entropy` - Exactly 48 bytes of entropy.
-    /// * `additional_input` - Optional additional input (max 48 bytes, XORed).
+    /// * `additional_input` - Optional additional input, at most 48 bytes
+    ///   (zero-padded, XORed with entropy).
     pub fn reseed(
         &mut self,
         entropy: &[u8],
@@ -139,16 +140,15 @@ impl AesCtrDrbg {
             return Err(AesCtrDrbgError::EntropyError(entropy.len()));
         }
 
+        // §10.2.1.4.1: as for personalization, an input longer than seedlen
+        // used to be truncated silently; Table 3 caps it at seedlen.
         let mut seed_material = [0u8; SEEDLEN];
         seed_material.copy_from_slice(entropy);
-        if let Some(ai) = additional_input {
-            let plen = core::cmp::min(ai.len(), SEEDLEN);
-            for i in 0..plen {
-                seed_material[i] ^= ai[i];
-            }
-        }
+        xor_padded(&mut seed_material, additional_input)
+            .map_err(|()| AesCtrDrbgError::InvalidRequest("additional_input longer than 48 bytes"))?;
 
         self.update(&seed_material);
+        seed_material.zeroize();
         self.reseed_counter = 1;
 
         Ok(())
@@ -191,6 +191,20 @@ impl Drop for AesCtrDrbg {
         self.v.zeroize();
         self.reseed_counter = 0;
     }
+}
+
+/// `buf ^= input || 0^(seedlen - len(input))` — the no-DF padding of
+/// §10.2.1.3.1 / §10.2.1.4.1 / §10.2.1.5.1. Errs, leaving `buf` untouched,
+/// when `input` is longer than seedlen.
+fn xor_padded(buf: &mut [u8; SEEDLEN], input: Option<&[u8]>) -> core::result::Result<(), ()> {
+    let input = input.unwrap_or(&[]);
+    if input.len() > SEEDLEN {
+        return Err(());
+    }
+    for (b, x) in buf.iter_mut().zip(input) {
+        *b ^= x;
+    }
+    Ok(())
 }
 
 /// Big-endian increment of 16-byte counter V.

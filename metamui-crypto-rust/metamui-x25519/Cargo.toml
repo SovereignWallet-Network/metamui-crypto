@@ -1,0 +1,50 @@
+[package]
+rust-version.workspace = true
+name = "metamui-x25519"
+version.workspace = true
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+license = "Apache-2.0"
+repository.workspace = true
+homepage = "https://metamui.id"
+description = "X25519 Diffie-Hellman key agreement (RFC 7748), verified against the RFC 7748 vectors"
+readme = "README.md"
+keywords = ["x25519", "curve25519", "ecdh", "key-exchange", "rfc7748"]
+categories = ["cryptography"]
+
+[features]
+default = [ "native",]
+# `native` is a no-op kept for callers that still name it; there is no
+# other implementation to select.
+native = []
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release.
+
+[package.edition]
+workspace = true
+
+[dependencies.hex]
+workspace = true
+
+[dependencies.thiserror]
+workspace = true
+
+[dependencies.serde]
+workspace = true
+
+# [dependencies.curve25519-dalek]  # REMOVED: Using pure native implementation
+# workspace = true
+# optional = true
+
+[dependencies.rand]
+workspace = true
+
+[dev-dependencies.serde_json]
+workspace = true
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = []

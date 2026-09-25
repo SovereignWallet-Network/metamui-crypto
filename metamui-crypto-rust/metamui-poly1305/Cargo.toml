@@ -1,0 +1,63 @@
+[package]
+rust-version.workspace = true
+name = "metamui-poly1305"
+description = "Poly1305 one-time authenticator (RFC 8439)"
+version.workspace = true
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+license = "Apache-2.0"
+repository.workspace = true
+readme = "README.md"
+keywords = ["crypto", "poly1305", "mac", "authentication", "rfc8439"]
+categories = [ "cryptography", "no-std",]
+
+[features]
+default = [ "std", "optimized"]
+std = []
+optimized = []
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release.
+
+[package.edition]
+workspace = true
+
+[package.homepage]
+workspace = true
+
+[dependencies.metamui-security-utils]
+path = "../metamui-security-utils"
+version = "=1.0.0-rc.5"
+features = [ "subtle", "zeroize",]
+
+[dependencies.getrandom]
+workspace = true
+
+[dependencies.num-bigint]
+version = "0.4"
+
+[dependencies.num-traits]
+version = "0.2"
+
+[dev-dependencies.hex]
+workspace = true
+
+[dependencies.hex-literal]
+workspace = true
+
+[dev-dependencies.hex-literal]
+workspace = true
+
+
+[dev-dependencies.serde_json]
+workspace = true
+
+[dev-dependencies.serde]
+version = "1"
+features = ["derive"]
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["std", "optimized"]

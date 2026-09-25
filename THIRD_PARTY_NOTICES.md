@@ -24,6 +24,9 @@ cryptographic library is compiled into them.
 | MIT — NTRU+ TEAM (https://github.com/ntruplus/ntruplus, commit 621c667) | `metamui-ntru-plus` is a port of the reference and is gated on its known-answer files | `metamui-crypto-rust/metamui-ntru-plus`, `test-vectors/ntru-plus-upstream` |
 | BSD-3-Clause — curve25519-dalek and schnorrkel contributors; MIT — merlin (Henry de Valence and contributors) | `metamui-sr25519` is an own port written against these references and gated on the schnorrkel-generated known-answer files | `metamui-crypto-rust/metamui-sr25519` |
 | Public domain — ref10 (Daniel J. Bernstein et al., SUPERCOP) | the Ed25519 field arithmetic in `metamui-ed25519` follows ref10 | `metamui-crypto-rust/metamui-ed25519` |
+| CC0-1.0 OR Apache-2.0 — the Argon2 reference implementation (P-H-C/phc-winner-argon2) | `metamui-argon2` is written after the PHC reference and gated on its known answers | `metamui-crypto-rust/metamui-argon2`, `test-vectors/argon2` |
+| MIT — Oasis Labs (oasisprotocol/deoxysii-rust) | `metamui-deoxys` is an own port citing the Oasis reference and gated on its known answers | `metamui-crypto-rust/metamui-deoxys`, `test-vectors/deoxys` |
+| CC0-1.0 — ascon-c (ascon/ascon-c) | `metamui-ascon` is gated byte for byte on the reference's `LWC_*_KAT` files; no ascon-c code is carried | `test-vectors/ascon-upstream`, `test-vectors/ascon` |
 
 
 ## Test vectors redistributed with this tree
@@ -49,6 +52,16 @@ cryptographic library is compiled into them.
 | `test-vectors/ed25519` | RFC 8032 vectors and ZIP-215 vectors | IETF Trust; MIT — Zcash (ZIP-215) |
 | `test-vectors/keccak256` | Ethereum js-ethereum-cryptography suite | MIT — ethereum/js-ethereum-cryptography |
 | `test-vectors/sr25519` | w3f/schnorrkel-generated KAT | BSD-3-Clause — Web3 Foundation |
+| `test-vectors/argon2` | RFC 9106 §5 and PHC reference answers; argon2-cffi (libargon2) output; MetaMUI edge and version-0x10 oracles | IETF Trust (test data); CC0-1.0 OR Apache-2.0 — PHC; own |
+| `test-vectors/ascon-upstream`, `ascon` | ascon-c `LWC_*_KAT` files (SP 800-232) and MetaMUI extracts of them | CC0-1.0 — ascon-c |
+| `test-vectors/bip39` | Trezor python-mnemonic `vectors.json` | MIT — SatoshiLabs |
+| `test-vectors/camellia`, `x25519`, `chacha20` | RFC 3713, RFC 7748 and RFC 8439 appendices | IETF Trust (test data) |
+| `test-vectors/pbkdf2` | RFC 6070 and RFC 7914 §11 vectors; a MetaMUI SHA-384/512 oracle | IETF Trust (test data); own |
+| `test-vectors/cmac` | Google Wycheproof `aes_cmac_test.json` (AES-256 groups) | Apache-2.0 |
+| `test-vectors/deoxys` | oasisprotocol/deoxysii-rust test data | MIT — Oasis Labs |
+| `test-vectors/hmac-drbg` | NIST ACVP-Server hmacDRBG-1.0 internal projection | U.S. Government work, 17 U.S.C. §105 |
+| `test-vectors/siphash` | veorq/SipHash reference vectors | CC0-1.0 — Jean-Philippe Aumasson, Daniel J. Bernstein |
+| `test-vectors/flathash` | MetaMUI-generated reference cases | own |
 
 `test-vectors/README.md` and each corpus's own README state the provenance
 of every file.
@@ -95,11 +108,11 @@ The same MIT text as above applies, with the copyright lines
 respectively (the reference archives' `LICENSE` files, recorded in the
 source repository's provenance register).
 
-### MIT License — merlin, Zcash (ZIP-215) and ethereum/js-ethereum-cryptography
+### MIT License — merlin, Zcash (ZIP-215), ethereum/js-ethereum-cryptography, Oasis Labs (deoxysii-rust) and SatoshiLabs (python-mnemonic)
 
 The same MIT text as above applies, with the respective copyright lines of
-the merlin authors, the Zcash contributors and the js-ethereum-cryptography
-authors.
+the merlin authors, the Zcash contributors, the js-ethereum-cryptography
+authors, Oasis Labs Inc. and SatoshiLabs.
 
 ### BSD 3-Clause License — curve25519-dalek, schnorrkel, Web3 Foundation
 
@@ -139,6 +152,16 @@ Foundation for the generated vectors.
 The BLAKE3 team publishes its test vectors under CC0-1.0 or Apache-2.0 at
 the recipient's choice; this tree takes them under Apache-2.0 (the
 `LICENSE` file at the root).
+
+### CC0 1.0 Universal — ascon-c known-answer files, SipHash reference vectors; CC0-1.0 OR Apache-2.0 — Argon2 reference
+
+The ascon-c project and the SipHash reference (Aumasson, Bernstein) publish
+their known-answer files and test vectors under CC0-1.0: the authors have
+waived all copyright and related rights to the extent possible under law
+(https://creativecommons.org/publicdomain/zero/1.0/). The PHC Argon2
+reference implementation is offered under CC0-1.0 or Apache-2.0 at the
+recipient's choice; this tree takes it under Apache-2.0 (the `LICENSE`
+file at the root).
 
 ### Apache License 2.0 — Google Wycheproof
 

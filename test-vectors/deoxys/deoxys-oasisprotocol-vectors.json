@@ -1,0 +1,70 @@
+{
+  "algorithm": "Deoxys-II-256-128",
+  "standard": "CAESAR competition portfolio — first choice for in-depth security",
+  "source": "https://github.com/oasisprotocol/deoxysii-rust/tree/master/test-data",
+  "date": "2026-03-09",
+  "note": "Vectors extracted from the oasisprotocol/deoxysii-rust reference implementation test data. The key, nonce, and AAD use an incremental pattern: byte[i] = (i * (i+1) / 2) mod 256. Plaintext uses the same pattern. 5 representative vectors are included covering lengths 0, 1, 16, 32, and 64 bytes.",
+  "parameters": {
+    "key_size_bits": 256,
+    "nonce_size_bits": 120,
+    "tag_size_bits": 128,
+    "block_size_bits": 128
+  },
+  "test_vectors": [
+    {
+      "tc_id": 1,
+      "description": "Empty plaintext and empty AAD",
+      "plaintext_len": 0,
+      "key": "7b3af9b87736f5b47332f1b06f2eedac6b2ae9a86726e5a46322e1a05f1edd9c",
+      "nonce": "7b30e59a4f04b96e23d88d42f7ac61",
+      "plaintext": "",
+      "aad": "",
+      "ciphertext": "",
+      "tag": "9f1b3c417b5e0787ec5a4c7b5e254499"
+    },
+    {
+      "tc_id": 2,
+      "description": "1-byte plaintext with 1-byte AAD",
+      "plaintext_len": 1,
+      "key": "7b3af9b87736f5b47332f1b06f2eedac6b2ae9a86726e5a46322e1a05f1edd9c",
+      "nonce": "7b30e59a4f04b96e23d88d42f7ac61",
+      "plaintext": "7b",
+      "aad": "7b",
+      "ciphertext": "da",
+      "tag": "11fa90c3ee591ed43ec49ff54abe760e"
+    },
+    {
+      "tc_id": 3,
+      "description": "16-byte plaintext (one full block) with 16-byte AAD",
+      "plaintext_len": 16,
+      "key": "7b3af9b87736f5b47332f1b06f2eedac6b2ae9a86726e5a46322e1a05f1edd9c",
+      "nonce": "7b30e59a4f04b96e23d88d42f7ac61",
+      "plaintext": "7b4005ca8f5419dea3682df2b77c4106",
+      "aad": "7b3cfdbe7f4001c2834405c6874809ca",
+      "ciphertext": "309e4d8b1c52fa5656505dd5a3ade76a",
+      "tag": "6b09b5f3d8a900247e835ae499b31dfd"
+    },
+    {
+      "tc_id": 4,
+      "description": "32-byte plaintext (two full blocks) with 32-byte AAD",
+      "plaintext_len": 32,
+      "key": "7b3af9b87736f5b47332f1b06f2eedac6b2ae9a86726e5a46322e1a05f1edd9c",
+      "nonce": "7b30e59a4f04b96e23d88d42f7ac61",
+      "plaintext": "7b4005ca8f5419dea3682df2b77c4106cb90551adfa4692ef3b87d4207cc9156",
+      "aad": "7b3cfdbe7f4001c2834405c6874809ca8b4c0dce8f5011d2935415d6975819da",
+      "ciphertext": "a33f1c64a58b7e48a117b3ad2b94188a4615ca7a7c0cc87ced75da9edafcf461",
+      "tag": "6f001b647e90ed289d4d1a5a5b43eb12"
+    },
+    {
+      "tc_id": 5,
+      "description": "64-byte plaintext (four full blocks) with 64-byte AAD",
+      "plaintext_len": 64,
+      "key": "7b3af9b87736f5b47332f1b06f2eedac6b2ae9a86726e5a46322e1a05f1edd9c",
+      "nonce": "7b30e59a4f04b96e23d88d42f7ac61",
+      "plaintext": "7b4005ca8f5419dea3682df2b77c4106cb90551adfa4692ef3b87d4207cc91561be0a56a2ff4b97e4308cd92571ce1a66b30f5ba7f4409ce93581de2a76c31f6",
+      "aad": "7b3cfdbe7f4001c2834405c6874809ca8b4c0dce8f5011d2935415d6975819da9b5c1dde9f6021e2a36425e6a76829eaab6c2deeaf7031f2b37435f6b77839fa",
+      "ciphertext": "5c6e71240c9ffad421247efe5231a4dfb7ed4d919a123087862719177457d80b3bbe4fd4f072a1674c13df884c53ece7855e5ad16c42fb1d8b999306b3687980",
+      "tag": "1a88948d8854bca0cf6892c42288e9c0"
+    }
+  ]
+}

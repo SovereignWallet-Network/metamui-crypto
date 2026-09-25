@@ -361,6 +361,31 @@ pub fn decode_public_key(data: &[u8], logn: usize) -> Result<Vec<i16>> {
     modq_decode(&data[1..], logn)
 }
 
+/// Decode the legacy headerless raw public key: `2^logn` little-endian i16
+/// coefficients (1024 bytes for Falcon-512, 2048 for Falcon-1024).
+///
+/// Kept for keys stored by consumers before the NIST form was the only
+/// output. It used to take any i16, so h[i], h[i] ± q and so on were distinct
+/// byte strings for one key mod q (M-19). Like `modq_decode`, it now accepts
+/// only the canonical representative in [0, q) — what every writer of this
+/// form (`h` from keygen or from the NIST decoder) produces.
+pub fn decode_raw_public_key(data: &[u8], logn: usize) -> Result<Vec<i16>> {
+    let n = 1usize << logn;
+    if data.len() != n * 2 {
+        return Err(Falcon512Error::InvalidPublicKey);
+    }
+    data.chunks_exact(2)
+        .map(|b| {
+            let c = i16::from_le_bytes([b[0], b[1]]);
+            if (0..Q as i16).contains(&c) {
+                Ok(c)
+            } else {
+                Err(Falcon512Error::InvalidPublicKey)
+            }
+        })
+        .collect()
+}
+
 /// Encode private key in NIST format: [header(1)] [f] [g] [F]
 ///
 /// Header byte: 0x50 | logn (0x59 for Falcon-512, 0x5A for Falcon-1024)

@@ -1,0 +1,49 @@
+[package]
+rust-version.workspace = true
+name = "metamui-siphash"
+description = "SipHash keyed pseudorandom function for short inputs"
+version.workspace = true
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+license = "Apache-2.0"
+repository.workspace = true
+readme = "README.md"
+keywords = ["crypto", "siphash", "prf", "hash", "mac"]
+categories = [ "cryptography", "no-std",]
+
+[features]
+default = [ "std",]
+std = [ "getrandom",]
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release.
+
+[package.edition]
+workspace = true
+
+[package.homepage]
+workspace = true
+
+[dependencies.getrandom]
+workspace = true
+optional = true
+
+[dev-dependencies.hex]
+workspace = true
+
+[dev-dependencies.hex-literal]
+workspace = true
+
+
+[dev-dependencies.serde_json]
+workspace = true
+
+[dev-dependencies.serde]
+version = "1"
+features = ["derive"]
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["std"]

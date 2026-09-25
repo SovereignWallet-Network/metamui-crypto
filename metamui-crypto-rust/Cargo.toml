@@ -5,28 +5,40 @@ members = [
     "metamui-aes-256",
     "metamui-aes-ctr-drbg",
     "metamui-aimer",
+    "metamui-argon2",
+    "metamui-ascon",
+    "metamui-bip39",
     "metamui-blake2b",
     "metamui-blake3",
+    "metamui-camellia",
+    "metamui-cmac",
     "metamui-crypto",
     "metamui-crypto-utilities",
+    "metamui-deoxys",
     "metamui-dilithium",
     "metamui-ed25519",
     "metamui-error",
     "metamui-falcon512",
+    "metamui-flathash",
     "metamui-haetae",
     "metamui-hkdf",
+    "metamui-hmac-drbg",
     "metamui-keccak256",
     "metamui-mlkem",
     "metamui-ntru-plus",
+    "metamui-pbkdf2",
+    "metamui-poly1305",
     "metamui-getrandom-unavailable",
     "metamui-security-utils",
     "metamui-sha2",
     "metamui-sha3",
     "metamui-shake",
+    "metamui-siphash",
     "metamui-slhdsa",
     "metamui-prehash-oids",
     "metamui-smaug-t",
     "metamui-sr25519",
+    "metamui-x25519",
 ]
 
 # Release profile — hoisted from metamui-falcon512, metamui-haetae, and
@@ -45,7 +57,7 @@ lto = true
 codegen-units = 1
 
 [workspace.package]
-version = "1.0.0-rc.4"
+version = "1.0.0-rc.5"
 edition = "2021"
 # Minimum supported Rust version for every workspace member (each member
 # declares `rust-version.workspace = true`). The `rust linux (docker)`

@@ -30,3 +30,10 @@ is in THIRD_PARTY_NOTICES.md. In particular this product includes:
     the Web3 Foundation's schnorrkel suite (BSD-3-Clause), the Ethereum
     js-ethereum-cryptography suite (MIT), ZIP-215 (Zcash, MIT) and RFC
     appendices (IETF Trust)
+  * For the second classic wave: the Argon2 crate is written after the
+    PHC reference (CC0-1.0 OR Apache-2.0) and the Deoxys-II crate cites
+    oasisprotocol/deoxysii-rust (MIT, Oasis Labs); known-answer files
+    from ascon-c (CC0-1.0), the SipHash reference (CC0-1.0), Trezor's
+    python-mnemonic (MIT, SatoshiLabs), oasisprotocol/deoxysii-rust
+    (MIT), argon2-cffi output, Google Wycheproof (Apache-2.0), the NIST
+    ACVP server (U.S. Government work) and RFC appendices (IETF Trust)

@@ -1,0 +1,41 @@
+[package]
+name = "metamui-cmac"
+description = "AES-256 CMAC message authentication code (NIST SP 800-38B)"
+categories = ["cryptography", "no-std"]
+keywords = ["cmac", "mac", "aes", "sp800-38b", "cryptography"]
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+[dependencies]
+metamui-aes-256 = { version = "=1.0.0-rc.5", path = "../metamui-aes-256", features = ["native"] }
+metamui-security-utils = { version = "=1.0.0-rc.5", path = "../metamui-security-utils" }
+
+[dev-dependencies]
+hex = { workspace = true }
+
+[features]
+default = ["std"]
+std = ["metamui-aes-256/std", "metamui-security-utils/std"]
+native = ["metamui-aes-256/native"]
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release.
+
+[dev-dependencies.serde_json]
+workspace = true
+
+[dev-dependencies.serde]
+version = "1"
+features = ["derive"]
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["std"]

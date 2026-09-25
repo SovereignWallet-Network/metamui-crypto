@@ -1,0 +1,79 @@
+[package]
+rust-version.workspace = true
+name = "metamui-hmac-drbg"
+categories = ["cryptography", "no-std"]
+keywords = ["hmac-drbg", "drbg", "sp800-90a", "rng", "cryptography"]
+description = "HMAC-based Deterministic Random Bit Generator (NIST SP 800-90A)"
+
+[dev-dependencies]
+hex-literal = "0.4"
+
+[features]
+default = [ "std",]
+std = [ "metamui-crypto-utilities/std", "metamui-sha2/std", "serde?/std"]
+cavp = ["serde"]
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release.
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.authors]
+workspace = true
+
+[package.license]
+workspace = true
+
+
+
+[package.repository]
+workspace = true
+
+[package.homepage]
+workspace = true
+
+[package.readme]
+workspace = true
+
+[dependencies.metamui-crypto-utilities]
+path = "../metamui-crypto-utilities"
+version = "=1.0.0-rc.5"
+
+# External crypto dependencies removed - using internal implementations
+
+[dependencies.metamui-sha2]
+path = "../metamui-sha2"
+version = "=1.0.0-rc.5"
+
+[dependencies.metamui-security-utils]
+path = "../metamui-security-utils"
+version = "=1.0.0-rc.5"
+features = [ "subtle", "zeroize",]
+
+[dependencies.serde]
+version = "1.0"
+optional = true
+default-features = false
+features = ["derive"]
+
+
+[dev-dependencies.hex]
+workspace = true
+
+[dev-dependencies.serde_json]
+workspace = true
+
+[dev-dependencies.serde]
+version = "1"
+features = ["derive"]
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["std", "cavp"]

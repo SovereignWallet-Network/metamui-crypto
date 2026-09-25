@@ -1,0 +1,38 @@
+[package]
+name = "metamui-bip39"
+version.workspace = true
+authors.workspace = true
+edition = "2021"
+rust-version.workspace = true
+license = "Apache-2.0"
+description = "BIP-39 mnemonics (English wordlist) and seed derivation over the in-tree SHA-2 and PBKDF2, verified against the Trezor reference vectors"
+repository.workspace = true
+keywords = ["bip39", "mnemonic", "cryptography", "no-std"]
+categories = ["cryptography", "no-std"]
+readme = "README.md"
+
+[lib]
+crate-type = ["rlib"]
+
+[dependencies]
+metamui-sha2 = { version = "=1.0.0-rc.5", path = "../metamui-sha2", default-features = false }
+metamui-pbkdf2 = { version = "=1.0.0-rc.5", path = "../metamui-pbkdf2", default-features = false }
+
+[dev-dependencies]
+hex = "0.4"
+serde_json = "1"
+serde = { version = "1", features = ["derive"] }
+
+[features]
+default = ["std"]
+std = ["metamui-sha2/std", "metamui-pbkdf2/std"]
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release.
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["std"]

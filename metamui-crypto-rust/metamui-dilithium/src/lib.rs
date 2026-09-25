@@ -51,22 +51,10 @@ pub mod test_vector_generator;
 pub mod test_vector_generator_v2; // Refactored to use generic metamui-acvp-core
 pub mod signature_support;
 
-#[cfg(test)]
-// mod test_decompose;  // Module not implemented yet
-
-#[cfg(test)]
-// mod test_arithmetic;  // Module not implemented yet
-
-#[cfg(test)]
-// mod test_w1_packing;  // Module not implemented yet
-
-#[cfg(test)]
-// mod test_minimal;  // Module not implemented yet
-
-#[cfg(test)]
-// mod debug_d5_matrix;
-
-// Re-export secure memory utilities
+// Re-export secure memory utilities. Five `#[cfg(test)]` attributes used to
+// sit above commented-out `mod` lines here; a comment does not end an
+// attribute, so all five applied to this `pub use`, and the re-exports
+// existed only in test builds.
 pub use memory::{secure_clear, secure_clear_u32, secure_clear_i32, ct_eq};
 
 pub use dilithium2::Dilithium2;

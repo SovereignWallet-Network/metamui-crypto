@@ -67,17 +67,18 @@ impl PublicKey1024 {
         Ok(PublicKey1024 { h })
     }
 
-    /// Deserialize from NIST format: [header(0x0A)] [14-bit packed h]
+    /// Deserialize from NIST format [header(0x0A)] [14-bit packed h] (1793
+    /// bytes) or the legacy raw format, 1024 little-endian i16 coefficients
+    /// (2048 bytes). Both require every coefficient in [0, q).
     pub fn from_bytes(bytes: &[u8]) -> Result<Self> {
         if bytes.len() == PUBLIC_KEY_SIZE {
             let h = crate::nist_encoding::decode_public_key(bytes, LOGN)?;
             Ok(PublicKey1024 { h })
         } else if bytes.len() == N * 2 {
-            // Legacy raw format
-            let coeffs: Vec<i16> = bytes.chunks(2)
-                .map(|chunk| i16::from_le_bytes([chunk[0], chunk[1]]))
-                .collect();
-            Ok(PublicKey1024 { h: coeffs })
+            // Legacy raw format; it used to take any i16, so x and x ± q
+            // were different encodings of one key (M-19).
+            let h = crate::nist_encoding::decode_raw_public_key(bytes, LOGN)?;
+            Ok(PublicKey1024 { h })
         } else {
             Err(Falcon512Error::InvalidPublicKey)
         }
@@ -455,6 +456,48 @@ mod tests {
         assert_eq!(sk_decoded.g, keypair.private_key.g);
         assert_eq!(sk_decoded.big_f, keypair.private_key.big_f);
         // big_g is not encoded in NIST format (recomputed from equation)
+    }
+
+    /// A canonical h (every coefficient in [0, q)); decoding never needs a real key.
+    fn canonical_h() -> Vec<i16> {
+        (0..N).map(|i| ((i * 7919 + 5) % Q as usize) as i16).collect()
+    }
+
+    fn raw_public_key(h: &[i16]) -> Vec<u8> {
+        h.iter().flat_map(|c| c.to_le_bytes()).collect()
+    }
+
+    /// M-19: the raw 2048-byte form must name one key per byte string, as the
+    /// 14-bit form does, while the canonical raw form keeps decoding.
+    #[test]
+    fn test_falcon1024_public_key_forms_are_canonical() {
+        let h = canonical_h();
+        let pk = PublicKey1024 { h: h.clone() };
+        let standard = pk.to_bytes();
+        let raw = raw_public_key(&h);
+        assert_eq!(PublicKey1024::from_bytes(&standard).unwrap().h, h);
+        assert_eq!(PublicKey1024::from_bytes(&raw).unwrap().h, h);
+
+        let q = Q as i16;
+        for (i, bad) in [(0, h[0] + q), (N - 1, h[N - 1] - q), (3, -1), (4, q), (5, i16::MAX)] {
+            let mut coeffs = h.clone();
+            coeffs[i] = bad;
+            assert!(PublicKey1024::from_bytes(&raw_public_key(&coeffs)).is_err(), "raw h[{i}] = {bad}");
+        }
+
+        // Coefficient 0 of the 14-bit form is byte 1 and the top 6 bits of byte 2.
+        for bad in [Q, 0x3FFF] {
+            let mut bytes = standard.clone();
+            bytes[1] = (bad >> 6) as u8;
+            bytes[2] = (bytes[2] & 0x03) | ((bad as u8 & 0x3F) << 2);
+            assert!(PublicKey1024::from_bytes(&bytes).is_err(), "packed h[0] = {bad}");
+        }
+
+        for len in [0, 897, 1024, 1792, 1794, 2047, 2049] {
+            let mut bytes = raw.clone();
+            bytes.resize(len, 0);
+            assert!(PublicKey1024::from_bytes(&bytes).is_err(), "{len}-byte public key");
+        }
     }
 
     #[test]

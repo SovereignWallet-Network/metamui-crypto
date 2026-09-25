@@ -83,8 +83,8 @@ fn randomized_round_trip_and_seeded_keygen() {
         assert_eq!(kem.decapsulate(&sk, &ct).unwrap(), ss);
         assert_eq!(ss.len(), kem.shared_secret_bytes());
         // seeded keygen is deterministic and interoperable with the Python facade's convention
-        let (pk1, sk1) = kem.keygen_from_seed(b"metamui/smaug-t/v1.1.1/seed");
-        let (pk2, sk2) = kem.keygen_from_seed(b"metamui/smaug-t/v1.1.1/seed");
+        let (pk1, sk1) = kem.keygen_from_seed(b"metamui/smaug-t/v1.1.1/seed").unwrap();
+        let (pk2, sk2) = kem.keygen_from_seed(b"metamui/smaug-t/v1.1.1/seed").unwrap();
         assert_eq!((pk1.len(), sk1.len()), (kem.public_key_bytes(), kem.secret_key_bytes()));
         assert_eq!((pk1, sk1), (pk2.clone(), sk2.clone()));
         let (ct, ss) = kem.encapsulate(&pk2, &mut rng).unwrap();

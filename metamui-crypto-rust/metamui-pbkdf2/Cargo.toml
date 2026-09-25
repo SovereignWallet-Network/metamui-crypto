@@ -1,0 +1,46 @@
+[[bench]]
+name = "pbkdf2_benchmarks"
+harness = false
+
+[package]
+name = "metamui-pbkdf2"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+authors.workspace = true
+description = "PBKDF2-HMAC-SHA256 and PBKDF2-HMAC-SHA512 (RFC 8018) over the in-tree SHA-2, verified against the RFC 7914 §11 vectors"
+readme = "README.md"
+keywords = ["pbkdf2", "kdf", "password", "rfc8018", "bip39"]
+categories = ["cryptography"]
+license = "Apache-2.0"
+repository.workspace = true
+
+[dev-dependencies]
+hex = "0.4"
+criterion = "0.5"
+
+[features]
+default = [ "std",]
+std = []
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release.
+
+[dependencies.metamui-sha2]
+path = "../metamui-sha2"
+version = "=1.0.0-rc.5"
+
+
+[dev-dependencies.serde_json]
+workspace = true
+
+[dev-dependencies.serde]
+version = "1"
+features = ["derive"]
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["std"]

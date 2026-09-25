@@ -1,0 +1,30 @@
+{
+  "algorithm": "Camellia",
+  "standard": "RFC 3713",
+  "source": "https://www.rfc-editor.org/rfc/rfc3713",
+  "date": "2026-03-09",
+  "note": "Test vectors from Appendix A of RFC 3713 (ECB mode). One vector per key size. All hex values lowercase, spaces removed. Key-192 is 24 bytes (128-bit key + 8-byte extension 0011223344556677). Key-256 is 32 bytes (key-192 + 8-byte extension 8899aabbccddeeff).",
+  "test_vectors": [
+    {
+      "tc_id": 1,
+      "key_size": 128,
+      "key": "0123456789abcdeffedcba9876543210",
+      "plaintext": "0123456789abcdeffedcba9876543210",
+      "ciphertext": "67673138549669730857065648eabe43"
+    },
+    {
+      "tc_id": 2,
+      "key_size": 192,
+      "key": "0123456789abcdeffedcba98765432100011223344556677",
+      "plaintext": "0123456789abcdeffedcba9876543210",
+      "ciphertext": "b4993401b3e996f84ee5cee7d79b09b9"
+    },
+    {
+      "tc_id": 3,
+      "key_size": 256,
+      "key": "0123456789abcdeffedcba987654321000112233445566778899aabbccddeeff",
+      "plaintext": "0123456789abcdeffedcba9876543210",
+      "ciphertext": "9acc237dff16d76c20ef7c919e3a7509"
+    }
+  ]
+}

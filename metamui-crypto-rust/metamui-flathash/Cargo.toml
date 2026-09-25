@@ -1,0 +1,44 @@
+[package]
+rust-version.workspace = true
+name = "metamui-flathash"
+version.workspace = true
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+license = "Apache-2.0"
+repository.workspace = true
+homepage = "https://metamui.id"
+description = "FlatHash: the MetaMUI canonical hash of a JSON object (flatten, sort, SHA-256), verified against the reference vectors"
+readme = "README.md"
+keywords = ["flathash", "json", "hash", "canonical", "metamui"]
+categories = ["cryptography", "encoding"]
+
+[features]
+default = []
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release.
+
+[package.edition]
+workspace = true
+
+[dependencies.metamui-crypto-utilities]
+path = "../metamui-crypto-utilities"
+version = "=1.0.0-rc.5"
+features = [ "flathash", "encoding",]
+
+[dev-dependencies.hex]
+workspace = true
+
+
+[dev-dependencies.serde_json]
+workspace = true
+
+[dev-dependencies.serde]
+version = "1"
+features = ["derive"]
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = []

@@ -61,7 +61,7 @@ fn check_decap(filename: &str, params: &Params, label: &str) {
         let expected_ss = hex_to_bytes(tv["ss"].as_str().unwrap());
 
         let mut ss = vec![0u8; CRYPTO_BYTES];
-        crypto_kem_dec(params, &mut ss, &ct, &sk);
+        crypto_kem_dec(params, &mut ss, &ct, &sk).expect("dec lengths");
 
         if ss == expected_ss {
             passed += 1;

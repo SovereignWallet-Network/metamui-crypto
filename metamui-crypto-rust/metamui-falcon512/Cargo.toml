@@ -20,12 +20,12 @@ wasm-opt = false
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-metamui-prehash-oids = { version = "=1.0.0-rc.4", path = "../metamui-prehash-oids", optional = true, default-features = false  }
+metamui-prehash-oids = { version = "=1.0.0-rc.5", path = "../metamui-prehash-oids", optional = true, default-features = false  }
 # Core dependencies
 rand = { version = "0.8", default-features = false, features = ["std", "std_rng"] }
 rand_core = { version = "0.6", default-features = false }
 rand_chacha = { version = "0.3", default-features = false }
-metamui-sha2 = { version = "=1.0.0-rc.4", path = "../metamui-sha2" }
+metamui-sha2 = { version = "=1.0.0-rc.5", path = "../metamui-sha2" }
 hex = { version = "0.4", default-features = false }
 # Big integer support (for NTRU equation solver)
 num-bigint = { version = "0.4", default-features = false }
@@ -35,11 +35,11 @@ subtle = { workspace = true, features = ["const-generics"] }
 zeroize = { workspace = true, features = ["derive", "alloc"] }
 once_cell = { version = "1.19", default-features = false, features = ["alloc", "race"] }
 lazy_static = { version = "1.4", default-features = false, features = ["spin_no_std"] }
-metamui-security-utils = { version = "=1.0.0-rc.4", path = "../metamui-security-utils"  }
-metamui-shake = { version = "=1.0.0-rc.4", path = "../metamui-shake"  }
-metamui-aes-256 = { version = "=1.0.0-rc.4", path = "../metamui-aes-256", features = ["native"]  }
-metamui-aes-ctr-drbg = { version = "=1.0.0-rc.4", path = "../metamui-aes-ctr-drbg"  }
-metamui-acvp-core = { version = "=1.0.0-rc.4", path = "../metamui-acvp-core"  }
+metamui-security-utils = { version = "=1.0.0-rc.5", path = "../metamui-security-utils"  }
+metamui-shake = { version = "=1.0.0-rc.5", path = "../metamui-shake"  }
+metamui-aes-256 = { version = "=1.0.0-rc.5", path = "../metamui-aes-256", features = ["native"]  }
+metamui-aes-ctr-drbg = { version = "=1.0.0-rc.5", path = "../metamui-aes-ctr-drbg"  }
+metamui-acvp-core = { version = "=1.0.0-rc.5", path = "../metamui-acvp-core"  }
 
 # Optional dependencies with proper feature gating
 wasm-bindgen = { version = "0.2", optional = true }
@@ -139,7 +139,7 @@ harness = false
 # browser enables `js` itself and keeps Web Crypto (getrandom prefers `js`,
 # so this registration is then inert).
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-metamui-getrandom-unavailable = { version = "=1.0.0-rc.4", path = "../metamui-getrandom-unavailable"  }
+metamui-getrandom-unavailable = { version = "=1.0.0-rc.5", path = "../metamui-getrandom-unavailable"  }
 
 # What docs.rs builds: the public API on one target, with only the features listed —
 # never all-features, which unions host-gated and test-only features.

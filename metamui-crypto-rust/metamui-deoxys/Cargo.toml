@@ -1,0 +1,63 @@
+[package]
+rust-version.workspace = true
+name = "metamui-deoxys"
+documentation = "https://docs.rs/metamui-deoxys"
+description = "Deoxys-II-256-128 authenticated encryption (CAESAR portfolio), verified against the oasisprotocol reference vectors"
+readme = "README.md"
+keywords = ["deoxys", "aead", "authenticated", "tweakable-cipher"]
+categories = [ "cryptography", "no-std",]
+
+[features]
+default = [ "std",]
+std = [ "rand",]
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release.
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.authors]
+workspace = true
+
+[package.license]
+workspace = true
+
+[package.repository]
+workspace = true
+
+[package.homepage]
+workspace = true
+
+[dependencies.metamui-security-utils]
+path = "../metamui-security-utils"
+version = "=1.0.0-rc.5"
+features = [ "subtle", "zeroize",]
+
+[dependencies.rand]
+workspace = true
+optional = true
+
+[dev-dependencies.hex]
+workspace = true
+
+[dev-dependencies.rand]
+workspace = true
+
+
+[dev-dependencies.serde_json]
+workspace = true
+
+[dev-dependencies.serde]
+version = "1"
+features = ["derive"]
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["std"]

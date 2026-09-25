@@ -96,7 +96,7 @@ fn check_full_kat(filename: &str, params: &Params, label: &str) {
         // Step 3: deterministic keygen.
         let mut pk = vec![0u8; pk_bytes];
         let mut sk = vec![0u8; sk_bytes];
-        crypto_kem_keypair_internal(params, &mut pk, &mut sk, &d, &inner_seed);
+        crypto_kem_keypair_internal(params, &mut pk, &mut sk, &d, &inner_seed).expect("keypair lengths");
 
         if pk == expected_pk { pk_pass += 1; }
         if sk == expected_sk { sk_pass += 1; }
@@ -105,14 +105,14 @@ fn check_full_kat(filename: &str, params: &Params, label: &str) {
         let mu = rng.randombytes(msg_bytes).unwrap();
         let mut ct = vec![0u8; ct_bytes];
         let mut ss = vec![0u8; CRYPTO_BYTES];
-        crypto_kem_enc_internal(params, &mut ct, &mut ss, &pk, &mu);
+        crypto_kem_enc_internal(params, &mut ct, &mut ss, &pk, &mu).expect("enc lengths");
 
         if ct == expected_ct { ct_pass += 1; }
         if ss == expected_ss { ss_pass += 1; }
 
         // Step 5: also round-trip decap to confirm consistency.
         let mut ss_dec = vec![0u8; CRYPTO_BYTES];
-        crypto_kem_dec_internal(params, &mut ss_dec, &ct, &sk);
+        crypto_kem_dec_internal(params, &mut ss_dec, &ct, &sk).expect("dec lengths");
         if ss_dec == expected_ss { decap_pass += 1; }
 
         // Capture first failure for diagnostic clarity.

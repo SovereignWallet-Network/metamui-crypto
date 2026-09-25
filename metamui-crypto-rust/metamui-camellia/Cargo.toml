@@ -1,0 +1,64 @@
+[[bench]]
+name = "camellia_benchmarks"
+harness = false
+
+[package]
+name = "metamui-camellia"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+license = "Apache-2.0"
+description = "Camellia-128/192/256 (RFC 3713) with ECB, CBC, CTR and GCM modes, verified against the RFC 3713 Appendix A vectors"
+repository.workspace = true
+homepage = "https://metamui.id"
+keywords = [ "crypto", "camellia", "encryption", "block-cipher", "metamui",]
+categories = [ "cryptography", "no-std",]
+readme = "README.md"
+
+[dev-dependencies]
+hex = "0.4"
+proptest = "1.0"
+
+[features]
+default = [ "std", "random",]
+std = []
+random = [ "rand_core", "getrandom",]
+no-std = []
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release.
+
+[dependencies.metamui-security-utils]
+path = "../metamui-security-utils"
+version = "=1.0.0-rc.5"
+features = [ "subtle", "zeroize",]
+
+[dependencies.rand_core]
+version = "0.6"
+optional = true
+
+[dependencies.getrandom]
+version = "0.2"
+optional = true
+
+[dev-dependencies.criterion]
+version = "0.5"
+default-features = false
+
+# Profile settings should be defined at workspace level only
+
+
+[dev-dependencies.serde_json]
+workspace = true
+
+[dev-dependencies.serde]
+version = "1"
+features = ["derive"]
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["std", "random"]

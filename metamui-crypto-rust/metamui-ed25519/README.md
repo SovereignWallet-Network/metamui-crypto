@@ -110,7 +110,7 @@ implementation; a consumer pinning the old name must update the dependency
 name and the `use` path:
 
 ```toml
-metamui-ed25519 = "1.0.0-rc.4"
+metamui-ed25519 = "1.0.0-rc.5"
 ```
 
 ## License

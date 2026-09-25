@@ -48,24 +48,24 @@ workspace = true
 
 [dependencies.metamui-blake2b]
 path = "../metamui-blake2b"
-version = "=1.0.0-rc.4"
+version = "=1.0.0-rc.5"
 
 [dependencies.metamui-sha2]
 path = "../metamui-sha2"
-version = "=1.0.0-rc.4"
+version = "=1.0.0-rc.5"
 
 [dependencies.metamui-sha3]
 path = "../metamui-sha3"
-version = "=1.0.0-rc.4"
+version = "=1.0.0-rc.5"
 
 [dependencies.metamui-security-utils]
 path = "../metamui-security-utils"
-version = "=1.0.0-rc.4"
+version = "=1.0.0-rc.5"
 features = [ "subtle", "zeroize",]
 
 [dependencies.metamui-crypto-utilities]
 path = "../metamui-crypto-utilities"
-version = "=1.0.0-rc.4"
+version = "=1.0.0-rc.5"
 
 [dependencies.parity-scale-codec]
 version = "3.6"
@@ -79,7 +79,7 @@ features = ["derive"]
 # browser enables `js` itself and keeps Web Crypto (getrandom prefers `js`,
 # so this registration is then inert).
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-metamui-getrandom-unavailable = { version = "=1.0.0-rc.4", path = "../metamui-getrandom-unavailable" }
+metamui-getrandom-unavailable = { version = "=1.0.0-rc.5", path = "../metamui-getrandom-unavailable" }
 
 # What docs.rs builds: the public API on one target, with only the features listed —
 # never all-features, which unions host-gated and test-only features.

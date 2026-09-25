@@ -1,0 +1,278 @@
+{
+  "metadata": {
+    "algorithm": "Ascon-AEAD128",
+    "version": "1.0",
+    "source": "https://github.com/ascon/ascon-c/blob/main/crypto_aead/asconaead128/LWC_AEAD_KAT_128_128.txt",
+    "category": "aead",
+    "created": "2026-04-15",
+    "total_vectors": 22
+  },
+  "test_groups": [
+    {
+      "group_id": "empty_pt",
+      "description": "Empty plaintext with varying associated data lengths (KAT #1-5)",
+      "vectors": [
+        {
+          "description": "KAT #1: empty PT, empty AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "",
+          "aad": "",
+          "ciphertext": "",
+          "tag": "4F9C278211BEC9316BF68F46EE8B2EC6",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #2: empty PT, 1-byte AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "",
+          "aad": "30",
+          "ciphertext": "",
+          "tag": "CCCB674FE18A09A285D6AB11B35675C0",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #3: empty PT, 2-byte AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "",
+          "aad": "3031",
+          "ciphertext": "",
+          "tag": "F65B191550C4DF9CFDD4460EBBCCA782",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #4: empty PT, 3-byte AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "",
+          "aad": "303132",
+          "ciphertext": "",
+          "tag": "D127CF7D2CD4DA8930616C70B3619F42",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #5: empty PT, 4-byte AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "",
+          "aad": "30313233",
+          "ciphertext": "",
+          "tag": "000BA92E52B5ED6B97C9D913CC4C82DF",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        }
+      ]
+    },
+    {
+      "group_id": "empty_ad",
+      "description": "Varying plaintext lengths with empty associated data",
+      "vectors": [
+        {
+          "description": "KAT #34: 1-byte PT, empty AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "20",
+          "aad": "",
+          "ciphertext": "E8",
+          "tag": "DD576ABA1CD3E6FC704DE02AEDB79588",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #67: 2-byte PT, empty AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "2021",
+          "aad": "",
+          "ciphertext": "E8C3",
+          "tag": "5A12D2A396E76224F6EE5418F6465197",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #100: 3-byte PT, empty AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "202122",
+          "aad": "",
+          "ciphertext": "E8C3DE",
+          "tag": "AF8E12816B8EDF39AD1571A9492B7CA2",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #133: 4-byte PT, empty AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "20212223",
+          "aad": "",
+          "ciphertext": "E8C3DEEE",
+          "tag": "03C0A96A9B09B64CDE66D9AB0796CD04",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #265: 8-byte PT, empty AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "2021222324252627",
+          "aad": "",
+          "ciphertext": "E8C3DEEE246CC5EA",
+          "tag": "E455EF6B33B782A3DD91ED6695373C27",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #463: 14-byte PT, empty AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "202122232425262728292A2B2C2D",
+          "aad": "",
+          "ciphertext": "E8C3DEEE246CC5EAE3E872313897",
+          "tag": "D52C675734AD306A5BC54C1422934D5D",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #496: 15-byte PT, empty AD (block boundary -1)",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "202122232425262728292A2B2C2D2E",
+          "aad": "",
+          "ciphertext": "E8C3DEEE246CC5EAE3E872313897A2",
+          "tag": "83AECC1DA0834A52940EC4BFCDDB6404",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        }
+      ]
+    },
+    {
+      "group_id": "pt_and_ad",
+      "description": "Both plaintext and associated data present",
+      "vectors": [
+        {
+          "description": "KAT #35: 1-byte PT, 1-byte AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "20",
+          "aad": "30",
+          "ciphertext": "96",
+          "tag": "2B8016836C75A7D86866588CA245D886",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #68: 2-byte PT, 1-byte AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "2021",
+          "aad": "30",
+          "ciphertext": "9610",
+          "tag": "D39E0CD43E61F7D01A1B636FD60FB19F",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #101: 3-byte PT, 1-byte AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "202122",
+          "aad": "30",
+          "ciphertext": "96107D",
+          "tag": "D3E1076A5E5666C5341E929FF172806D",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #134: 4-byte PT, 1-byte AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "20212223",
+          "aad": "30",
+          "ciphertext": "96107D8A",
+          "tag": "C34B518F67870E904B0E15E08A1B084B",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #266: 8-byte PT, 1-byte AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "2021222324252627",
+          "aad": "30",
+          "ciphertext": "96107D8A29A7529A",
+          "tag": "6A458FD77624539F22F62AC4498E9023",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #464: 14-byte PT, 1-byte AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "202122232425262728292A2B2C2D",
+          "aad": "30",
+          "ciphertext": "96107D8A29A7529A7941BDC7DF1F",
+          "tag": "84B6728EFCC82F5E5F0C6D32E34E7687",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        }
+      ]
+    },
+    {
+      "group_id": "multi_block",
+      "description": "Multi-block plaintext (PT >= 16 bytes, i.e. >= 1 full rate block)",
+      "vectors": [
+        {
+          "description": "KAT #529: 16-byte PT (exact 1 full block), empty AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "202122232425262728292A2B2C2D2E2F",
+          "aad": "",
+          "ciphertext": "E8C3DEEE246CC5EAE3E872313897A2BB",
+          "tag": "9EAA915C9DD3245D77048F24D46D27A7",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #562: 17-byte PT (1 full block + 1 byte), empty AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "202122232425262728292A2B2C2D2E2F30",
+          "aad": "",
+          "ciphertext": "E8C3DEEE246CC5EAE3E872313897A2BB60",
+          "tag": "301002539D456275DD0B0CEAB3B23844",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #1057: 32-byte PT (2 full blocks), empty AD",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F",
+          "aad": "",
+          "ciphertext": "E8C3DEEE246CC5EAE3E872313897A2BB6089AA3E15E80307970F2D1F006654C2",
+          "tag": "AAA5FA172CB9F07D07463CEFC7440BC1",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        },
+        {
+          "description": "KAT #1089: 32-byte PT + 32-byte AD (both multi-block)",
+          "key": "000102030405060708090A0B0C0D0E0F",
+          "nonce": "101112131415161718191A1B1C1D1E1F",
+          "plaintext": "202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F",
+          "aad": "303132333435363738393A3B3C3D3E3F404142434445464748494A4B4C4D4E4F",
+          "ciphertext": "CB34D04660A66DBFBE9C856601F5B8AA51A499B55AC8F7FBEFBC331A613EE9CD",
+          "tag": "FD191750A47F211C0A15ED28173D7CAA",
+          "algorithm": "ASCON-AEAD128",
+          "valid": true
+        }
+      ]
+    }
+  ]
+}

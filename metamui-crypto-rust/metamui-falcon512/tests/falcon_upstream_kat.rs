@@ -164,6 +164,11 @@ fn reframe(sm: &[u8], logn: u8) -> Result<(Vec<u8>, Vec<u8>), String> {
     Ok((msg.to_vec(), our_sig))
 }
 
+/// The legacy headerless public-key form: little-endian i16 coefficients.
+fn raw_public_key(h: &[i16]) -> Vec<u8> {
+    h.iter().flat_map(|c| c.to_le_bytes()).collect()
+}
+
 enum Variant {
     Falcon512,
     Falcon1024,
@@ -183,11 +188,22 @@ impl Variant {
             Variant::Falcon512 => {
                 let pk = PublicKey::from_bytes(pk_bytes)
                     .map_err(|e| format!("PublicKey::from_bytes: {e:?}"))?;
+                // The legacy raw form of the upstream key names the same key (M-19).
+                let raw = PublicKey::from_bytes(&raw_public_key(&pk.h.coeffs))
+                    .map_err(|e| format!("PublicKey::from_bytes(raw): {e:?}"))?;
+                if raw.h.coeffs != pk.h.coeffs || raw.to_bytes() != pk_bytes {
+                    return Err("raw-form round trip changed the key".into());
+                }
                 verify(msg, sig, &pk).map_err(|e| format!("verify: {e:?}"))
             }
             Variant::Falcon1024 => {
                 let pk = PublicKey1024::from_bytes(pk_bytes)
                     .map_err(|e| format!("PublicKey1024::from_bytes: {e:?}"))?;
+                let raw = PublicKey1024::from_bytes(&raw_public_key(&pk.h))
+                    .map_err(|e| format!("PublicKey1024::from_bytes(raw): {e:?}"))?;
+                if raw.h != pk.h || raw.to_bytes() != pk_bytes {
+                    return Err("raw-form round trip changed the key".into());
+                }
                 verify_1024(msg, sig, &pk).map_err(|e| format!("verify_1024: {e:?}"))
             }
         }

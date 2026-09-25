@@ -1,0 +1,43 @@
+[package]
+name = "metamui-ascon"
+version.workspace = true
+edition = "2021"
+rust-version.workspace = true
+description = "Pure Rust NIST SP 800-232 Ascon: AEAD128, Hash256, XOF128, CXOF128"
+authors = [ "Phantom Seokgu Yun <phantom@metamui.id>",]
+license = "Apache-2.0"
+repository.workspace = true
+homepage = "https://metamui.id"
+documentation = "https://docs.rs/metamui-ascon"
+keywords = ["cryptography", "ascon", "sp800-232", "lightweight", "aead"]
+categories = [ "cryptography", "no-std",]
+readme = "README.md"
+
+[dependencies]
+metamui-crypto-utilities = { version = "=1.0.0-rc.5", path = "../metamui-crypto-utilities" }
+metamui-security-utils = { version = "=1.0.0-rc.5", path = "../metamui-security-utils", features = ["zeroize"] }
+
+[dev-dependencies]
+hex = "0.4"
+
+[features]
+default = [ "std",]
+std = []
+
+# Portable only. Every code path is scalar Rust that compiles the same on
+# every target; there is no SIMD, assembly or GPU feature, by policy of the
+# public release.
+
+
+[dev-dependencies.serde_json]
+workspace = true
+
+[dev-dependencies.serde]
+version = "1"
+features = ["derive"]
+
+# What docs.rs builds: the public API on one target, with only the features listed —
+# never all-features, which unions host-gated and test-only features.
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+features = ["std"]

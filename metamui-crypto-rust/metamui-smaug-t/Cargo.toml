@@ -18,8 +18,8 @@ zeroize = { version = "1.5", features = ["zeroize_derive"] }
 subtle = { workspace = true, features = ["std"] }
 # Hashing is the in-house MetaMUI Keccak family; no RustCrypto crate is in
 # this crate's closure (the TypeScript/WASM SMAUG-T binding is built from it).
-metamui-shake = { version = "=1.0.0-rc.4", path = "../metamui-shake" }
-metamui-sha3 = { version = "=1.0.0-rc.4", path = "../metamui-sha3" }
+metamui-shake = { version = "=1.0.0-rc.5", path = "../metamui-shake" }
+metamui-sha3 = { version = "=1.0.0-rc.5", path = "../metamui-sha3" }
 # Entropy is the platform's (`rand_core::OsRng` over getrandom). `rand`
 # itself was here before, dragging its ChaCha `StdRng` into the closure for
 # nothing this crate calls; tests that want a seeded RNG take it as a
@@ -72,7 +72,7 @@ crate-type = ["lib", "staticlib", "cdylib"]
 # browser enables `js` itself and keeps Web Crypto (getrandom prefers `js`,
 # so this registration is then inert).
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-metamui-getrandom-unavailable = { version = "=1.0.0-rc.4", path = "../metamui-getrandom-unavailable" }
+metamui-getrandom-unavailable = { version = "=1.0.0-rc.5", path = "../metamui-getrandom-unavailable" }
 
 # What docs.rs builds: the public API on one target, with only the features listed —
 # never all-features, which unions host-gated and test-only features.

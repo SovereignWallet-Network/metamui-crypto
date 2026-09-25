@@ -11,8 +11,8 @@ categories = ["cryptography", "no-std"]
 keywords = ["aimer", "kpqc", "post-quantum", "mpc", "signature"]
 
 [dependencies]
-metamui-aes-256 = { version = "=1.0.0-rc.4", path = "../metamui-aes-256" }
-metamui-shake = { version = "=1.0.0-rc.4", path = "../metamui-shake" }
+metamui-aes-256 = { version = "=1.0.0-rc.5", path = "../metamui-aes-256" }
+metamui-shake = { version = "=1.0.0-rc.5", path = "../metamui-shake" }
 getrandom = { version = "0.2", default-features = false }
 zeroize = { workspace = true, features = ["derive", "alloc"] }
 subtle = { workspace = true }
@@ -59,7 +59,7 @@ crate-type = ["cdylib", "rlib"]
 # browser enables `js` itself and keeps Web Crypto (getrandom prefers `js`,
 # so this registration is then inert).
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-metamui-getrandom-unavailable = { version = "=1.0.0-rc.4", path = "../metamui-getrandom-unavailable" }
+metamui-getrandom-unavailable = { version = "=1.0.0-rc.5", path = "../metamui-getrandom-unavailable" }
 
 # What docs.rs builds: the public API on one target, with only the features listed —
 # never all-features, which unions host-gated and test-only features.

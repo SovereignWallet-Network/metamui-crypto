@@ -264,24 +264,22 @@ pub struct PublicKey {
 }
 
 impl PublicKey {
-    /// Deserialize from NIST format: [header(0x09)] [14-bit packed h] (897 bytes)
+    /// Deserialize a public key from either accepted form:
+    /// - 897 bytes: NIST format [header(0x09)] [14-bit packed h]
+    /// - 1024 bytes: legacy raw format, 512 little-endian i16 coefficients
+    ///
+    /// Both are canonical: every coefficient must lie in [0, q), so each key
+    /// has exactly one encoding per form. Anything else is `InvalidPublicKey`.
     pub fn from_bytes(bytes: &[u8]) -> Result<Self> {
         if bytes.len() == constants::PUBLIC_KEY_SIZE {
             // NIST format: 1 header + 896 data
             let h = nist_encoding::decode_public_key(bytes, constants::LOGN)?;
             Ok(PublicKey { h: Poly::new(h) })
         } else if bytes.len() == N * 2 {
-            // Legacy raw format: 2 bytes per i16 coefficient
-            let coeffs: Vec<i16> = bytes.chunks(2)
-                .map(|chunk| {
-                    if chunk.len() == 2 {
-                        i16::from_le_bytes([chunk[0], chunk[1]])
-                    } else {
-                        0
-                    }
-                })
-                .collect();
-            Ok(PublicKey { h: Poly::new(coeffs) })
+            // Legacy raw format. It used to take any i16, so x and x + q (or
+            // x - q) named the same key: many byte strings per key (M-19).
+            let h = nist_encoding::decode_raw_public_key(bytes, constants::LOGN)?;
+            Ok(PublicKey { h: Poly::new(h) })
         } else {
             Err(error::Falcon512Error::InvalidPublicKey)
         }
@@ -644,6 +642,113 @@ mod tests {
         assert!(verify_padded(msg, &padded, &kp.public_key).unwrap());
     }
     
+    /// The legacy raw public-key form: `N` little-endian i16 coefficients.
+    fn raw_public_key(h: &[i16]) -> Vec<u8> {
+        h.iter().flat_map(|c| c.to_le_bytes()).collect()
+    }
+
+    /// Overwrite coefficient `i` of a standard (0x09 || 14-bit big-endian
+    /// packed h) public key with `c`, bit by bit, so `c` may be >= q.
+    fn set_packed_coeff(pk: &mut [u8], i: usize, c: u16) {
+        for b in 0..14 {
+            let pos = 14 * i + b;
+            let (byte, shift) = (1 + pos / 8, 7 - pos % 8);
+            let bit = ((c >> (13 - b)) & 1) as u8;
+            pk[byte] = (pk[byte] & !(1 << shift)) | (bit << shift);
+        }
+    }
+
+    fn sample_public_key() -> PublicKey {
+        use rand::SeedableRng;
+        generate_keypair(&mut rand::rngs::StdRng::seed_from_u64(0x4d19)).unwrap().public_key
+    }
+
+    #[test]
+    fn raw_and_standard_public_key_forms_decode_to_the_same_key() {
+        let pk = sample_public_key();
+        let standard = pk.to_bytes();
+        let raw = raw_public_key(&pk.h.coeffs);
+        assert_eq!((standard.len(), raw.len()), (897, 1024));
+
+        let from_standard = PublicKey::from_bytes(&standard).unwrap();
+        let from_raw = PublicKey::from_bytes(&raw).unwrap();
+        assert_eq!(from_standard.h.coeffs, pk.h.coeffs);
+        assert_eq!(from_raw.h.coeffs, pk.h.coeffs);
+        assert_eq!(from_raw.to_bytes(), standard);
+
+        // Both ends of the canonical range [0, q) stay accepted in both forms.
+        let mut edge = pk.h.coeffs.clone();
+        edge[0] = 0;
+        edge[N - 1] = Q as i16 - 1;
+        let edge_std = PublicKey { h: Poly::new(edge.clone()) }.to_bytes();
+        assert_eq!(PublicKey::from_bytes(&raw_public_key(&edge)).unwrap().h.coeffs, edge);
+        assert_eq!(PublicKey::from_bytes(&edge_std).unwrap().h.coeffs, edge);
+    }
+
+    /// M-19: the raw form took any i16, so h[i] and h[i] + q (or h[i] - q, or
+    /// -1 for q - 1) were different byte strings for the same key.
+    #[test]
+    fn raw_public_key_refuses_a_non_canonical_coefficient() {
+        let pk = sample_public_key();
+        let q = Q as i16;
+        let h = &pk.h.coeffs;
+        let cases = [
+            (0, h[0] + q),
+            (N - 1, h[N - 1] - q),
+            (7, -1),
+            (9, q),
+            (11, i16::MAX),
+            (13, i16::MIN),
+        ];
+        for (i, bad) in cases {
+            let mut coeffs = h.clone();
+            coeffs[i] = bad;
+            assert!(
+                matches!(PublicKey::from_bytes(&raw_public_key(&coeffs)), Err(Falcon512Error::InvalidPublicKey)),
+                "raw coefficient {i} = {bad} must be refused"
+            );
+        }
+    }
+
+    #[test]
+    fn standard_public_key_refuses_a_coefficient_of_q_or_more() {
+        let pk = sample_public_key();
+        let standard = pk.to_bytes();
+        for i in [0, 1, 255, N - 1] {
+            let mut same = standard.clone();
+            set_packed_coeff(&mut same, i, pk.h.coeffs[i] as u16);
+            assert_eq!(same, standard, "helper must re-encode coefficient {i} in place");
+            for bad in [Q, Q + 1, 0x3FFF] {
+                let mut bytes = standard.clone();
+                set_packed_coeff(&mut bytes, i, bad);
+                assert!(
+                    matches!(PublicKey::from_bytes(&bytes), Err(Falcon512Error::InvalidPublicKey)),
+                    "packed coefficient {i} = {bad} must be refused"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn public_key_of_any_other_length_or_header_is_refused() {
+        let pk = sample_public_key();
+        let standard = pk.to_bytes();
+        let raw = raw_public_key(&pk.h.coeffs);
+        for len in [0, 1, 896, 898, 1023, 1025, 1793, 2048] {
+            let mut bytes = raw.clone();
+            bytes.resize(len, 0);
+            assert!(
+                matches!(PublicKey::from_bytes(&bytes), Err(Falcon512Error::InvalidPublicKey)),
+                "{len}-byte public key must be refused"
+            );
+        }
+        for header in [0x00, 0x0a, 0x89, 0x39] {
+            let mut bytes = standard.clone();
+            bytes[0] = header;
+            assert!(matches!(PublicKey::from_bytes(&bytes), Err(Falcon512Error::InvalidPublicKey)));
+        }
+    }
+
     #[test]
     fn test_constants() {
         assert_eq!(N, 512);
